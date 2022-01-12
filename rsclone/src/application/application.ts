@@ -33,7 +33,7 @@ export default class Application extends Control {
       };
       startPage.onAuthors = () => {
          startPage.destroy();
-         this.awardsCycle();
+         this.authorsCycle();
       };
    }
 
