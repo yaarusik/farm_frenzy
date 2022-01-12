@@ -1,8 +1,3 @@
+import Application from "./application/application";
 
-function render() {
-  const subHeader = document.createElement("h2");
-  subHeader.innerHTML = "This elements was created by js";
-  document.body.appendChild(subHeader);
-}
-
-render();
+const app = new Application(document.body);
