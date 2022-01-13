@@ -1,26 +1,26 @@
-@import 'var';
+@import "var";
 
-.btn{
+.btn {
   width: 14rem;
   padding-bottom: 0.3vh;
-  background: $btn-blue;
+  background: linear-gradient(180deg, rgba(101, 196, 248, 1) 0%, rgba(14, 75, 226, 1) 49%);
   border-radius: 30px;
   font-size: 1.8rem;
   color: $white;
   margin-bottom: 2vh;
   border: 5px solid $white;
   box-sizing: border-box;
-  outline: 1px solid $brown;
+  outline: 1px solid rgb(192, 162, 117);
   box-shadow: 0px 3px 7px 2px rgba($white, 0.4) inset;
   transition: all 0.15s ease-in-out;
 
-  &:not(.btn_disabled):hover{
+  &:not(.btn_disabled):hover {
     background: lighten($btn-blue, 5%);
   }
 }
 
-.btn_disabled{
-  cursor: default; 
-  
-  filter: sepia(0.95);
+.btn_disabled {
+  cursor: default;
+  border: 5px solid rgb(248, 228, 199);
+  background: rgba(189, 175, 148);
 }
