@@ -1,4 +1,8 @@
 /*Обнуление*/
+
+$minwidth: 560px; // Случайная величина, чтобы работало
+$fontfamily: sans-serif;
+
 * {
    padding: 0;
    margin: 0;
@@ -28,7 +32,7 @@ section {
 }
 html,
 body {
-   // height: 100vh;
+   height: 100vh;
    min-width: $minwidth;
 }
 body {
