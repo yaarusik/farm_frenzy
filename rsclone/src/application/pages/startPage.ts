@@ -1,14 +1,14 @@
 import  Control from "./../../builder/controller";
 
 export default class StartPage extends Control {
-   wrapper: Control<HTMLElement>
+   wrapper: Control<HTMLElement>;
    
    constructor(parentNode: HTMLElement){
       super(parentNode);
 
       this.wrapper = new Control(this.node, "div", "main", "");
       this.resizeWindow();
-      window.addEventListener('resize', this.resizeWindow);
+      window.addEventListener("resize", this.resizeWindow);
 
       const logo = new Control<HTMLImageElement>(this.wrapper.node, "img", "logo", "");
       logo.node.src = "images/main/logo-ru.png";
@@ -16,7 +16,7 @@ export default class StartPage extends Control {
       const panel = new Control(this.wrapper.node, "div", "panel", "");
 
       const greetings = new Control(panel.node, "div", "panel__greet", "Здравствуйте!");
-      greetings.node.setAttribute('data-text', 'Здравствуйте!');
+      greetings.node.setAttribute("data-text", "Здравствуйте!");
 
       const nameInput = new Control<HTMLInputElement>(panel.node, "input", "panel__name", "");
       nameInput.node.type = "text";
@@ -58,6 +58,6 @@ export default class StartPage extends Control {
    }
 
    resizeWindow = () =>{
-      this.wrapper.node.style.width = String(1140 * (window.innerHeight / 640)) + 'px';
-   }
+      this.wrapper.node.style.width = String(1140 * (window.innerHeight / 640)) + "px";
+   };
 }
