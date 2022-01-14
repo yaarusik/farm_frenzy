@@ -1,0 +1,12 @@
+.wrapper__map {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+
+.canvas {
+  height: 100vh;
+  transition: 0.2s;
+  background: white;
+}

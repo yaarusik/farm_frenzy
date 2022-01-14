@@ -1,9 +1,17 @@
-@import 'scss/var';
+@import "scss/var";
 
-:root{
+//MAP SECTION================================================================
+@import "scss/gameMapPage.scss";
+// =========================================================================
+
+:root {
   color: $white;
 }
 
-body{
+body {
+  overflow: hidden;
+}
+
+html {
   overflow: hidden;
 }

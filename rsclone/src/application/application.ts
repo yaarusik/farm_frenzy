@@ -12,7 +12,8 @@ export default class Application extends Control {
       super(parentNode);
       // preloader
 
-      this.mainCycle();
+      // this.mainCycle();
+      this.gameMapCycle();
       
    }
    // главная страница
@@ -40,7 +41,8 @@ export default class Application extends Control {
 
    // страница карты
    private gameMapCycle(){
-      const gameMapPage = new GameMapPage(this.node);
+      const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
+      const gameMapPage = new GameMapPage(pageWrapper.node, "div", "map", "");
       gameMapPage.onSelectShop = () => {
          gameMapPage.destroy();
          this.shopCycle();
