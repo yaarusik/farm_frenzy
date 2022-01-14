@@ -3,11 +3,10 @@ import  Control from "./../../builder/controller";
 export default class SettingsPage extends Control {
   wrapper: Control<HTMLElement>;
   
-
   constructor(parentNode: HTMLElement){
-      super(parentNode);
+    super(parentNode);
 
-    this.wrapper = new Control(this.node, "div", "main", "");
+    this.wrapper = new Control(this.node, "div", "wrapper main", "");
     this.resizeWindow();
     window.addEventListener("resize", this.resizeWindow);
 
@@ -40,16 +39,15 @@ export default class SettingsPage extends Control {
     const checkedInputMusic = new Control(musicLabel.node, "div", "input__checked", "");
 
     const mainBackBtn = new Control(panel.node, "button", "btn", "ОК");
-       mainBackBtn.node.onclick = () => {
-          this.onBack();
-       };
-
-}
+    mainBackBtn.node.onclick = () => {
+      this.onBack();
+    };
+  }
 
   onBack() {
     throw new Error("Method not implemented.");
   }
   resizeWindow = () =>{
-     this.wrapper.node.style.width = String(1140 * (window.innerHeight / 640)) + "px";
-  };
+    this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
+  }
 }

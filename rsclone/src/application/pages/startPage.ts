@@ -6,7 +6,7 @@ export default class StartPage extends Control {
    constructor(parentNode: HTMLElement){
       super(parentNode);
 
-      this.wrapper = new Control(this.node, "div", "main", "");
+      this.wrapper = new Control(this.node, "div", "wrapper main", "");
       this.resizeWindow();
       window.addEventListener("resize", this.resizeWindow);
 
@@ -15,7 +15,7 @@ export default class StartPage extends Control {
 
       const panel = new Control(this.wrapper.node, "div", "panel", "");
 
-      const greetings = new Control(panel.node, "div", "panel__greet", "Здравствуйте!");
+      const greetings = new Control(panel.node, "div", "title panel__greet", "Здравствуйте!");
       greetings.node.setAttribute("data-text", "Здравствуйте!");
 
       const nameInput = new Control<HTMLInputElement>(panel.node, "input", "panel__name", "");
@@ -58,6 +58,6 @@ export default class StartPage extends Control {
    }
 
    resizeWindow = () =>{
-      this.wrapper.node.style.width = String(1140 * (window.innerHeight / 640)) + "px";
-   };
+      this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
+   }
 }
