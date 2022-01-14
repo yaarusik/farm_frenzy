@@ -19,7 +19,6 @@ export default class SettingsPage extends Control {
 
     const soundBox = new Control(settingsBox.node, "div", "sound__box", "");
     const sound = new Control(soundBox.node, "div", "sound", "Звуки");
-
     const soundInp = new Control<HTMLInputElement>(soundBox.node, "input", "sousound__input settings__input", "");
     soundInp.node.id = "sound";
     soundInp.node.type = "checkbox";
@@ -31,7 +30,6 @@ export default class SettingsPage extends Control {
 
     const musicBox = new Control(settingsBox.node, "div", "music__box", "");
     const music = new Control(musicBox.node, "div", "music", "Музыка");
-
     const musicInp = new Control<HTMLInputElement>(musicBox.node, "input", "music__input settings__input", "");
     musicInp.node.id = "music";
     musicInp.node.type = "checkbox";
