@@ -36,7 +36,7 @@ $box-height: 3.4375rem;
 .music__box, .sound__box {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     width: $box-width;
     height: $box-height;
 }
@@ -56,11 +56,36 @@ $box-height: 3.4375rem;
     border: 3px solid $border-settings;
 }
 
-.sousound__label, .music__label, .music__input, .sousound__input {
-    width: 1.25rem;
-    height: 1.25rem;
+.sousound__label, .music__label, .settings__input {
+    width: 1.75rem;
+    height: 1.75rem;
 }
 
-.music__input, .sousound__input {
+.sousound__label, .music__label {
+    position: relative;
     cursor: pointer;
+    background-color: $white;
+    border-radius: 6px;
+    border: 3px solid $label-border;
+}
+
+.settings__input {
+    display: none;
+}
+
+.input__checked {
+    width: 1.75rem;
+    height: 1.75rem;
+    background-image: url(../images/settings/checked.svg);
+    background-size: cover;
+    position: absolute;
+    left: -2.5rem;
+    bottom: 0;
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+.settings__input:checked ~ label > div {
+    opacity: 1;
+    left: 0;
 }

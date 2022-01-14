@@ -19,21 +19,27 @@ export default class SettingsPage extends Control {
 
     const soundBox = new Control(settingsBox.node, "div", "sound__box", "");
     const sound = new Control(soundBox.node, "div", "sound", "Звуки");
-    sound.node.id = "sound";
+
+    const soundInp = new Control<HTMLInputElement>(soundBox.node, "input", "sousound__input settings__input", "");
+    soundInp.node.id = "sound";
+    soundInp.node.type = "checkbox";
+
     const soundLabel = new Control<HTMLLabelElement>(soundBox.node, "label", "sousound__label", "");
     soundLabel.node.setAttribute("for", "sound");
 
-    const soundInp = new Control<HTMLInputElement>(soundLabel.node, "input", "sousound__input", "");
-    soundInp.node.type = "checkbox";
+    const checkedInputSound = new Control(soundLabel.node, "div", "input__checked", "");
 
     const musicBox = new Control(settingsBox.node, "div", "music__box", "");
     const music = new Control(musicBox.node, "div", "music", "Музыка");
-    music.node.id = "music";
+
+    const musicInp = new Control<HTMLInputElement>(musicBox.node, "input", "music__input settings__input", "");
+    musicInp.node.id = "music";
+    musicInp.node.type = "checkbox";
+
     const musicLabel = new Control<HTMLLabelElement>(musicBox.node, "label", "music__label", "");
     musicLabel.node.setAttribute("for", "music");
 
-    const musicInp = new Control<HTMLInputElement>(musicLabel.node, "input", "music__input", "");
-    musicInp.node.type = "checkbox";
+    const checkedInputMusic = new Control(musicLabel.node, "div", "input__checked", "");
 
     const mainBackBtn = new Control(panel.node, "button", "btn", "ОК");
        mainBackBtn.node.onclick = () => {
