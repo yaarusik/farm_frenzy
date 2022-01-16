@@ -12,9 +12,7 @@ export default class Application extends Control {
       super(parentNode);
       // preloader
 
-      // this.mainCycle();
-      this.gameMapCycle();
-      
+      this.mainCycle(); 
    }
    // главная страница
    private mainCycle(){
@@ -47,7 +45,7 @@ export default class Application extends Control {
          gameMapPage.destroy();
          this.shopCycle();
       };
-      gameMapPage.startLevel = (levelNumber: number) => {   
+      gameMapPage.startLevel = () => {   
          gameMapPage.destroy();
          this.levelCycle();
       };
@@ -96,5 +94,4 @@ export default class Application extends Control {
          this.mainCycle();      
       };
    }
-
 }

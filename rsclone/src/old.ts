@@ -82,44 +82,5 @@
       //    this.onBack();
       // };
 
-      // private createCanvas(canvas: HTMLCanvasElement) {
-     
 
-   //    canvas.addEventListener("click", (e) => {
-   //       this.canvasEvents(e, canvas);
-   //    });
 
-   //    canvas.width = 1600;
-   //    canvas.height = 1200;
-   //    const context = <CanvasRenderingContext2D>canvas.getContext("2d");
-
-   //    this.imagesOptions.forEach(async (item) =>{
-   //       const picture = await this.loadImage(item.image);
-   //       if(item.sx){
-   //          const cutPicture = new CutPicture(picture , item.sx, item.sy, item.swidth, item.sheight, item.x, item.y, item.width, item.height);
-   //          cutPicture.draw(context);
-   //       } else {
-   //          const btn = new Button(picture, item.x, item.y, item.width, item.height);
-   //          btn.draw(context);
-   //       }
-   //    });
-   // }
-
-   // private loadImage(src: string): Promise<HTMLImageElement> {
-   //    return new Promise((resolve) =>{
-   //       const image = new Image();
-   //       image.src = src;
-   //       image.onload = () => resolve(image);
-   //      });
-   //   } 
-
-   //   private canvasEvents(e: MouseEvent, canvas: HTMLCanvasElement){
-   //    const rect = canvas.getBoundingClientRect();
-   //    const mouseX = e.clientX - rect.left;
-   //    const mouseY = e.clientY - rect.top;
-
-      
-
-   //   }
-
-   // imagesOptions: { image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight:number;}[];
