@@ -31,7 +31,6 @@
     "webpack-remove-empty-scripts": "^0.7.1"
   },
   "dependencies": {
-    "fabric": "^4.6.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.4"
   }

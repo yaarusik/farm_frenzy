@@ -1,6 +1,6 @@
-import Picture from "../utils/canvasBtn";
-import CutPicture from "../utils/cutPictures";
-import  Control from "./../../builder/controller";
+import Picture from "../../utils/canvasBtn";
+import CutPicture from "../../utils/cutPictures";
+import  Control from "../../builder/controller";
 
 interface IButtons {
     name: string, image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; 

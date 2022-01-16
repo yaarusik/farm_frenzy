@@ -1,4 +1,4 @@
-import  Control from "./../../builder/controller";
+import  Control from "../../builder/controller";
 
 export default class ShopPage extends Control {
   
