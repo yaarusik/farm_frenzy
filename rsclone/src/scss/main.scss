@@ -1,12 +1,7 @@
 @import "var";
 
 .main {
-  position: relative;
-  height: 100vh;
-  padding-top: 1%;
-  margin: 0 auto;
-  background: url("../images/main/main-back.png") center no-repeat;
-  background-size: cover;
+  background-image: url("../images/main/main-back.jpg");
 }
 
 .logo {
@@ -16,7 +11,7 @@
 }
 
 .panel {
-  width: 32.631%;
+  width: 45%;
   height: 43.75vh;
   display: flex;
   flex-direction: column;
@@ -29,18 +24,7 @@
 }
 
 .panel__greet {
-  position: relative;
   margin-bottom: 3vh;
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-.panel__greet::before {
-  content: attr(data-text);
-  position: absolute;
-  left: 0;
-  right: 0;
-  -webkit-text-stroke: 0.06em rgb(126, 89, 11);
 }
 
 .panel__name {
