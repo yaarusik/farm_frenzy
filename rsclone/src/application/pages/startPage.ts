@@ -1,4 +1,4 @@
-import  Control from "./../../builder/controller";
+import  Control from "../../builder/controller";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
@@ -16,6 +16,7 @@ export default class StartPage extends Control {
       const panel = new Control(this.wrapper.node, "div", "panel", "");
 
       const greetings = new Control(panel.node, "div", "title panel__greet", "Здравствуйте!");
+
       greetings.node.setAttribute("data-text", "Здравствуйте!");
 
       const nameInput = new Control<HTMLInputElement>(panel.node, "input", "panel__name", "");

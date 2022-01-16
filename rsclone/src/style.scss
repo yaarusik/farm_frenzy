@@ -1,11 +1,15 @@
-@import 'scss/var';
+@import "scss/var";
 
-:root{
+//MAP SECTION================================================================
+@import "scss/gameMapPage.scss";
+// =========================================================================
+
+:root {
   color: $white;
   background: $black;
 }
 
-body{
+body {
   overflow: hidden;
 }
 
@@ -32,3 +36,4 @@ body{
   right: 0;
   -webkit-text-stroke: 0.06em rgb(126, 89, 11);
 }
+
