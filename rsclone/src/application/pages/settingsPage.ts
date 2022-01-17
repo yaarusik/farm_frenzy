@@ -1,7 +1,9 @@
-import  Control from "../../builder/controller";
+import Control from "./../../builder/controller";
+import ButtonEffect from "./../../builder/button";
 
 export default class SettingsPage extends Control {
   wrapper: Control<HTMLElement>;
+  buttonEffect = new ButtonEffect();
   
   constructor(parentNode: HTMLElement){
     super(parentNode);
@@ -48,9 +50,10 @@ export default class SettingsPage extends Control {
     const checkedInput = new Control(fullScreenLabel.node, "div", "input__checked", "");
 
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
-       mainBackBtn.node.onclick = () => {
-          this.onBack();
-       };
+    this.buttonEffect.devideButton(mainBackBtn.node);
+    mainBackBtn.node.onclick = () => {
+      this.onBack();
+    };
 
 }
   createRangeInput(parent: HTMLElement, className: string) {

@@ -1,7 +1,9 @@
-import  Control from "../../builder/controller";
+import Control from "./../../builder/controller";
+import ButtonEffect from "./../../builder/button";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
+   buttonEffect = new ButtonEffect();
    
    constructor(parentNode: HTMLElement){
       super(parentNode);
@@ -23,24 +25,29 @@ export default class StartPage extends Control {
       nameInput.node.type = "text";
 
       const campaignBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Карьера");
+      this.buttonEffect.devideButton(campaignBtn.node);
       campaignBtn.node.onclick = () => {
          this.onSelectMap();
       };
 
       const endlessBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn btn_disabled", "Бесконечная");
+      this.buttonEffect.devideButton(endlessBtn.node);
       endlessBtn.node.disabled = true;
 
       const footer = new Control(this.wrapper.node, "footer", "footer", "");
 
       const settingsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Настройки");
+      this.buttonEffect.devideButton(settingsBtn.node);
       settingsBtn.node.onclick = () => {
          this.onSettings();
       };
       const awardsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Награды");
+      this.buttonEffect.devideButton(awardsBtn.node);
       awardsBtn.node.onclick = () => {
          this.onAwards();
       };
       const authorsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Авторы");
+      this.buttonEffect.devideButton(authorsBtn.node);
       authorsBtn.node.onclick = () => {
          this.onAuthors();
       };
