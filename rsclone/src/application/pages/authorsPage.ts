@@ -1,7 +1,10 @@
-import  Control from "./../../builder/controller";
+import Control from "./../../builder/controller";
+import ButtonEffect from "./../../builder/button";
+
 
 export default class AuthorsPage extends Control {
   wrapper: Control<HTMLElement>;
+  buttonEffect = new ButtonEffect();
 
   constructor(parentNode: HTMLElement){
     super(parentNode);
@@ -24,6 +27,7 @@ export default class AuthorsPage extends Control {
     const authorThird = new Control<HTMLLIElement>(authorList.node, "li", "author__item", "Серафим");
 
     const mainBackBtn = new Control(this.wrapper.node, "button", "btn btn_close", "ОК");
+    this.buttonEffect.devideButton(mainBackBtn.node);
     mainBackBtn.node.onclick = () => {
       this.onBack();
     };
