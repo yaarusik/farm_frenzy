@@ -3,8 +3,9 @@ import CutPicture from "../../utils/cutPictures";
 import  Control from "../../builder/controller";
 
 interface IButtons {
-    name: string, image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; 
+   type: string, name: string, image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; 
 }
+
 export default class GameMapPage extends Control {
      startLevel!: () => void;
    onBack!: () => void;
@@ -21,6 +22,7 @@ export default class GameMapPage extends Control {
 
       this.imagesOptions = [
          {  
+            type: 'picture',
             name: "карта",
             image: "images/map/map.jpg",
             x: 0, 
@@ -33,6 +35,7 @@ export default class GameMapPage extends Control {
             sheight: 0
          },
          {
+            type: 'picture',
             name: "меню__бар",
             image: "images/map/map__menu.png",
             x: 0, 
@@ -45,6 +48,7 @@ export default class GameMapPage extends Control {
             sheight: 0
          },
          {  
+            type: 'button',
             name: "магазин",
             image: "images/map/button_3.png",
             x: 16, 
@@ -57,6 +61,7 @@ export default class GameMapPage extends Control {
             sheight: 37
          },
          {
+            type: 'button',
             name: "меню",
             image: "images/map/button_3.png",
             x: 1456, 
@@ -69,7 +74,8 @@ export default class GameMapPage extends Control {
             sheight: 37
          }, 
          {
-            name: "уровень 1",
+            type: 'button',
+            name: "уровень1",
             image: "images/map/new__level.png",
             x: 590, 
             y: 958,
@@ -81,44 +87,8 @@ export default class GameMapPage extends Control {
             sheight: 54
          }
       ]; 
-      this.buttons = [
-         {  
-         name: "магазин",
-         image: "images/map/button_3.png",
-         x: 16, 
-         y: 1114,
-         width: 148,
-         height: 62, 
-         sx: 2,
-         sy: 2,
-         swidth: 75,
-         sheight: 37
-      },
-      {
-         name: "меню",
-         image: "images/map/button_3.png",
-         x: 1456, 
-         y: 1114,
-         width: 134,
-         height: 62, 
-         sx: 2,
-         sy: 2,
-         swidth: 75,
-         sheight: 37
-      }, 
-      {
-         name: "уровень1",
-         image: "images/map/new__level.png",
-         x: 590, 
-         y: 958,
-         width: 54,
-         height: 54, 
-         sx: 11,
-         sy: 164,
-         swidth: 54,
-         sheight: 54
-      }
-      ];  
+
+      this.buttons = this.imagesOptions.filter(btn => btn.type === 'button');
       // коэффициенты масштаба
       this.curWidthK = 1;
       this.curHeightK = 1;
@@ -187,7 +157,7 @@ export default class GameMapPage extends Control {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
-
+      console.log(buttons);
       buttons.forEach(btn => {
          const currentX = btn.x / this.curWidthK;
          const currentW = btn.width / this.curWidthK;
