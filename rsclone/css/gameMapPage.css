@@ -1,0 +1,15 @@
+.wrapper__map {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.canvas {
+  width: 100%;
+  max-width: 1600px;
+  max-height: 100vh;
+}
