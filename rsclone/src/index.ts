@@ -5,5 +5,6 @@ import "./scss/btn.scss";
 import "./scss/main.scss";
 import "./scss/settings.scss";
 import "./scss/author.scss";
+import "./scss/level.scss";
 
 const app = new Application(document.body);
