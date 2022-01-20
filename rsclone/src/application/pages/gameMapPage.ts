@@ -184,13 +184,13 @@ export default class GameMapPage extends Control {
 			};
 			if (this.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
-					case "магазин": {
+					case "Магазин": {
 						// УБРАТЬ ПРИВЕДЕНИЕ ТИПА
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onSelectShop, 250);
 						break;
 					}
-					case "меню": {
+					case "Меню": {
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onBack, 250);
 						break;
