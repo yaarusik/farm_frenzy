@@ -2,23 +2,13 @@ import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
 import Control from "../../builder/controller";
 import { imagesOptions, textOptions } from "./../../utils/mapData";
-
-interface IPictures {
-	type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; stepY?: number; id?: number
-}
-interface Coords {
-	currentX: number, currentY: number, currentW: number, currentH: number
-}
-interface IText {
-	text: string; x: number; y: number; animation: boolean;
-}
-
+import { IPictures, IText, Coords } from "./../iterfaces";
 export default class GameMapPage extends Control {
 	startLevel!: () => void;
 	onBack!: () => void;
 	onSelectShop!: () => void;
 
-	heightRatio: number;
+	// heightRatio: number;
 	curWidthK: number;
 	curHeightK: number;
 	imagesOptions: IPictures[];
@@ -36,7 +26,7 @@ export default class GameMapPage extends Control {
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
-		this.heightRatio = 1.33333333;
+		// this.heightRatio = 1.33333333;
 
 		const canvasContainer = new Control(this.node, "div", "canvas__container", "");
 		this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
