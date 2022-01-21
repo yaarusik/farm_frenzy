@@ -26,7 +26,6 @@ export default class GameMapPage extends Control {
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
-		// this.heightRatio = 1.33333333;
 
 		const canvasContainer = new Control(this.node, "div", "canvas__container", "");
 		this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -36,7 +35,6 @@ export default class GameMapPage extends Control {
 		this.startMap();
 
 		window.onresize = () => {
-			// this.resize(this.canvas.node);
 			this.canvasScale(this.canvas.node);
 		};
 
@@ -76,10 +74,6 @@ export default class GameMapPage extends Control {
 		this.curWidthK = 1600 / parseInt(widthContainer, 10);
 		this.curHeightK = 1200 / parseInt(heightContainer, 10);
 	}
-
-	// private resize(canvas: HTMLCanvasElement): void {
-	// 	// canvas.style.height = `${this.heightRatio * canvas.width}`;
-	// }
 
 	private drawImage(ctx: CanvasRenderingContext2D, loadImages: Promise<HTMLImageElement>[]) {
 		Promise.all(loadImages).then(responses => {
@@ -151,12 +145,7 @@ export default class GameMapPage extends Control {
 
 	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = {
-				currentX: btn.x / this.curWidthK,
-				currentW: btn.width / this.curWidthK,
-				currentY: btn.y / this.curHeightK,
-				currentH: btn.height / this.curHeightK
-			};
+			const scaleCoords: Coords = this.scaleCoords(btn);
 			if (this.determineCoords(event, scaleCoords)) {
 				this.buttonsHover(btn, btn.stepY as number);
 				this.changeAnimation(btn, true);
@@ -167,21 +156,24 @@ export default class GameMapPage extends Control {
 		});
 	}
 
+	private scaleCoords(btn: IPictures) {
+		return {
+			currentX: btn.x / this.curWidthK,
+			currentW: btn.width / this.curWidthK,
+			currentY: btn.y / this.curHeightK,
+			currentH: btn.height / this.curHeightK
+		};
+	}
+
 	private changeAnimation(btn: IPictures, animEnable: boolean) {
 		this.textOptions.forEach((item) => {
 			if (item.text === btn.name) item.animation = animEnable;
 		});
 	}
 
-
 	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = {
-				currentX: btn.x / this.curWidthK,
-				currentW: btn.width / this.curWidthK,
-				currentY: btn.y / this.curHeightK,
-				currentH: btn.height / this.curHeightK
-			};
+			const scaleCoords: Coords = this.scaleCoords(btn);
 			if (this.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
 					case "Магазин": {
