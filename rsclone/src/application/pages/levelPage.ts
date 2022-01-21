@@ -20,6 +20,13 @@ export default class LevelPage extends Control {
 
 		this.imagesPath = [
 			"images/pets/chicken/down.png",
+			"images/pets/chicken/down-left.png",
+			"images/pets/chicken/down-right.png",
+			"images/pets/chicken/left.png",
+			"images/pets/chicken/right.png",
+			"images/pets/chicken/up.png",
+			"images/pets/chicken/up-left.png",
+			"images/pets/chicken/up-right.png",
 		];
 
 		this.animals = [];
@@ -86,6 +93,7 @@ export default class LevelPage extends Control {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.animals.forEach((item) => {
 			let animName = item.name + '-' + item.state;
+			// console.log(animName);
 			if (typeof this.images.get(animName) === 'undefined')
 				return;
 			const frame = (Math.floor(this.gameFrame / this.staggeredFrames) + item.frameRand) % 16;
@@ -97,6 +105,37 @@ export default class LevelPage extends Control {
 			let sHeight = item.height * this.curHeightK * this.heightRatio;
 
 			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
+
+			if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3){
+				item.wantX = 400 + Math.floor(Math.random() * 740);
+				item.wantY = 430 + Math.floor(Math.random() * 470);
+
+			}
+			
+			let state = '';
+
+			if (item.coordY - item.wantY < -2){
+				state = 'down';
+				item.coordY ++;
+			} else if (item.coordY - item.wantY > 2){
+				state = 'up';
+				item.coordY --;
+			}
+
+			if (item.coordX - item.wantX < -2){
+				state += (state.length > 0 ? '-' : '') + 'right';
+				item.coordX += 1 * this.heightRatio; // Иначе слишком медленно по горизонтали идёт
+			} else if (item.coordX - item.wantX > 2){
+				state += (state.length > 0 ? '-' : '') + 'left';
+				item.coordX -= 1 * this.heightRatio;
+			}
+
+			if (frame === 0)
+				console.log(state);
+
+			if (state === '') // Мало ли
+				state = item.state
+			item.state = state;
 		});
 
 		this.gameFrame++;
@@ -106,7 +145,7 @@ export default class LevelPage extends Control {
 
 	private createAnimal(name: string) {
 		if (name === 'chicken')
-			this.animals.push(new Chicken(this.id, Math.random() * 1000, Math.random() * 1000));
+			this.animals.push(new Chicken(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 470)));
 
 		this.id++;
 	}
