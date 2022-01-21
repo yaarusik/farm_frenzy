@@ -1,53 +1,35 @@
 import Control from "../../builder/controller";
+import { Chicken, AnimalList } from "../types";
 
-interface IPictures {
-	type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; stepY?: number; id?: number
-}
-
-interface Animal{
-	type: string; name: string; id: number; state: number; image: string; coordX: number; coordY: number; width: number; height: number;
-}
 export default class LevelPage extends Control {
 	canvasContainer: Control;
 	canvas : Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
-	imagesOptions: IPictures[];
 	curWidthK: number;
 	curHeightK: number;
-	animals: Animal[];
+	heightRatio: number;
+	animals: AnimalList[];
+	gameFrame : number;
+	staggeredFrames : number;
+	id : number; // Для животых
+	images = new Map<string, HTMLImageElement>();
+	imagesPath : string[];
 
 	constructor (parentNode: HTMLElement) {
 		super(parentNode);
 
-		this.imagesOptions = [
-			{
-				type: "picture",
-				name: "карта",
-				image: "images/level/level-back.jpg",
-				x: 0,
-				y: 0,
-				width: 1600,
-				height: 1200,
-				sx: 0,
-				sy: 0,
-				swidth: 0,
-				sheight: 0
-			}
+		this.imagesPath = [
+			"images/pets/chicken/down.png",
 		];
 
-		this.animals = [
-			{
-				type: "animal",
-				name: "chicken",
-				id: 0,
-				state: 0,
-				image: "images/pets/chicken/down.png",
-				coordX: 0,
-				coordY: 0,
-				width: 64,
-				height: 64,
-			}
-		]
+		this.animals = [];
+		this.createAnimal('chicken'); // Временно
+		this.createAnimal('chicken');
+		this.createAnimal('chicken');
+		this.createAnimal('chicken');
+		this.createAnimal('chicken');
+		this.createAnimal('chicken');
+		this.createAnimal('chicken');
 
 		this.canvasContainer = new Control(this.node, "div", "wrapper wrapper_level", "");
 		this.canvas = new Control<HTMLCanvasElement>(this.canvasContainer.node, "canvas", "canvas", "");
@@ -57,27 +39,80 @@ export default class LevelPage extends Control {
 
 		this.curWidthK = 1;
 		this.curHeightK = 1;
+		this.heightRatio = 1.333333333;
+
+		this.gameFrame = 0;
+		this.staggeredFrames = 3;
+		this.id = 0;
 		
 		this.startLevel();
 	}
 	
 	private startLevel(){
-		// this.canvasScale(this.canvas.node);
-		this.animals.forEach(item => {
-			const animal = new Control<HTMLImageElement>(this.canvasContainer.node, "img", "animal", "");
-			animal.node.src = item.image;
-			item.state = 0; // Надо будет обсудить номера для состояний
+		this.resize(this.canvas.node);
+		this.canvasScale(this.canvas.node);
+		this.imagesPath.forEach(async (path) => {
+			let petName = path.slice(12, 12 + path.slice(12).indexOf('/'));
+			let anim = path.slice(path.lastIndexOf('/') + 1, -4);
+			let animName = petName + '-' + anim;
+			this.images.set(animName, await this.loadImage(path));
 		});
-		console.log(this.animals);
+
+		this.run();
+	}
+
+	private loadImage(src : string): Promise<HTMLImageElement>{
+		return new Promise((resolve) => {
+			const image = new Image();
+			image.src = src;
+			image.onload = () => {
+				resolve(image);
+			};
+		});
+	}
+
+	private resize(canvas: HTMLCanvasElement): void {
+		canvas.style.height = `${this.heightRatio * canvas.width}`;
+	}
+
+	private canvasScale(canvas: HTMLCanvasElement) {
+		const widthContainer = getComputedStyle(canvas).width;
+		const heightContainer = getComputedStyle(canvas).height;
+		this.curWidthK = 1600 / parseInt(widthContainer, 10);
+		this.curHeightK = 1200 / parseInt(heightContainer, 10);
+	}
+
+	private run(){
+		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
+		this.animals.forEach((item) => {
+			let animName = item.name + '-' + item.state;
+			if (typeof this.images.get(animName) === 'undefined')
+				return;
+			const frame = (Math.floor(this.gameFrame / this.staggeredFrames) + item.frameRand) % 16;
+
+			let imageFile = this.images.get(animName) as HTMLImageElement;
+			let dx = item.width * (frame % 4);
+			let dy = item.height * Math.floor(frame / 4);
+			let sWidth = item.width * this.curWidthK * this.heightRatio;
+			let sHeight = item.height * this.curHeightK * this.heightRatio;
+			
+			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
+		});
+
+		this.gameFrame ++;
+		requestAnimationFrame(this.run.bind(this));
+	}
+
+
+	private createAnimal(name : string){
+		if (name === 'chicken')
+			this.animals.push(new Chicken(this.id, Math.random() * 1000, Math.random() * 1000));
+
+		this.id ++;
 	}
 
 	gameMapBack() {
 		throw new Error("Method not implemented.");
 	}
-
-
-
-
-
 
 }
