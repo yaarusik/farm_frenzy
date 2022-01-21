@@ -30,13 +30,13 @@ export default class LevelPage extends Control {
 		];
 
 		this.animals = [];
-		this.createAnimal('chicken'); // Временно
-		this.createAnimal('chicken');
-		this.createAnimal('chicken');
-		this.createAnimal('chicken');
-		this.createAnimal('chicken');
-		this.createAnimal('chicken');
-		this.createAnimal('chicken');
+		this.createAnimal("chicken"); // Временно
+		this.createAnimal("chicken");
+		this.createAnimal("chicken");
+		this.createAnimal("chicken");
+		this.createAnimal("chicken");
+		this.createAnimal("chicken");
+		this.createAnimal("chicken");
 
 		this.canvasContainer = new Control(this.node, "div", "wrapper wrapper_level", "");
 		this.canvas = new Control<HTMLCanvasElement>(this.canvasContainer.node, "canvas", "canvas", "");
@@ -59,9 +59,9 @@ export default class LevelPage extends Control {
 		this.resize(this.canvas.node);
 		this.canvasScale(this.canvas.node);
 		this.imagesPath.forEach(async (path) => {
-			let petName = path.slice(12, 12 + path.slice(12).indexOf('/'));
-			let anim = path.slice(path.lastIndexOf('/') + 1, -4);
-			let animName = petName + '-' + anim;
+			const petName = path.slice(12, 12 + path.slice(12).indexOf("/"));
+			const anim = path.slice(path.lastIndexOf("/") + 1, -4);
+			const animName = petName + "-" + anim;
 			this.images.set(animName, await this.loadImage(path));
 		});
 
@@ -92,17 +92,18 @@ export default class LevelPage extends Control {
 	private run() {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.animals.forEach((item) => {
+
 			let animName = item.name + '-' + item.state;
 			// console.log(animName);
 			if (typeof this.images.get(animName) === 'undefined')
 				return;
 			const frame = (Math.floor(this.gameFrame / this.staggeredFrames) + item.frameRand) % 16;
 
-			let imageFile = this.images.get(animName) as HTMLImageElement;
-			let dx = item.width * (frame % 4);
-			let dy = item.height * Math.floor(frame / 4);
-			let sWidth = item.width * this.curWidthK * this.heightRatio;
-			let sHeight = item.height * this.curHeightK * this.heightRatio;
+			const imageFile = this.images.get(animName) as HTMLImageElement;
+			const dx = item.width * (frame % 4);
+			const dy = item.height * Math.floor(frame / 4);
+			const sWidth = item.width * this.curWidthK * this.heightRatio;
+			const sHeight = item.height * this.curHeightK * this.heightRatio;
 
 			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 

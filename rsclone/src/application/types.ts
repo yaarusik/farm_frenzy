@@ -1,19 +1,19 @@
-export class Animal{
-	type : string;
-  name : string;
-  id : number;
-  state : string;
-  image : string;
-  coordX : number;
-  coordY : number;
-  width : number;
-  height : number;
-  frameNum : number;
+export class Animal {
+  type: string;
+  name: string;
+  id: number;
+  state: string;
+  image: string;
+  coordX: number;
+  coordY: number;
+  width: number;
+  height: number;
+  frameNum: number;
   frameRand: number;
   wantX: number;
   wantY: number;
 
-  constructor(type : string, name : string, id : number, state : string, image : string, coordX : number, coordY : number, width : number, height: number, frameNum : number){
+  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number) {
     this.type = type;
     this.name = name;
     this.id = id;
@@ -36,9 +36,9 @@ export class Animal{
   // Нужны методы для потребности в еде и т.д.
 }
 
-export class Chicken extends Animal{
-  constructor(id : number, coordX : number, coordY: number){
-    super('pet', 'chicken', id, 'down', "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16);
+export class Chicken extends Animal {
+  constructor (id: number, coordX: number, coordY: number) {
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16);
   }
 }
 
