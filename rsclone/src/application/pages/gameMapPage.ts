@@ -119,7 +119,6 @@ export default class GameMapPage extends Control {
 		});
 	}
 
-
 	private buttonsHover(btn: IPictures, yStep: number) {
 		btn.sy = yStep;
 	}
