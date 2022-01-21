@@ -3,17 +3,17 @@ import { Chicken, AnimalList } from "../types";
 
 export default class LevelPage extends Control {
 	canvasContainer: Control;
-	canvas : Control<HTMLCanvasElement>;
+	canvas: Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
 	curWidthK: number;
 	curHeightK: number;
 	heightRatio: number;
 	animals: AnimalList[];
-	gameFrame : number;
-	staggeredFrames : number;
-	id : number; // Для животых
+	gameFrame: number;
+	staggeredFrames: number;
+	id: number; // Для животых
 	images = new Map<string, HTMLImageElement>();
-	imagesPath : string[];
+	imagesPath: string[];
 
 	constructor (parentNode: HTMLElement) {
 		super(parentNode);
@@ -44,11 +44,11 @@ export default class LevelPage extends Control {
 		this.gameFrame = 0;
 		this.staggeredFrames = 3;
 		this.id = 0;
-		
+
 		this.startLevel();
 	}
-	
-	private startLevel(){
+
+	private startLevel() {
 		this.resize(this.canvas.node);
 		this.canvasScale(this.canvas.node);
 		this.imagesPath.forEach(async (path) => {
@@ -61,7 +61,7 @@ export default class LevelPage extends Control {
 		this.run();
 	}
 
-	private loadImage(src : string): Promise<HTMLImageElement>{
+	private loadImage(src: string): Promise<HTMLImageElement> {
 		return new Promise((resolve) => {
 			const image = new Image();
 			image.src = src;
@@ -82,7 +82,7 @@ export default class LevelPage extends Control {
 		this.curHeightK = 1200 / parseInt(heightContainer, 10);
 	}
 
-	private run(){
+	private run() {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.animals.forEach((item) => {
 			let animName = item.name + '-' + item.state;
@@ -95,20 +95,20 @@ export default class LevelPage extends Control {
 			let dy = item.height * Math.floor(frame / 4);
 			let sWidth = item.width * this.curWidthK * this.heightRatio;
 			let sHeight = item.height * this.curHeightK * this.heightRatio;
-			
+
 			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 		});
 
-		this.gameFrame ++;
+		this.gameFrame++;
 		requestAnimationFrame(this.run.bind(this));
 	}
 
 
-	private createAnimal(name : string){
+	private createAnimal(name: string) {
 		if (name === 'chicken')
 			this.animals.push(new Chicken(this.id, Math.random() * 1000, Math.random() * 1000));
 
-		this.id ++;
+		this.id++;
 	}
 
 	gameMapBack() {
