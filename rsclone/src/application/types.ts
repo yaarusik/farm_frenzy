@@ -10,6 +10,8 @@ export class Animal{
   height : number;
   frameNum : number;
   frameRand: number;
+  wantX: number;
+  wantY: number;
 
   constructor(type : string, name : string, id : number, state : string, image : string, coordX : number, coordY : number, width : number, height: number, frameNum : number){
     this.type = type;
@@ -23,10 +25,12 @@ export class Animal{
     this.height = height;
     this.frameNum = frameNum;
     this.frameRand = Math.floor(Math.random() * this.frameNum);
+    this.wantX = this.coordX;
+    this.wantY = this.coordY;
   }
 
   die(){
-
+    throw new Error("Method not implemented.");
   }
 
   // Нужны методы для потребности в еде и т.д.
@@ -39,7 +43,3 @@ export class Chicken extends Animal{
 }
 
 export type AnimalList = Chicken; // Потом сюда надо дописывать других животных
-
-export enum AnimalState {
-  //  = 'down',
-}
