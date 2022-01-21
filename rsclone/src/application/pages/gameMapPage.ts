@@ -3,12 +3,12 @@ import CutPicture from "../../utils/classes/cutPictures";
 import Control from "../../builder/controller";
 import { imagesOptions, textOptions } from "./../../utils/mapData";
 import { IPictures, IText, Coords } from "./../iterfaces";
+import Common from "./../common/common";
 export default class GameMapPage extends Control {
 	startLevel!: () => void;
 	onBack!: () => void;
 	onSelectShop!: () => void;
 
-	// heightRatio: number;
 	curWidthK: number;
 	curHeightK: number;
 	imagesOptions: IPictures[];
@@ -16,9 +16,12 @@ export default class GameMapPage extends Control {
 	canvas: Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
 	textOptions: IText[];
+	commonFunction: Common;
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
+
+		this.commonFunction = new Common();
 
 		this.textOptions = textOptions;
 		this.imagesOptions = imagesOptions;
@@ -41,13 +44,14 @@ export default class GameMapPage extends Control {
 		this.canvas.node.addEventListener("mousemove", (e) => {
 			this.canvasMoveHundler(e, this.canvas.node, this.buttons);
 		});
+
 		this.canvas.node.addEventListener("click", (e) => {
 			this.canvasClickHundler(e, this.canvas.node, this.buttons);
 		});
 	}
 
 	private startMap() {
-		const loadImages = this.imagesOptions.map(image => this.loadImage(image.image));
+		const loadImages = this.imagesOptions.map(image => this.commonFunction.loadImage(image.image));
 		this.canvasScale(this.canvas.node);
 
 		this.run(loadImages);
@@ -56,12 +60,10 @@ export default class GameMapPage extends Control {
 	private async render(loadImages: Promise<HTMLImageElement>[]) {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.drawImage(this.context, loadImages);
-
 	}
 
 	private run(loadImages: Promise<HTMLImageElement>[]) {
 		this.render(loadImages);
-
 
 		requestAnimationFrame(() => {
 			this.run(loadImages);
@@ -117,15 +119,6 @@ export default class GameMapPage extends Control {
 		});
 	}
 
-	private loadImage(src: string): Promise<HTMLImageElement> {
-		return new Promise((resolve) => {
-			const image = new Image();
-			image.src = src;
-			image.onload = () => {
-				resolve(image);
-			};
-		});
-	}
 
 	private buttonsHover(btn: IPictures, yStep: number) {
 		btn.sy = yStep;

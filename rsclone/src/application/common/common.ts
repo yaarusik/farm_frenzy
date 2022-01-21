@@ -1,9 +1,6 @@
-class Common {
-  constructor () {
+export default class Common {
 
-  }
-
-  private loadImage(src: string): Promise<HTMLImageElement> {
+  public loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve) => {
       const image = new Image();
       image.src = src;
