@@ -100,6 +100,13 @@ $border-radius: 1.375rem;
     }
 }
 
+.stars__img {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 10px;
+}
+
 .shop__main-block {
     @extend %shop-block;
     flex-wrap: wrap;
@@ -208,7 +215,7 @@ $border-radius: 1.375rem;
     position: absolute;
     left: 50%;
     transform: translate(-49%);
-    bottom: 2px;
+    bottom: 3px;
     width: 100px;
     height: 30px;
     background-color: #696f73;

@@ -27,6 +27,8 @@ export default class ShopPage extends Control {
 
       const shopMainUnderStarsBlock =  new Control(shopMainUnder.node, "div", "shop__main-under__block" ,"");
       const shopMainUnderStars =  new Control(shopMainUnderStarsBlock.node, "div", "shop__main-under__stars" ,"");
+      const startAnimation = new Control<HTMLImageElement>(shopMainUnderStars.node, "img", "stars__img" ,"");
+      startAnimation.node.src = "../images/shop/star_anim.png";
       const starsCounter = new Control(shopMainUnderStars.node, "div", "stars__count" ,"0");
       starsCounter.node.setAttribute("data-amount", "0");
 
