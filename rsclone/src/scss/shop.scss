@@ -16,11 +16,6 @@ $border-radius: 1.375rem;
     src: url("../fonts/vag-rounded.otf");
 }
 
-@font-face {
-    font-family: 'Sourse-serif4';
-    src: url("../fonts/SourceSerif4.ttf");
-}
-
 .shop {
     padding: 3vh 5%;
     background-image: url(../images/shop/shop-back.jpg);
@@ -117,6 +112,10 @@ $border-radius: 1.375rem;
 }
 
 .contantBlock, .contantAside, .contantEngineer, .contantPets {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     width: 10.938rem;
     height: 9.375rem;
     border: 2px solid #51311c;
@@ -130,4 +129,89 @@ $border-radius: 1.375rem;
     bottom: 10px;
     color: #ffe80a;
     font-size: 50px;
+}
+
+.content__name {
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 3px;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-content: space-between;
+    width: 100%;
+    height: 7.375rem;
+
+    &__block {
+        height: 6.438rem;
+        width: 100%;
+        background-size: cover;
+        background-image: url(../images/shop/layers/shop_layer-grey-2.png);
+    }
+
+    &__img {
+        right: 20px;
+        height: 4.688rem;
+        width: 5.625rem;
+        position: absolute;
+        top: 0;
+    }
+}
+
+.driedEggs {
+    top: 30px;
+    width: 6.75rem;
+    height: 5.625rem;
+}
+
+.depots, .wells {
+    top: 30px;
+    width: 6.75rem;
+    height: 4.876rem;
+}
+
+.cages {
+    top: 25px;
+    width: 6rem;
+    height: 5.25rem;
+}
+
+.cars {
+    top: 35px;
+    width: 6.976rem;
+    height: 4.876rem;
+}
+
+.airplanes {
+    top: 15px;
+    width: 7.50rem;
+    height: 6.735rem;
+}
+
+.dogs {
+    top: 28px;
+}
+.cats {
+    top: 23px;
+}
+
+.cats, .dogs {
+    width: 6.75rem;
+    height: 5.625rem;
+}
+
+.content__btn {
+    position: absolute;
+    left: 50%;
+    transform: translate(-48.5%);
+    bottom: 0;
+    width: 105px;
+    height: 30px;
+    background-color: #696f73;
+    border-radius: 15px;
+    font-size: 25px;
+    color: $white;
 }

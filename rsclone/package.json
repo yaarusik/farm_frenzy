@@ -8,6 +8,7 @@
     "build": "webpack"
   },
   "devDependencies": {
+    "@types/fabric": "^4.5.6",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
     "clean-webpack-plugin": "^4.0.0",
@@ -26,7 +27,7 @@
     "sass-loader": "^11.1.1",
     "webpack": "^5.58.1",
     "webpack-cli": "^4.9.0",
-    "webpack-dev-server": "^4.3.1",
+    "webpack-dev-server": "^4.7.3",
     "webpack-remove-empty-scripts": "^0.7.1"
   },
   "dependencies": {
