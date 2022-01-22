@@ -216,10 +216,17 @@ $border-radius: 1.375rem;
     left: 50%;
     transform: translate(-49%);
     bottom: 3px;
-    width: 100px;
-    height: 30px;
+    width: 6.25rem;
+    height: 1.875rem;
     background-color: #696f73;
     border-radius: 15px;
-    font-size: 25px;
+    font-size: 23px;
     color: $white;
+
+    &-img {
+        position: absolute;
+        bottom: 7px;
+        width: 1.375rem;
+        height: 1.375rem;
+    }
 }

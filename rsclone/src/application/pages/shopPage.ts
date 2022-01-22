@@ -28,7 +28,7 @@ export default class ShopPage extends Control {
       const shopMainUnderStarsBlock =  new Control(shopMainUnder.node, "div", "shop__main-under__block" ,"");
       const shopMainUnderStars =  new Control(shopMainUnderStarsBlock.node, "div", "shop__main-under__stars" ,"");
       const startAnimation = new Control<HTMLImageElement>(shopMainUnderStars.node, "img", "stars__img" ,"");
-      startAnimation.node.src = "../images/shop/star_anim.png";
+      startAnimation.node.src = "../images/shop/star/star_anim.png";
       const starsCounter = new Control(shopMainUnderStars.node, "div", "stars__count" ,"0");
       starsCounter.node.setAttribute("data-amount", "0");
 
@@ -67,8 +67,11 @@ export default class ShopPage extends Control {
          const contentBlockImg = new Control(content.node, "div", "content__block" ,"");
          const contentImg = new Control<HTMLImageElement>(contentBlockImg.node, "img", `${blockClass} content__img` ,"");
          contentImg.node.src = link;
-         const contentBtn = new Control<HTMLButtonElement>(content.node, "button", "content__btn", "");
-         contentBtn.node.innerHTML = `${cost}&#11088;`;
+         const contentBtn = new Control<HTMLButtonElement>(content.node, "button", "content__btn", cost);
+
+         const btnImage = new Control<HTMLImageElement>(content.node, "img", "content__btn-img", "");
+         btnImage.node.style.right = cost.length > 3 ? "36px" : "40px";
+         btnImage.node.src = "../images/shop/star/star_btn.png";
       }
 
       while (parent.childElementCount < count) {
