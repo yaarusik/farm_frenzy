@@ -69,5 +69,5 @@ export default class SettingsPage extends Control {
   }
   resizeWindow = () =>{
     this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
-  }
+  };
 }
