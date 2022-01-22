@@ -3,7 +3,7 @@ export interface IContentBlock {
 }
 
 export const housesBlock: IContentBlock = {
-    "Порошковый/130" : "../images/shop/houses/driedEggs/driedEggs-01.png"
+    // "Порошковый/130" : "../images/shop/houses/driedEggs/driedEggs-01.png"
 };
 
 export const asideBlock: IContentBlock = {
@@ -14,7 +14,7 @@ export const asideBlock: IContentBlock = {
 
 export const EngineeringBlock: IContentBlock = {
     "Автомобиль/100" : "../images/shop/cars/car-01.png",
-    "Самолёт/100" : "../images/shop/airplanes/airplane-01.png"
+    // "Самолёт/100" : "../images/shop/airplanes/airplane-01.png"
 };
 
 export const PetsBlock: IContentBlock = {

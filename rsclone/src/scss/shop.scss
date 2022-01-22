@@ -134,7 +134,7 @@ $border-radius: 1.375rem;
 .content__name {
     font-family: Helvetica, sans-serif;
     text-align: center;
-    font-size: 26px;
+    font-size: 24px;
     margin-bottom: 3px;
 }
 
@@ -147,8 +147,8 @@ $border-radius: 1.375rem;
 
     &__block {
         height: 6.438rem;
-        width: 100%;
-        background-size: cover;
+        width: 97%;
+        background-size: 100% 100%;
         background-image: url(../images/shop/layers/shop_layer-grey-2.png);
     }
 
@@ -162,9 +162,10 @@ $border-radius: 1.375rem;
 }
 
 .driedEggs {
-    top: 30px;
-    width: 6.75rem;
-    height: 5.625rem;
+    top: 18px;
+    right: 3px;
+    width: 7.875rem;
+    height: 6.563rem;
 }
 
 .depots, .wells {
@@ -206,9 +207,9 @@ $border-radius: 1.375rem;
 .content__btn {
     position: absolute;
     left: 50%;
-    transform: translate(-48.5%);
-    bottom: 0;
-    width: 105px;
+    transform: translate(-49%);
+    bottom: 2px;
+    width: 100px;
     height: 30px;
     background-color: #696f73;
     border-radius: 15px;
