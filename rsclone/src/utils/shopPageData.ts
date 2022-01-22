@@ -3,7 +3,7 @@ export interface IContentBlock {
 }
 
 export const housesBlock: IContentBlock = {
-    // "Порошковый/130" : "../images/shop/houses/driedEggs/driedEggs-01.png"
+    "Порошковый/130" : "../images/shop/houses/driedEggs/driedEggs-01.png"
 };
 
 export const asideBlock: IContentBlock = {
