@@ -13,6 +13,7 @@ export default class Application extends Control {
 		// preloader
 
 		this.mainCycle();
+		// this.gameMapCycle();
 	}
 	// главная страница
 	private mainCycle() {
@@ -65,7 +66,8 @@ export default class Application extends Control {
 	}
 
 	private levelCycle() {
-		const levelPage = new LevelPage(this.node);
+		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
+		const levelPage = new LevelPage(pageWrapper.node);
 		levelPage.gameMapBack = () => {
 			levelPage.destroy();
 			this.gameMapCycle();

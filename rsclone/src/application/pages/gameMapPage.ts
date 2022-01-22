@@ -1,181 +1,34 @@
-import Picture from "../../utils/canvasBtn";
-import CutPicture from "../../utils/cutPictures";
+import Picture from "../../utils/classes/canvasBtn";
+import CutPicture from "../../utils/classes/cutPictures";
 import Control from "../../builder/controller";
-
-interface IPictures {
-	type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; stepY?: number; id?: number
-}
-
-
-
+import { imagesOptions, textOptions } from "./../../utils/mapData";
+import { IPictures, IText, Coords } from "./../iterfaces";
+import Common from "./../common/common";
 export default class GameMapPage extends Control {
 	startLevel!: () => void;
 	onBack!: () => void;
 	onSelectShop!: () => void;
 
-	heightRatio: number;
 	curWidthK: number;
 	curHeightK: number;
 	imagesOptions: IPictures[];
 	buttons: IPictures[];
 	canvas: Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
+	textOptions: IText[];
+	commonFunction: Common;
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
 
-		this.imagesOptions = [
-			{
-				type: "picture",
-				name: "карта",
-				image: "images/map/gameMapStart.jpg",
-				x: 0,
-				y: 0,
-				width: 1600,
-				height: 1200,
-				sx: 0,
-				sy: 0,
-				swidth: 0,
-				sheight: 0
-			},
-			{
-				type: "picture",
-				name: "меню__бар",
-				image: "images/map/map__menu.png",
-				x: 0,
-				y: 1092,
-				width: 1600,
-				height: 110,
-				sx: 0,
-				sy: 0,
-				swidth: 0,
-				sheight: 0
-			},
-			{
-				type: "button",
-				name: "магазин",
-				image: "images/map/menuButtons.png",
-				stepY: 44,
-				x: 16,
-				y: 1112,
-				width: 148,
-				height: 68,
-				sx: 0,
-				sy: 0,
-				swidth: 80,
-				sheight: 41,
-			},
-			{
-				type: "button",
-				name: "меню",
-				image: "images/map/menuButtons.png",
-				stepY: 44,
-				x: 1456,
-				y: 1112,
-				width: 136,
-				height: 66,
-				sx: 0,
-				sy: 0,
-				swidth: 80,
-				sheight: 41,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 1,
-				x: 560,
-				y: 928,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 2,
-				x: 635,
-				y: 997,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 3,
-				x: 716,
-				y: 1068,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 4,
-				x: 805,
-				y: 1014,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 5,
-				x: 898,
-				y: 945,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			},
-			{
-				type: "button",
-				name: "уровень",
-				image: "images/map/new__level.png",
-				id: 6,
-				x: 995,
-				y: 877,
-				width: 76,
-				height: 76,
-				sx: 0,
-				sy: 0,
-				stepY: 76,
-				swidth: 76,
-				sheight: 76,
-			}
-		];
+		this.commonFunction = new Common();
 
+		this.textOptions = textOptions;
+		this.imagesOptions = imagesOptions;
 		this.buttons = this.imagesOptions.filter(btn => btn.type === "button");
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
-		this.heightRatio = 1.33333333;
 
 		const canvasContainer = new Control(this.node, "div", "canvas__container", "");
 		this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -185,33 +38,32 @@ export default class GameMapPage extends Control {
 		this.startMap();
 
 		window.onresize = () => {
-			this.resize(this.canvas.node);
 			this.canvasScale(this.canvas.node);
 		};
 
 		this.canvas.node.addEventListener("mousemove", (e) => {
 			this.canvasMoveHundler(e, this.canvas.node, this.buttons);
 		});
+
 		this.canvas.node.addEventListener("click", (e) => {
 			this.canvasClickHundler(e, this.canvas.node, this.buttons);
 		});
 	}
 
 	private startMap() {
-		const loadImages = this.imagesOptions.map(image => this.loadImage(image.image));
+		const loadImages = this.imagesOptions.map(image => this.commonFunction.loadImage(image.image));
 		this.canvasScale(this.canvas.node);
 
 		this.run(loadImages);
 	}
 
-	private render(loadImages: Promise<HTMLImageElement>[]) {
+	private async render(loadImages: Promise<HTMLImageElement>[]) {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.drawImage(this.context, loadImages);
 	}
 
 	private run(loadImages: Promise<HTMLImageElement>[]) {
 		this.render(loadImages);
-
 
 		requestAnimationFrame(() => {
 			this.run(loadImages);
@@ -223,10 +75,6 @@ export default class GameMapPage extends Control {
 		const heightContainer = getComputedStyle(canvas).height;
 		this.curWidthK = 1600 / parseInt(widthContainer, 10);
 		this.curHeightK = 1200 / parseInt(heightContainer, 10);
-	}
-
-	private resize(canvas: HTMLCanvasElement): void {
-		canvas.style.height = `${this.heightRatio * canvas.width}`;
 	}
 
 	private drawImage(ctx: CanvasRenderingContext2D, loadImages: Promise<HTMLImageElement>[]) {
@@ -241,18 +89,36 @@ export default class GameMapPage extends Control {
 					btn.draw(ctx);
 				}
 			});
+
+			this.drawText(this.textOptions);
 		});
 	}
 
-	private loadImage(src: string): Promise<HTMLImageElement> {
-		return new Promise((resolve) => {
-			const image = new Image();
-			image.src = src;
-			image.onload = () => {
-				resolve(image);
-			};
+	private drawText(textArr: IText[]) {
+		this.context.font = "24px Vag_Rounded-Bold CY";
+		this.context.fillStyle = "#fff";
+		const letterSpacing = 0.5;
+		const step = 3;
+		textArr.forEach(text => {
+			if (!text.animation) {
+				this.context.textAlign = "start";
+				this.context.fillText(text.text, text.x, text.y);
+			} else {
+				const startY = text.y;
+				const startX = text.x;
+				for (let i = 0; i < text.text.length; i++) {
+					const textSize = this.context.measureText(text.text[i]);
+					text.x += Math.floor(textSize.width) + letterSpacing;
+					i % 2 ? text.y = startY - step : text.y = startY + step;
+					this.context.textAlign = "right";
+					this.context.fillText(text.text[i], text.x, text.y);
+				}
+				text.x = startX;
+				text.y = startY;
+			}
 		});
 	}
+
 
 	private buttonsHover(btn: IPictures, yStep: number) {
 		btn.sy = yStep;
@@ -272,36 +138,44 @@ export default class GameMapPage extends Control {
 
 	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = {
-				currentX: btn.x / this.curWidthK,
-				currentW: btn.width / this.curWidthK,
-				currentY: btn.y / this.curHeightK,
-				currentH: btn.height / this.curHeightK
-			};
+			const scaleCoords: Coords = this.scaleCoords(btn);
 			if (this.determineCoords(event, scaleCoords)) {
 				this.buttonsHover(btn, btn.stepY as number);
+				this.changeAnimation(btn, true);
 			} else {
 				this.buttonsHover(btn, 0 as number);
+				this.changeAnimation(btn, false);
 			}
 		});
 	}
+
+	private scaleCoords(btn: IPictures) {
+		return {
+			currentX: btn.x / this.curWidthK,
+			currentW: btn.width / this.curWidthK,
+			currentY: btn.y / this.curHeightK,
+			currentH: btn.height / this.curHeightK
+		};
+	}
+
+	private changeAnimation(btn: IPictures, animEnable: boolean) {
+		this.textOptions.forEach((item) => {
+			if (item.text === btn.name) item.animation = animEnable;
+		});
+	}
+
 	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = {
-				currentX: btn.x / this.curWidthK,
-				currentW: btn.width / this.curWidthK,
-				currentY: btn.y / this.curHeightK,
-				currentH: btn.height / this.curHeightK
-			};
+			const scaleCoords: Coords = this.scaleCoords(btn);
 			if (this.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
-					case "магазин": {
+					case "Магазин": {
 						// УБРАТЬ ПРИВЕДЕНИЕ ТИПА
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onSelectShop, 250);
 						break;
 					}
-					case "меню": {
+					case "Меню": {
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onBack, 250);
 						break;
@@ -320,6 +194,3 @@ export default class GameMapPage extends Control {
 	}
 }
 
-interface Coords {
-	currentX: number, currentY: number, currentW: number, currentH: number
-}
