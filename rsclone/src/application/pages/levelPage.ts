@@ -47,7 +47,6 @@ export default class LevelPage extends Control {
 		this.curWidthK = 1;
 		this.curHeightK = 1;
 		this.heightRatio = 1.333333333;
-
 		this.gameFrame = 0;
 		this.staggeredFrames = 3;
 		this.id = 0;
@@ -93,7 +92,7 @@ export default class LevelPage extends Control {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.animals.forEach((item) => {
 
-			let animName = item.name + '-' + item.state;
+			const animName = item.name + '-' + item.state;
 			// console.log(animName);
 			if (typeof this.images.get(animName) === 'undefined')
 				return;
@@ -107,26 +106,26 @@ export default class LevelPage extends Control {
 
 			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 
-			if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3){
+			if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3) {
 				item.wantX = 400 + Math.floor(Math.random() * 740);
 				item.wantY = 430 + Math.floor(Math.random() * 470);
 
 			}
-			
+
 			let state = '';
 
-			if (item.coordY - item.wantY < -2){
+			if (item.coordY - item.wantY < -2) {
 				state = 'down';
-				item.coordY ++;
-			} else if (item.coordY - item.wantY > 2){
+				item.coordY++;
+			} else if (item.coordY - item.wantY > 2) {
 				state = 'up';
-				item.coordY --;
+				item.coordY--;
 			}
 
-			if (item.coordX - item.wantX < -2){
+			if (item.coordX - item.wantX < -2) {
 				state += (state.length > 0 ? '-' : '') + 'right';
 				item.coordX += 1 * this.heightRatio; // Иначе слишком медленно по горизонтали идёт
-			} else if (item.coordX - item.wantX > 2){
+			} else if (item.coordX - item.wantX > 2) {
 				state += (state.length > 0 ? '-' : '') + 'left';
 				item.coordX -= 1 * this.heightRatio;
 			}
@@ -135,11 +134,12 @@ export default class LevelPage extends Control {
 				console.log(state);
 
 			if (state === '') // Мало ли
-				state = item.state
+				state = item.state;
 			item.state = state;
 		});
 
 		this.gameFrame++;
+
 		requestAnimationFrame(this.run.bind(this));
 	}
 
