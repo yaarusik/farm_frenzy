@@ -17,6 +17,7 @@ export default class GameMapPage extends Control {
 	context: CanvasRenderingContext2D;
 	textOptions: IText[];
 	commonFunction: Common;
+	animation: number;
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
@@ -28,6 +29,7 @@ export default class GameMapPage extends Control {
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
+		this.animation = 0;
 
 		const canvasContainer = new Control(this.node, "div", "canvas__container", "");
 		this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -36,6 +38,7 @@ export default class GameMapPage extends Control {
 		this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
 		// создание общего класса с функциями
 		this.commonFunction = new Common(this.canvas.node, this.context);
+
 
 		this.startMap();
 
@@ -69,7 +72,9 @@ export default class GameMapPage extends Control {
 
 	private run(loadImages: Promise<HTMLImageElement>[]) {
 		this.render(loadImages);
-		requestAnimationFrame(() => {
+
+		console.log('a');
+		this.animation = requestAnimationFrame(() => {
 			this.run(loadImages);
 		});
 	}
@@ -82,13 +87,13 @@ export default class GameMapPage extends Control {
 		btn.sy = yStep * 2;
 	}
 
-	private determineCoords(e: MouseEvent, scaleCoords: Coords): boolean {
-		const rect = this.canvas.node.getBoundingClientRect();
-		const mouseX = e.clientX - rect.left;
-		const mouseY = e.clientY - rect.top;
-		const { currentX, currentW, currentY, currentH } = scaleCoords;
-		return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
-	}
+	// private determineCoords(e: MouseEvent, scaleCoords: Coords): boolean {
+	// 	const rect = this.canvas.node.getBoundingClientRect();
+	// 	const mouseX = e.clientX - rect.left;
+	// 	const mouseY = e.clientY - rect.top;
+	// 	const { currentX, currentW, currentY, currentH } = scaleCoords;
+	// 	return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
+	// }
 
 	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
 		buttons.forEach(btn => {
@@ -127,16 +132,19 @@ export default class GameMapPage extends Control {
 						// УБРАТЬ ПРИВЕДЕНИЕ ТИПА
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onSelectShop, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					case "Меню": {
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.onBack, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					case "уровень": {
 						this.buttonsClick(btn, btn.stepY as number);
 						setTimeout(this.startLevel, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					default: console.log("error");
