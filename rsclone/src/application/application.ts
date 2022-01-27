@@ -14,6 +14,7 @@ export default class Application extends Control {
 
 		// this.mainCycle();
 		this.gameMapCycle();
+		// this.levelCycle();
 	}
 	// главная страница
 	private mainCycle() {
