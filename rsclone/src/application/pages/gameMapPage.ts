@@ -1,8 +1,8 @@
 
 
 import Control from "../../builder/controller";
-import { imagesOptions, textOptions } from "./../../utils/mapData";
-import { IPictures, IText, Coords } from "./../iterfaces";
+import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
+import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 export default class GameMapPage extends Control {
 	startLevel!: () => void;
@@ -11,12 +11,13 @@ export default class GameMapPage extends Control {
 
 	curWidthK: number;
 	curHeightK: number;
-	imagesOptions: IPictures[];
-	buttons: IPictures[];
+	imagesOptions: IPicture[];
+	buttons: IButton[];
 	canvas: Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
 	textOptions: IText[];
 	commonFunction: Common;
+	animation: number;
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
@@ -24,10 +25,12 @@ export default class GameMapPage extends Control {
 
 		this.textOptions = textOptions;
 		this.imagesOptions = imagesOptions;
-		this.buttons = this.imagesOptions.filter(btn => btn.type === "button");
+
+		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButton[];
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
+		this.animation = 0;
 
 		const canvasContainer = new Control(this.node, "div", "canvas__container", "");
 		this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -36,6 +39,7 @@ export default class GameMapPage extends Control {
 		this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
 		// создание общего класса с функциями
 		this.commonFunction = new Common(this.canvas.node, this.context);
+
 
 		this.startMap();
 
@@ -69,80 +73,71 @@ export default class GameMapPage extends Control {
 
 	private run(loadImages: Promise<HTMLImageElement>[]) {
 		this.render(loadImages);
-		requestAnimationFrame(() => {
+
+
+		this.animation = requestAnimationFrame(() => {
 			this.run(loadImages);
 		});
 	}
 
-	private buttonsHover(btn: IPictures, yStep: number) {
+	// СДЕЛАТЬ ЕДИНУЮ ВЕРСИЮ ХОВЕР И КЛИК
+	private buttonsHover(btn: IPicture, yStep: number) {
 		btn.sy = yStep;
 	}
 
-	private buttonsClick(btn: IPictures, yStep: number) {
+	private buttonsClick(btn: IPicture, yStep: number) {
 		btn.sy = yStep * 2;
 	}
 
-	private determineCoords(e: MouseEvent, scaleCoords: Coords): boolean {
-		const rect = this.canvas.node.getBoundingClientRect();
-		const mouseX = e.clientX - rect.left;
-		const mouseY = e.clientY - rect.top;
-		const { currentX, currentW, currentY, currentH } = scaleCoords;
-		return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
-	}
-
-	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
+	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = this.scaleCoords(btn);
+			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
-				this.buttonsHover(btn, btn.stepY as number);
+				this.buttonsHover(btn, btn.stepY);
 				this.changeAnimation(btn, true);
 			} else {
-				this.buttonsHover(btn, 0 as number);
+				this.buttonsHover(btn, 0);
 				this.changeAnimation(btn, false);
 			}
 		});
 	}
 
-	private scaleCoords(btn: IPictures) {
-		return {
-			currentX: btn.x / this.curWidthK,
-			currentW: btn.width / this.curWidthK,
-			currentY: btn.y / this.curHeightK,
-			currentH: btn.height / this.curHeightK
-		};
-	}
-
-	private changeAnimation(btn: IPictures, animEnable: boolean) {
+	private changeAnimation(btn: IPicture, animEnable: boolean) {
 		this.textOptions.forEach((item) => {
 			if (item.text === btn.name) item.animation = animEnable;
 		});
 	}
 
-	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IPictures[]) {
+
+
+	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = this.scaleCoords(btn);
+			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
 					case "Магазин": {
-						// УБРАТЬ ПРИВЕДЕНИЕ ТИПА
-						this.buttonsClick(btn, btn.stepY as number);
+						// асинхронно дождаться settimeout
+						this.buttonsClick(btn, btn.stepY);
 						setTimeout(this.onSelectShop, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					case "Меню": {
-						this.buttonsClick(btn, btn.stepY as number);
+						this.buttonsClick(btn, btn.stepY);
 						setTimeout(this.onBack, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					case "уровень": {
-						this.buttonsClick(btn, btn.stepY as number);
+						this.buttonsClick(btn, btn.stepY);
 						setTimeout(this.startLevel, 250);
+						cancelAnimationFrame(this.animation);
 						break;
 					}
 					default: console.log("error");
 				}
 			} else {
-				this.buttonsClick(btn, 0 as number);
+				this.buttonsClick(btn, 0);
 			}
 		});
 	}

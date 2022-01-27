@@ -12,8 +12,9 @@ export default class Application extends Control {
 		super(parentNode);
 		// preloader
 
-		// this.mainCycle();
-		this.gameMapCycle();
+		this.mainCycle();
+		// this.gameMapCycle();
+		// this.levelCycle();
 	}
 	// главная страница
 	private mainCycle() {
