@@ -2,7 +2,7 @@
 
 import Control from "../../builder/controller";
 import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
-import { IPictures, IText, Coords, IButtons } from "./../iterfaces";
+import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 export default class GameMapPage extends Control {
 	startLevel!: () => void;
@@ -11,8 +11,8 @@ export default class GameMapPage extends Control {
 
 	curWidthK: number;
 	curHeightK: number;
-	imagesOptions: IPictures[];
-	buttons: IButtons[];
+	imagesOptions: IPicture[];
+	buttons: IButton[];
 	canvas: Control<HTMLCanvasElement>;
 	context: CanvasRenderingContext2D;
 	textOptions: IText[];
@@ -26,7 +26,7 @@ export default class GameMapPage extends Control {
 		this.textOptions = textOptions;
 		this.imagesOptions = imagesOptions;
 
-		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButtons[];
+		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButton[];
 		// коэффициенты масштаба
 		this.curWidthK = 1;
 		this.curHeightK = 1;
@@ -81,17 +81,17 @@ export default class GameMapPage extends Control {
 	}
 
 	// СДЕЛАТЬ ЕДИНУЮ ВЕРСИЮ ХОВЕР И КЛИК
-	private buttonsHover(btn: IPictures, yStep: number) {
+	private buttonsHover(btn: IPicture, yStep: number) {
 		btn.sy = yStep;
 	}
 
-	private buttonsClick(btn: IPictures, yStep: number) {
+	private buttonsClick(btn: IPicture, yStep: number) {
 		btn.sy = yStep * 2;
 	}
 
-	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButtons[]) {
+	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = this.scaleCoords(btn);
+			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				this.buttonsHover(btn, btn.stepY);
 				this.changeAnimation(btn, true);
@@ -102,27 +102,21 @@ export default class GameMapPage extends Control {
 		});
 	}
 
-	private scaleCoords(btn: IPictures) {
-		return {
-			currentX: btn.x / this.curWidthK,
-			currentW: btn.width / this.curWidthK,
-			currentY: btn.y / this.curHeightK,
-			currentH: btn.height / this.curHeightK
-		};
-	}
-
-	private changeAnimation(btn: IPictures, animEnable: boolean) {
+	private changeAnimation(btn: IPicture, animEnable: boolean) {
 		this.textOptions.forEach((item) => {
 			if (item.text === btn.name) item.animation = animEnable;
 		});
 	}
 
-	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButtons[]) {
+
+
+	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
-			const scaleCoords: Coords = this.scaleCoords(btn);
+			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
 					case "Магазин": {
+						// асинхронно дождаться settimeout
 						this.buttonsClick(btn, btn.stepY);
 						setTimeout(this.onSelectShop, 250);
 						cancelAnimationFrame(this.animation);

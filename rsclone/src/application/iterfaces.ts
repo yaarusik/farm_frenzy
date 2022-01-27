@@ -1,6 +1,6 @@
 
 // MAP SECTION ========================
-export interface IPictures {
+export interface IPicture {
   type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number;
 }
 export interface Coords {
@@ -10,8 +10,9 @@ export interface IText {
   text: string; x: number; y: number; animation: boolean;
 }
 
-export interface IButtons extends IPictures {
+export interface IButton extends IPicture {
   hover: number;
-  stepY: number
+  stepY: number;
+  click: number;
 }
 // MAP SECTION ========================

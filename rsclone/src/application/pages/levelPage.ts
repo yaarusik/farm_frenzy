@@ -1,29 +1,26 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { IPictures, Coords, IButtons, IText } from "./../iterfaces";
+import { IPicture, Coords, IButton, IText } from "./../iterfaces";
 import { levelTextOptions, userInterfaceOptions } from './../../utils/gameData/levelData';
-
-
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
   commonFunction: Common;
   animation: number;
-  userInterfaceOptions: IPictures[];
+  userInterfaceOptions: IPicture[];
   curWidthK: number;
   curHeightK: number;
-  buttons: IButtons[];
+  buttons: IButton[];
   textOptions: IText[];
-
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
 
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
-    this.buttons = this.userInterfaceOptions.filter(btn => btn.type === "button") as IButtons[];
+    this.buttons = this.userInterfaceOptions.filter(btn => btn.type === "button") as IButton[];
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -49,33 +46,67 @@ export default class LevelPage extends Control {
     this.canvas.node.addEventListener("mousemove", (e) => {
       this.canvasMoveHundler(e, this.buttons);
     });
+
+    this.canvas.node.addEventListener("click", (e) => {
+      this.canvasClickHundler(e, this.canvas.node, this.buttons);
+    });
   }
 
-
-  private canvasMoveHundler(event: MouseEvent, buttons: IButtons[]) {
+  private canvasMoveHundler(event: MouseEvent, buttons: IButton[]) {
     buttons.forEach(btn => {
-      const scaleCoords: Coords = this.scaleCoords(btn);
+      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
       if (this.commonFunction.determineCoords(event, scaleCoords)) {
         this.buttonsHover(btn, btn.stepY, btn.hover);
-        // this.changeAnimation(btn, true);
+        this.changeAnimation(btn, true);
       } else {
         this.buttonsHover(btn, 0, 0);
-        // this.changeAnimation(btn, false);
+        this.changeAnimation(btn, false);
       }
     });
   }
-  // перенести в общие функции
-  private scaleCoords(btn: IButtons) {
-    return {
-      currentX: btn.x / this.curWidthK,
-      currentW: btn.width / this.curWidthK,
-      currentY: btn.y / this.curHeightK,
-      currentH: btn.height / this.curHeightK
-    };
+
+  private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
+    buttons.forEach(btn => {
+      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+      if (this.commonFunction.determineCoords(event, scaleCoords)) {
+        switch (btn.name) {
+          case "Меню": {
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            setTimeout(this.gameMapBack, 250);
+            cancelAnimationFrame(this.animation);
+            break;
+          }
+          case 'chicken': {
+            // здесь можно купить курицу и она появиться
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            console.log("chicken");
+            break;
+          }
+          case 'pig': {
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            console.log("chicken");
+            break;
+          }
+          default: console.log("error");
+        }
+      } else {
+        this.buttonsClick(btn, 0, 0);
+      }
+    });
   }
 
-  private buttonsHover(btn: IPictures, yStep: number, count: number) {
+  private buttonsHover(btn: IButton, yStep: number, count: number) {
     btn.sy = yStep * count;
+  }
+
+  private buttonsClick(btn: IButton, yStep: number, count: number) {
+    btn.sy = yStep * count;
+  }
+
+  private changeAnimation(btn: IPicture, animEnable: boolean) {
+    this.textOptions.forEach((item) => {
+      if (item.text === btn.name) item.animation = animEnable;
+    });
   }
 
   private startUI() {
@@ -99,14 +130,7 @@ export default class LevelPage extends Control {
     this.commonFunction.drawImageAndText(loadImages, this.userInterfaceOptions, this.textOptions);
   }
 
-
   gameMapBack() {
     throw new Error("Method not implemented.");
   }
-
-
-
-
-
-
 }

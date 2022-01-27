@@ -1,4 +1,4 @@
-import { IPictures, IText, Coords } from './../iterfaces';
+import { IPicture, IText, Coords, IButton } from './../iterfaces';
 import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
 
@@ -14,6 +14,7 @@ export default class Common {
     this.initialWidth = 1600;
     this.initialHeight = 1200;
   }
+
   public loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve) => {
       const image = new Image();
@@ -24,7 +25,7 @@ export default class Common {
     });
   }
 
-  public drawImageAndText(loadImages: Promise<HTMLImageElement>[], imagesData: IPictures[], textData?: IText[]) {
+  public drawImageAndText(loadImages: Promise<HTMLImageElement>[], imagesData: IPicture[], textData?: IText[]) {
     Promise.all(loadImages).then(responses => {
       responses.forEach((img, index) => {
         const item = imagesData[index];
@@ -80,6 +81,15 @@ export default class Common {
     const mouseY = e.clientY - rect.top;
     const { currentX, currentW, currentY, currentH } = scaleCoords;
     return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
+  }
+
+  public scaleCoords(btn: IButton, curWidthK: number, curHeightK: number) {
+    return {
+      currentX: btn.x / curWidthK,
+      currentW: btn.width / curWidthK,
+      currentY: btn.y / curHeightK,
+      currentH: btn.height / curHeightK
+    };
   }
 
 
