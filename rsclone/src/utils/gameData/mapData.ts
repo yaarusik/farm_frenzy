@@ -148,12 +148,16 @@ export const imagesOptions = [
 export const textOptions = [
   {
     text: "Магазин",
+    fontSize: '24px Vag_Rounded-Bold CY',
+    color: '#fff',
     x: 42,
     y: 1153,
     animation: false,
   },
   {
     text: "Меню",
+    fontSize: '24px Vag_Rounded-Bold CY',
+    color: '#fff',
     x: 1492,
     y: 1151,
     animation: false,

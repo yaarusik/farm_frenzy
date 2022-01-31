@@ -266,10 +266,6 @@ export const userInterfaceOptions = [
 
 ];
 
-
-
-
-
 export const animationBuildOptions = [
   {
     name: 'storage',
@@ -289,8 +285,21 @@ export const animationBuildOptions = [
 export const levelTextOptions = [
   {
     text: 'Меню',
+    fontSize: '24px Vag_Rounded-Bold CY',
+    color: '#fff',
     x: 44,
     y: 1153,
     animation: false,
   },
+  {
+    name: 'total',
+    text: "100",
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: '#f7f21a',
+    x: 1076,
+    y: 124,
+    animation: false,
+  },
 ];
+
+

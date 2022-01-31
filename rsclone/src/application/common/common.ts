@@ -44,11 +44,12 @@ export default class Common {
 
   // функция бля отрисовки текста или анимации текста
   private drawText(textArr: IText[]) {
-    this.context.font = "24px Vag_Rounded-Bold CY";
-    this.context.fillStyle = "#fff";
+
     const letterSpacing = 0.5;
     const step = 3;
     textArr.forEach(text => {
+      this.context.fillStyle = text.color;
+      this.context.font = text.fontSize;
       if (!text.animation) {
         this.context.textAlign = "start";
         this.context.fillText(text.text, text.x, text.y);

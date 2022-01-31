@@ -3,6 +3,8 @@ import Control from "../../builder/controller";
 import Common from "./../common/common";
 import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
 import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
+import Well from "../../utils/animation/well";
+import { initialData } from "./../common/initialData";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -15,8 +17,9 @@ export default class LevelPage extends Control {
   buttons: IButton[];
   textOptions: IText[];
   animationBuildOptions: IAnimBuild[];
-  animationImage: IButton[];
-  conditionAnimation: { [key: string]: boolean; };
+  animState: { [key: string]: boolean; };
+  well: Well;
+  price: { [key: string]: number };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -24,9 +27,10 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
+
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
-    this.animationImage = <IButton[]>this.userInterfaceOptions.filter(anim => anim.type === "animation");
+    this.well = new Well(this.userInterfaceOptions);
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -38,9 +42,14 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
     this.animation = 0;
 
-    this.conditionAnimation = {
+    this.animState = {
       well: true,
       waterIndicator: true,
+    };
+
+    this.price = {
+      well: 19,
+      chicken: 100,
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -112,20 +121,22 @@ export default class LevelPage extends Control {
             break;
           }
           case "well": {
-            if (this.conditionAnimation.well) this.wellAnimation(btn);
-            if (this.conditionAnimation.waterIndicator) this.fullWaterIndicator();
-            this.conditionAnimation.well = false;
-            this.conditionAnimation.waterIndicator = false;
+            this.changeTotal(btn.name);
+            if (this.animState.well) this.well.wellAnimation(btn, this.animState);
+            if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
+            this.animState.well = false;
+            this.animState.waterIndicator = false;
             break;
           }
           case 'chicken': {
             // здесь можно купить курицу и она появиться
+            this.changeTotal(btn.name);
             this.buttonsClick(btn, btn.stepY, btn.click);
-            this.waterIndicatorChange();
             break;
           }
           case 'pig': {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.well.waterIndicatorChange();
             console.log("chicken");
             break;
           }
@@ -192,63 +203,18 @@ export default class LevelPage extends Control {
     }
   }
 
-  private wellAnimation(btn: IButton) {
-    let frameY = 0;
-    const timer = setInterval(() => {
-      if (btn.frameY) {
-        if (frameY < btn.frameY - 1) {
-          btn.sy += btn.stepY;
-          frameY++;
-        } else {
-          frameY = 0;
-          btn.sy = 0;
+  private changeTotal(product: string) {
+    if (this.animState.well) {
+      initialData.totalLevelSum.level1 -= this.price[product];
+      this.textOptions.forEach(item => {
+        if (item.name === 'total') {
+          console.log('total');
+          item.text = initialData.totalLevelSum.level1.toString();
         }
-      }
-    }, 50);
-    // останавливать в зависимости от индикатора
-    setTimeout(() => {
-      clearInterval(timer);
-      this.conditionAnimation.well = true;
-      btn.sy = 0;
-    }, 2400);
-  }
-
-  // водный индикатор
-  private waterIndicatorChange() {
-    const waterIndicator = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
-    const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
-    const step = 5;
-    if (waterIndicator.sy < maxHeight) {
-      waterIndicator.sy += step * waterIndicator.stepY;
-    } else {
-      waterIndicator.sy = 0;
+      });
     }
+
   }
-
-  // пополнение воды
-  private fullWaterIndicator() {
-    const water = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
-    let frameY = 0;
-    const timer = setInterval(() => {
-      if (water.frameY) {
-        if (frameY < water.frameY - 1) {
-          water.sy -= water.stepY;
-          frameY++;
-        } else {
-          frameY = 0;
-          water.sy = 0;
-        }
-      }
-    }, 100);
-    //дизейблить кнопку, когда вода еще полностью не закончилась
-    setTimeout(() => {
-      clearInterval(timer);
-      this.conditionAnimation.waterIndicator = true;
-      water.sy = 0;
-    }, 2400);
-  }
-
-
 
   //Секция анимаций для зданий ==================
   gameMapBack() {
