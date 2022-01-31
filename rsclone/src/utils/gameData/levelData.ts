@@ -233,6 +233,21 @@ export const userInterfaceOptions = [
     swidth: 128,
     sheight: 100
   },
+  {
+    type: "animation",
+    name: "waterIndicator",
+    image: "images/level/indicators/indicator_water.png",
+    x: 930,
+    y: 200,
+    width: 22,
+    stepY: 52,
+    height: 100,
+    frameY: 27,
+    sx: 0,
+    sy: 0,
+    swidth: 12,
+    sheight: 53
+  }
   // {
   //   type: "button",
   //   name: "dust",
@@ -250,6 +265,10 @@ export const userInterfaceOptions = [
   // },
 
 ];
+
+
+
+
 
 export const animationBuildOptions = [
   {

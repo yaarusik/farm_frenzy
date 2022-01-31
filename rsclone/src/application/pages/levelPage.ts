@@ -15,7 +15,7 @@ export default class LevelPage extends Control {
   buttons: IButton[];
   textOptions: IText[];
   animationBuildOptions: IAnimBuild[];
-  animationImage: IPicture[];
+  animationImage: IButton[];
   conditionAnimation: { [key: string]: boolean; };
 
   constructor (parentNode: HTMLElement) {
@@ -24,8 +24,9 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
-    this.buttons = this.userInterfaceOptions.filter(btn => btn.type === "button") as IButton[];
-    this.animationImage = this.userInterfaceOptions.filter(anim => anim.type === "animation");
+    this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
+
+    this.animationImage = <IButton[]>this.userInterfaceOptions.filter(anim => anim.type === "animation");
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -37,9 +38,9 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
     this.animation = 0;
 
-
     this.conditionAnimation = {
       well: true,
+      waterIndicator: true,
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -76,7 +77,6 @@ export default class LevelPage extends Control {
       } else {
         switch (btn.name) {
           case "well": {
-
             break;
           }
           case "pig":
@@ -96,7 +96,6 @@ export default class LevelPage extends Control {
             this.changeAnimation(btn, false);
           }
         }
-
       }
     });
   }
@@ -114,13 +113,15 @@ export default class LevelPage extends Control {
           }
           case "well": {
             if (this.conditionAnimation.well) this.wellAnimation(btn);
+            if (this.conditionAnimation.waterIndicator) this.fullWaterIndicator();
             this.conditionAnimation.well = false;
+            this.conditionAnimation.waterIndicator = false;
             break;
           }
           case 'chicken': {
             // здесь можно купить курицу и она появиться
             this.buttonsClick(btn, btn.stepY, btn.click);
-            console.log("chicken");
+            this.waterIndicatorChange();
             break;
           }
           case 'pig': {
@@ -159,8 +160,8 @@ export default class LevelPage extends Control {
     this.run(loadImages);
   }
 
-  private run(loadImages: Promise<HTMLImageElement>[]) {
-    this.render(loadImages);
+  private async run(loadImages: Promise<HTMLImageElement>[]) {
+    await this.render(loadImages);
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
     this.animation = requestAnimationFrame(() => {
@@ -211,6 +212,44 @@ export default class LevelPage extends Control {
       btn.sy = 0;
     }, 2400);
   }
+
+  // водный индикатор
+  private waterIndicatorChange() {
+    const waterIndicator = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
+    const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
+    const step = 5;
+    if (waterIndicator.sy < maxHeight) {
+      waterIndicator.sy += step * waterIndicator.stepY;
+    } else {
+      waterIndicator.sy = 0;
+    }
+  }
+
+  // пополнение воды
+  private fullWaterIndicator() {
+    const water = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
+    let frameY = 0;
+    const timer = setInterval(() => {
+      if (water.frameY) {
+        if (frameY < water.frameY - 1) {
+          water.sy -= water.stepY;
+          frameY++;
+        } else {
+          frameY = 0;
+          water.sy = 0;
+        }
+      }
+    }, 100);
+    //дизейблить кнопку, когда вода еще полностью не закончилась
+    setTimeout(() => {
+      clearInterval(timer);
+      this.conditionAnimation.waterIndicator = true;
+      water.sy = 0;
+    }, 2400);
+  }
+
+
+
   //Секция анимаций для зданий ==================
   gameMapBack() {
     throw new Error("Method not implemented.");
