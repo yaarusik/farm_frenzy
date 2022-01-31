@@ -40,7 +40,6 @@ export default class GameMapPage extends Control {
 		// создание общего класса с функциями
 		this.commonFunction = new Common(this.canvas.node, this.context);
 
-
 		this.startMap();
 
 		window.onresize = () => {

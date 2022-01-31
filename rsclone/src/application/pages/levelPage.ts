@@ -4,6 +4,7 @@ import Common from "./../common/common";
 import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
 import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
 import Well from "../../utils/animation/well";
+import { initialData } from "./../common/initialData";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -18,6 +19,7 @@ export default class LevelPage extends Control {
   animationBuildOptions: IAnimBuild[];
   animState: { [key: string]: boolean; };
   well: Well;
+  price: { [key: string]: number };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -25,6 +27,7 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
+
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
     this.well = new Well(this.userInterfaceOptions);
@@ -38,9 +41,15 @@ export default class LevelPage extends Control {
     this.curWidthK = 1;
     this.curHeightK = 1;
     this.animation = 0;
+
     this.animState = {
       well: true,
       waterIndicator: true,
+    };
+
+    this.price = {
+      well: 19,
+      chicken: 100,
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -112,6 +121,7 @@ export default class LevelPage extends Control {
             break;
           }
           case "well": {
+            this.changeTotal(btn.name);
             if (this.animState.well) this.well.wellAnimation(btn, this.animState);
             if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
             this.animState.well = false;
@@ -120,12 +130,13 @@ export default class LevelPage extends Control {
           }
           case 'chicken': {
             // здесь можно купить курицу и она появиться
+            this.changeTotal(btn.name);
             this.buttonsClick(btn, btn.stepY, btn.click);
-            this.well.waterIndicatorChange();
             break;
           }
           case 'pig': {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.well.waterIndicatorChange();
             console.log("chicken");
             break;
           }
@@ -190,6 +201,19 @@ export default class LevelPage extends Control {
       if (item.maxY > build.y)
         build.y += item.speed;
     }
+  }
+
+  private changeTotal(product: string) {
+    if (this.animState.well) {
+      initialData.totalLevelSum.level1 -= this.price[product];
+      this.textOptions.forEach(item => {
+        if (item.name === 'total') {
+          console.log('total');
+          item.text = initialData.totalLevelSum.level1.toString();
+        }
+      });
+    }
+
   }
 
   //Секция анимаций для зданий ==================
