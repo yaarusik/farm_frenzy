@@ -29,7 +29,7 @@ export default class Common {
     Promise.all(loadImages).then(responses => {
       responses.forEach((img, index) => {
         const item = imagesData[index];
-        if (item.type === "button") {
+        if (item.type === "button" || item.type === "animation") {
           const cutPicture = new CutPicture(img, item.sx, item.sy, item.swidth, item.sheight, item.x, item.y, item.width, item.height);
           cutPicture.draw(this.context);
         } else {
@@ -40,6 +40,7 @@ export default class Common {
       if (textData) this.drawText(textData);
     });
   }
+
 
   // функция бля отрисовки текста или анимации текста
   private drawText(textArr: IText[]) {

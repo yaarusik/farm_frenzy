@@ -205,7 +205,67 @@ export const userInterfaceOptions = [
     swidth: 0,
     sheight: 0
   },
+  {
+    type: "button",
+    name: "storage",
+    image: "images/level/builds/storage/storage_1.png",
+    x: 530,
+    y: -200,
+    width: 300,
+    height: 240,
+    sx: 0,
+    sy: 0,
+    swidth: 164,
+    sheight: 132
+  },
+  {
+    type: "button",
+    name: "well",
+    image: "images/level/builds/well/house_well_step_1.png",
+    frameY: 16,
+    stepY: 100,
+    x: 720,
+    y: -200,
+    width: 230,
+    height: 180,
+    sx: 0,
+    sy: 0,
+    swidth: 128,
+    sheight: 100
+  },
+  // {
+  //   type: "button",
+  //   name: "dust",
+  //   image: "images/level/effects/dust_house.png",
+  //   stepY: 48,
+  //   stepX: 40,
+  //   x: 500,
+  //   y: 100,
+  //   width: 500,
+  //   height: 700,
+  //   sx: 168,
+  //   sy: 0,
+  //   swidth: 40,
+  //   sheight: 48
+  // },
+
 ];
+
+export const animationBuildOptions = [
+  {
+    name: 'storage',
+    maxX: 0,
+    maxY: 938,
+    speed: 36
+  },
+  {
+    name: 'well',
+    maxX: 0,
+    maxY: 146,
+    speed: 25
+  }
+];
+
 
 export const levelTextOptions = [
   {

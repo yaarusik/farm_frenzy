@@ -13,6 +13,27 @@ export interface IText {
 export interface IButton extends IPicture {
   hover: number;
   stepY: number;
+  stepX: number;
   click: number;
+  frameY?: number;
+  frameX?: number;
 }
 // MAP SECTION ========================
+
+// LEVELSECTION =======================
+export interface IAnimBuild {
+  name: string,
+  maxX: number,
+  maxY: number,
+  speed: number
+}
+
+export interface IBuild extends IPicture {
+  frameX: number,
+  frameY: number,
+  stepY?: number;
+  stepX?: number;
+}
+
+
+// LEVELSECTION =======================

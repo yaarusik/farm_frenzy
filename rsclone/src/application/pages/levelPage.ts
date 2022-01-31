@@ -1,8 +1,8 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { IPicture, Coords, IButton, IText } from "./../iterfaces";
-import { levelTextOptions, userInterfaceOptions } from './../../utils/gameData/levelData';
+import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
+import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -14,13 +14,18 @@ export default class LevelPage extends Control {
   curHeightK: number;
   buttons: IButton[];
   textOptions: IText[];
+  animationBuildOptions: IAnimBuild[];
+  animationImage: IPicture[];
+  conditionAnimation: { [key: string]: boolean; };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
 
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
+    this.animationBuildOptions = animationBuildOptions;
     this.buttons = this.userInterfaceOptions.filter(btn => btn.type === "button") as IButton[];
+    this.animationImage = this.userInterfaceOptions.filter(anim => anim.type === "animation");
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -31,6 +36,11 @@ export default class LevelPage extends Control {
     this.curWidthK = 1;
     this.curHeightK = 1;
     this.animation = 0;
+
+
+    this.conditionAnimation = {
+      well: true,
+    };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
@@ -56,11 +66,37 @@ export default class LevelPage extends Control {
     buttons.forEach(btn => {
       const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
       if (this.commonFunction.determineCoords(event, scaleCoords)) {
-        this.buttonsHover(btn, btn.stepY, btn.hover);
-        this.changeAnimation(btn, true);
+        if (btn.name === 'well' || btn.name === 'storage') {
+          console.log('well');
+        } else {
+          this.buttonsHover(btn, btn.stepY, btn.hover);
+          this.changeAnimation(btn, true);
+        }
+
       } else {
-        this.buttonsHover(btn, 0, 0);
-        this.changeAnimation(btn, false);
+        switch (btn.name) {
+          case "well": {
+
+            break;
+          }
+          case "pig":
+          case "chicken":
+          case "cow":
+          case "ostrich":
+          case "dog":
+          case "cat": {
+            const hoverCoords = 192;
+            const count = 1;
+            // если можно купить, ховер работает
+            this.buttonsHover(btn, hoverCoords, count);
+            break;
+          }
+          default: {
+            this.buttonsHover(btn, 0, 0);
+            this.changeAnimation(btn, false);
+          }
+        }
+
       }
     });
   }
@@ -74,6 +110,11 @@ export default class LevelPage extends Control {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(this.gameMapBack, 250);
             cancelAnimationFrame(this.animation);
+            break;
+          }
+          case "well": {
+            if (this.conditionAnimation.well) this.wellAnimation(btn);
+            this.conditionAnimation.well = false;
             break;
           }
           case 'chicken': {
@@ -90,7 +131,8 @@ export default class LevelPage extends Control {
           default: console.log("error");
         }
       } else {
-        this.buttonsClick(btn, 0, 0);
+        // переделать сброс кнопки
+        // this.buttonsClick(btn, 0, 0);
       }
     });
   }
@@ -119,7 +161,8 @@ export default class LevelPage extends Control {
 
   private run(loadImages: Promise<HTMLImageElement>[]) {
     this.render(loadImages);
-
+    // СДЕЛАТЬ ПО КНОПКЕ
+    this.buildSpawn();
     this.animation = requestAnimationFrame(() => {
       this.run(loadImages);
     });
@@ -130,7 +173,47 @@ export default class LevelPage extends Control {
     this.commonFunction.drawImageAndText(loadImages, this.userInterfaceOptions, this.textOptions);
   }
 
+  //Секция анимаций для зданий ==================
+
+  // один раз только нужно запустить
+  private buildSpawn() {
+    this.animationBuildOptions.forEach((item, index) => {
+      this.buttons.forEach(build => {
+        setTimeout(() => this.buildAnimation(item, build), 500 * index);
+      });
+    });
+  }
+
+  private buildAnimation(item: IAnimBuild, build: IButton) {
+    if (item.name === build.name) {
+      if (item.maxY > build.y)
+        build.y += item.speed;
+    }
+  }
+
+  private wellAnimation(btn: IButton) {
+    let frameY = 0;
+    const timer = setInterval(() => {
+      if (btn.frameY) {
+        if (frameY < btn.frameY - 1) {
+          btn.sy += btn.stepY;
+          frameY++;
+        } else {
+          frameY = 0;
+          btn.sy = 0;
+        }
+      }
+    }, 50);
+    // останавливать в зависимости от индикатора
+    setTimeout(() => {
+      clearInterval(timer);
+      this.conditionAnimation.well = true;
+      btn.sy = 0;
+    }, 2400);
+  }
+  //Секция анимаций для зданий ==================
   gameMapBack() {
     throw new Error("Method not implemented.");
   }
 }
+
