@@ -4,6 +4,7 @@ import Common from "./../common/common";
 import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
 import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
 import Well from "../../utils/animation/well";
+import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 
 export default class LevelPage extends Control {
@@ -20,6 +21,8 @@ export default class LevelPage extends Control {
   animState: { [key: string]: boolean; };
   well: Well;
   price: { [key: string]: number };
+  coin: Coin;
+  a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -27,10 +30,24 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
+    // this.a = {
+    //   type: "picture",
+    //   name: "pause",
+    //   image: "images/level/panels/pause_panel.png",
+    //   x: 569,
+    //   y: 300,
+    //   width: 462,
+    //   height: 600,
+    //   sx: 0,
+    //   sy: 0,
+    //   swidth: 0,
+    //   sheight: 0
+    // };
 
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
     this.well = new Well(this.userInterfaceOptions);
+    this.coin = new Coin(this.userInterfaceOptions);
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -116,6 +133,7 @@ export default class LevelPage extends Control {
         switch (btn.name) {
           case "Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            // this.userInterfaceOptions.push(this.a);
             setTimeout(this.gameMapBack, 250);
             cancelAnimationFrame(this.animation);
             break;
@@ -175,6 +193,7 @@ export default class LevelPage extends Control {
     await this.render(loadImages);
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
+    this.coin.coinAnimation();
     this.animation = requestAnimationFrame(() => {
       this.run(loadImages);
     });
@@ -213,8 +232,8 @@ export default class LevelPage extends Control {
         }
       });
     }
-
   }
+
 
   //Секция анимаций для зданий ==================
   gameMapBack() {

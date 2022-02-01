@@ -247,24 +247,38 @@ export const userInterfaceOptions = [
     sy: 0,
     swidth: 12,
     sheight: 53
-  }
+  },
+  {
+    type: "animation",
+    name: "coin",
+    image: "images/level/uiLevel/gold_coin.png",
+    x: 1078,
+    y: 35,
+    width: 50,
+    height: 50,
+    stepY: 32,
+    frameY: 15,
+    sx: 0,
+    sy: 0,
+    swidth: 32,
+    sheight: 32
+  },
   // {
-  //   type: "button",
-  //   name: "dust",
-  //   image: "images/level/effects/dust_house.png",
-  //   stepY: 48,
-  //   stepX: 40,
-  //   x: 500,
-  //   y: 100,
-  //   width: 500,
-  //   height: 700,
-  //   sx: 168,
+  //   type: "picture",
+  //   name: "pause",
+  //   image: "images/level/panels/pause_panel.png",
+  //   x: 569,
+  //   y: 300,
+  //   width: 462,
+  //   height: 600,
+  //   sx: 0,
   //   sy: 0,
-  //   swidth: 40,
-  //   sheight: 48
+  //   swidth: 0,
+  //   sheight: 0
   // },
-
 ];
+
+
 
 export const animationBuildOptions = [
   {
