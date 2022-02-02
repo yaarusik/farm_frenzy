@@ -185,6 +185,10 @@ export default class LevelPage extends Control {
             console.log("chicken");
             break;
           }
+          case 'mainArea': {
+            this.createGrass(event.clientX, event.clientY);
+            break;
+          }
           default: console.log("error");
         }
       } else {
