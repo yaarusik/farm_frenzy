@@ -22,9 +22,10 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
+  initialImages: HTMLImageElement[];
 
 
-  // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
+  a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -32,20 +33,20 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
-
-    // this.a = {
-    //   type: "picture",
-    //   name: "pause",
-    //   image: "images/level/panels/pause_panel.png",
-    //   x: 569,
-    //   y: 300,
-    //   width: 462,
-    //   height: 600,
-    //   sx: 0,
-    //   sy: 0,
-    //   swidth: 0,
-    //   sheight: 0
-    // };
+    this.initialImages = [];
+    this.a = {
+      type: "picture",
+      name: "pause",
+      image: "images/level/panels/pause_panel.png",
+      x: 569,
+      y: 300,
+      width: 462,
+      height: 600,
+      sx: 0,
+      sy: 0,
+      swidth: 0,
+      sheight: 0
+    };
 
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
@@ -136,12 +137,11 @@ export default class LevelPage extends Control {
         switch (btn.name) {
           case "Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            // // ================================================
+            // ================================================
             // this.userInterfaceOptions.push(this.a);
-            // const img = this.commonFunction.loadImage(this.a.image);
-            // this.loadImages.push(img);
-            // // ===================================================
-            // console.log(this.loadImages);
+            // const img = this.commonFunction.loadImage(this.a.image).then(img => this.initialImages.push(img));
+            // ===================================================
+            // console.log(img);
             setTimeout(this.gameMapBack, 250);
             cancelAnimationFrame(this.animation);
             break;
@@ -207,7 +207,6 @@ export default class LevelPage extends Control {
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
     this.coin.coinAnimation();
-
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
