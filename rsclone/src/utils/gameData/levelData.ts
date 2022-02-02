@@ -1,17 +1,17 @@
 export const userInterfaceOptions = [
-  {
-    type: "picture",
-    name: "mainField",
-    image: "images/level/level-back.jpg",
-    x: 0,
-    y: 0,
-    width: 1600,
-    height: 1200,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
+  // {
+  //   type: "picture",
+  //   name: "mainField",
+  //   image: "images/level/level-back.jpg",
+  //   x: 0,
+  //   y: 0,
+  //   width: 1600,
+  //   height: 1200,
+  //   sx: 0,
+  //   sy: 0,
+  //   swidth: 0,
+  //   sheight: 0
+  // },
   {
     type: "picture",
     name: "buttomBar",

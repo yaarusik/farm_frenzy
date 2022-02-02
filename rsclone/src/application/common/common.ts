@@ -30,9 +30,13 @@ export default class Common {
       responses.forEach((img, index) => {
         const item = imagesData[index];
         if (item.type === "button" || item.type === "animation") {
+          this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
+          this.context.globalAlpha = 1;
           const cutPicture = new CutPicture(img, item.sx, item.sy, item.swidth, item.sheight, item.x, item.y, item.width, item.height);
           cutPicture.draw(this.context);
         } else {
+          this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
+			    this.context.globalAlpha = 1;
           const btn = new Picture(img, item.x, item.y, item.width, item.height);
           btn.draw(this.context);
         }

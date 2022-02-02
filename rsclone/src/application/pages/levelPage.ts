@@ -222,12 +222,9 @@ export default class LevelPage extends Control {
 	}
 
   private async run(loadImages: Promise<HTMLImageElement>[]){
-    let start = new Date();
-    await this.render(loadImages);
-    let end = new Date();
-    // console.log(end.getTime() - start.getTime());
     this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
+    await this.render(loadImages);
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
     this.coin.coinAnimation();
