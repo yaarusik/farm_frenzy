@@ -22,7 +22,9 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
-  a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
+
+
+  // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -30,6 +32,7 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
+
     // this.a = {
     //   type: "picture",
     //   name: "pause",
@@ -133,7 +136,12 @@ export default class LevelPage extends Control {
         switch (btn.name) {
           case "Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            // // ================================================
             // this.userInterfaceOptions.push(this.a);
+            // const img = this.commonFunction.loadImage(this.a.image);
+            // this.loadImages.push(img);
+            // // ===================================================
+            // console.log(this.loadImages);
             setTimeout(this.gameMapBack, 250);
             cancelAnimationFrame(this.animation);
             break;
@@ -181,27 +189,38 @@ export default class LevelPage extends Control {
     });
   }
 
-  private startUI() {
+  private async startUI() {
     const loadImages = this.userInterfaceOptions.map(image => this.commonFunction.loadImage(image.image));
+
     const coefficients = this.commonFunction.canvasScale();
     this.curWidthK = coefficients.curWidthK;
     this.curHeightK = coefficients.curHeightK;
-    this.run(loadImages);
+
+    const initialImages = await this.commonFunction.renderImages(loadImages);
+
+    this.run(initialImages);
   }
 
-  private async run(loadImages: Promise<HTMLImageElement>[]) {
-    await this.render(loadImages);
+  private async run(saveImg: HTMLImageElement[]) {
+
+    await this.render(saveImg);
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
     this.coin.coinAnimation();
+
+
     this.animation = requestAnimationFrame(() => {
-      this.run(loadImages);
+      this.run(saveImg);
     });
   }
 
-  private async render(loadImages: Promise<HTMLImageElement>[]) {
+  private async render(saveImg: HTMLImageElement[]) {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
-    this.commonFunction.drawImageAndText(loadImages, this.userInterfaceOptions, this.textOptions);
+    this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
+    this.commonFunction.drawText(this.textOptions);
+
+    // пробуй вставить сюда
+
   }
 
   //Секция анимаций для зданий ==================

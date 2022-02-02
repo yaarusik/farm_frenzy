@@ -22,10 +22,8 @@ export default class GameMapPage extends Control {
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
 
-
 		this.textOptions = textOptions;
 		this.imagesOptions = imagesOptions;
-
 		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButton[];
 		// коэффициенты масштаба
 		this.curWidthK = 1;
@@ -57,25 +55,28 @@ export default class GameMapPage extends Control {
 		});
 	}
 
-	private startMap() {
+	private async startMap() {
 		const loadImages = this.imagesOptions.map(image => this.commonFunction.loadImage(image.image));
 		const coefficients = this.commonFunction.canvasScale();
 		this.curWidthK = coefficients.curWidthK;
 		this.curHeightK = coefficients.curHeightK;
-		this.run(loadImages);
+
+		const initialImages = await this.commonFunction.renderImages(loadImages);
+
+		this.run(initialImages);
 	}
 
-	private async render(loadImages: Promise<HTMLImageElement>[]) {
+	private async render(saveImg: HTMLImageElement[]) {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
-		this.commonFunction.drawImageAndText(loadImages, this.imagesOptions, this.textOptions);
+		this.commonFunction.drawImage(saveImg, this.imagesOptions);
+		this.commonFunction.drawText(this.textOptions);
 	}
 
-	private run(loadImages: Promise<HTMLImageElement>[]) {
-		this.render(loadImages);
-
+	private async run(saveImg: HTMLImageElement[]) {
+		this.render(saveImg);
 
 		this.animation = requestAnimationFrame(() => {
-			this.run(loadImages);
+			this.run(saveImg);
 		});
 	}
 
@@ -106,8 +107,6 @@ export default class GameMapPage extends Control {
 			if (item.text === btn.name) item.animation = animEnable;
 		});
 	}
-
-
 
 	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
