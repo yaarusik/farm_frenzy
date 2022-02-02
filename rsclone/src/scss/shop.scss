@@ -103,6 +103,8 @@ $border-radius: 1.375rem;
 .stars__img {
     position: absolute;
     left: 50%;
+    width: 3.125rem;
+    height: 3.125rem;
     transform: translate(-50%);
     top: 10px;
 }
@@ -135,7 +137,8 @@ $border-radius: 1.375rem;
     transform: translate(-50%);
     bottom: 10px;
     color: #ffe80a;
-    font-size: 50px;
+    font-size: 39px;
+    animation-duration: 0.3s;
 }
 
 .content__name {
@@ -156,7 +159,6 @@ $border-radius: 1.375rem;
         height: 6.438rem;
         width: 97%;
         background-size: 100% 100%;
-        background-image: url(../images/shop/layers/shop_layer-grey-2.png);
     }
 
     &__img {
@@ -169,7 +171,7 @@ $border-radius: 1.375rem;
 }
 
 .driedEggs {
-    top: 18px;
+    top: 10px;
     right: 3px;
     width: 7.875rem;
     height: 6.563rem;
@@ -222,6 +224,10 @@ $border-radius: 1.375rem;
     border-radius: 15px;
     font-size: 23px;
     color: $white;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
 
     &-img {
         position: absolute;
@@ -229,4 +235,24 @@ $border-radius: 1.375rem;
         width: 1.375rem;
         height: 1.375rem;
     }
+}
+
+.level__max {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 2.188rem;
+    height: 2.188rem;
+    background-image: url(../images/shop/checked.svg);
+    background-size: cover;
+}
+
+@keyframes money_anim {
+    0% {top: 72px; opacity: 1;}
+    100% {top: 115px; opacity: 0;}
+}
+@keyframes money_backAnim {
+    0% {top: 0px; opacity: 0;}
+    100% {top: 72px; opacity: 1;}
 }
