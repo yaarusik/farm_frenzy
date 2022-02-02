@@ -25,26 +25,27 @@ export default class Common {
     });
   }
 
-  public drawImageAndText(loadImages: Promise<HTMLImageElement>[], imagesData: IPicture[], textData?: IText[]) {
-    Promise.all(loadImages).then(responses => {
-      responses.forEach((img, index) => {
-        const item = imagesData[index];
-        if (item.type === "button" || item.type === "animation") {
-          const cutPicture = new CutPicture(img, item.sx, item.sy, item.swidth, item.sheight, item.x, item.y, item.width, item.height);
-          cutPicture.draw(this.context);
-        } else {
-          const btn = new Picture(img, item.x, item.y, item.width, item.height);
-          btn.draw(this.context);
-        }
-      });
-      if (textData) this.drawText(textData);
+  public async renderImages(loadImages: Promise<HTMLImageElement>[]) {
+    const images: HTMLImageElement[] = [];
+    await Promise.all(loadImages).then(renderImg => renderImg.forEach(img => images.push(img)));
+    return images;
+  }
+
+  public drawImage(loadImages: HTMLImageElement[], imagesData: IPicture[]) {
+    loadImages.forEach((img, index) => {
+      const item = imagesData[index];
+      if (item.type === "button" || item.type === "animation") {
+        const cutPicture = new CutPicture(img, item.sx, item.sy, item.swidth, item.sheight, item.x, item.y, item.width, item.height);
+        cutPicture.draw(this.context);
+      } else {
+        const btn = new Picture(img, item.x, item.y, item.width, item.height);
+        btn.draw(this.context);
+      }
     });
   }
 
-
-  // функция бля отрисовки текста или анимации текста
-  private drawText(textArr: IText[]) {
-
+  // функция для отрисовки текста или анимации текста
+  public drawText(textArr: IText[]) {
     const letterSpacing = 0.5;
     const step = 3;
     textArr.forEach(text => {
