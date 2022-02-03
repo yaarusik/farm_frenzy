@@ -13,6 +13,19 @@ export const userInterfaceOptions = [
     sheight: 0
   },
   {
+    type: "button",
+    name: "mainArea",
+    image: "images/level/level-back.jpg",
+    x: 400,
+    y: 430,
+    width: 740,
+    height: 420,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  {
     type: "picture",
     name: "buttomBar",
     image: "images/level/uiLevel/play_menu.png",
@@ -314,6 +327,22 @@ export const levelTextOptions = [
     y: 124,
     animation: false,
   },
+];
+
+export const levelImagesPath = [
+  "images/pets/chicken/down.png",
+  "images/pets/chicken/down-left.png",
+  "images/pets/chicken/down-right.png",
+  "images/pets/chicken/left.png",
+  "images/pets/chicken/right.png",
+  "images/pets/chicken/up.png",
+  "images/pets/chicken/up-left.png",
+  "images/pets/chicken/up-right.png",
+  "images/pets/chicken/death.png",
+  "images/pets/chicken/eat-left.png",
+  "images/pets/chicken/eat-right.png",
+  "images/level/uiLevel/hungerBar.png",
+  "images/level/grass.png",
 ];
 
 
