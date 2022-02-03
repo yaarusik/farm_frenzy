@@ -13,6 +13,7 @@ export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
   commonFunction: Common;
+  levelRender: LevelRender;
   animation: number;
   userInterfaceOptions: IPicture[];
   curWidthK: number;
@@ -25,10 +26,6 @@ export default class LevelPage extends Control {
   price: { [key: string]: number };
   coin: Coin;
   // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
-  levelRender: LevelRender;
-	animals: AnimalList[];
-	grass: Grass[];
-	id: number;
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -51,10 +48,6 @@ export default class LevelPage extends Control {
     //   sheight: 0
     // };
 
-    this.animals = [];
-		this.grass = [];
-    this.createAnimal("chicken");
-
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
     this.well = new Well(this.userInterfaceOptions);
@@ -69,7 +62,6 @@ export default class LevelPage extends Control {
     this.curWidthK = 1;
     this.curHeightK = 1;
 
-		this.id = 0;
     this.animation = 0;
 
     this.animState = {
@@ -167,7 +159,7 @@ export default class LevelPage extends Control {
             break;
           }
           case 'chicken': {
-            this.createAnimal("chicken");
+            this.levelRender.createAnimal("chicken");
             this.changeTotal(btn.name);
             this.buttonsClick(btn, btn.stepY, btn.click);
             break;
@@ -179,9 +171,7 @@ export default class LevelPage extends Control {
             break;
           }
           case 'mainArea': {
-            let rect = this.canvas.node.getBoundingClientRect()
-            console.log(rect.top, rect.left, event.clientX, event.clientY);
-            this.createGrass((event.clientX - rect.left * 2) * 2, event.clientY);
+            this.levelRender.createGrass(event.clientX, event.clientY);
             break;
           }
           default: console.log("error");
@@ -227,61 +217,17 @@ export default class LevelPage extends Control {
     this.buildSpawn();
     this.coin.coinAnimation();
 
-    this.levelRender.renderLevel(this.grass, this.animals, this.curWidthK, this.curHeightK);
+    this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
     });
   }
 
-  private createAnimal(name: string) {
-		if (!(typeof this.id !== "number"))
-			this.id = 0;
-		if (name === "chicken")
-			this.animals.push(new Chicken(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
-		this.id ++;
-	}
-
-  private createGrass(clickX : number, clickY : number){
-		clickX -= 24; clickY -= 24;
- 
-		const k = 42; //отступ между травами
-		if (clickX - k * 2 >= 400)
-			this.grass.push(new Grass(clickX - k * 2, clickY, Math.floor(Math.random() * 5) + 3));
-		if (clickX - k >= 400 && clickY + k <= 850)
-			this.grass.push(new Grass(clickX - k, clickY + k, Math.floor(Math.random() * 5) + 3));
-		if (clickY + k * 2 <= 850)
-			this.grass.push(new Grass(clickX, clickY + k * 2, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140 && clickY + k <= 850)
-			this.grass.push(new Grass(clickX + k, clickY + k, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140)
-			this.grass.push(new Grass(clickX + k * 2, clickY, Math.floor(Math.random() * 5) + 3));
-		if (clickX - k >= 400 && clickY - k >= 430)
-			this.grass.push(new Grass(clickX - k, clickY - k, Math.floor(Math.random() * 5) + 3));
-		if (clickY - k * 2>= 430)
-			this.grass.push(new Grass(clickX, clickY - k * 2, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140 && clickY - k >= 430)
-			this.grass.push(new Grass(clickX + k, clickY - k, Math.floor(Math.random() * 5) + 3));
-		
-		if (clickX - k >= 400)
-			this.grass.push(new Grass(clickX - k, clickY, Math.floor(Math.random() * 5) + 7));
-		if (clickY + k <= 850)
-			this.grass.push(new Grass(clickX, clickY + k, Math.floor(Math.random() * 5) + 7));
-		if (clickX + k <= 1140)
-			this.grass.push(new Grass(clickX + k, clickY, Math.floor(Math.random() * 5) + 7));
-		if (clickY + k <= 850)
-			this.grass.push(new Grass(clickX, clickY - k, Math.floor(Math.random() * 5) + 7));
-
-		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
-	}
-
   private async render(saveImg: HTMLImageElement[]) {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
-
-    // пробуй вставить сюда
-
   }
 
   //Секция анимаций для зданий ==================
