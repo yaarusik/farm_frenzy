@@ -1,5 +1,5 @@
 import { levelImagesPath } from "../../utils/gameData/levelData";
-import { Grass, AnimalList } from "../types";
+import { Grass, AnimalList, Chicken } from "../types";
 import Common from "./common";
 
 
@@ -9,6 +9,9 @@ export default class LevelRender{
   commonFunction: Common;
   images = new Map<string, HTMLImageElement>();
   imagesPath: string[];
+  animals: AnimalList[];
+	grass: Grass[];
+	id: number;
   heightRatio: number;
   gameFrame: number;
 	staggeredFrames: number;
@@ -20,6 +23,10 @@ export default class LevelRender{
     this.commonFunction = new Common(this.canvas, this.context);
 
     this.imagesPath = levelImagesPath;
+
+    this.animals = [];
+		this.grass = [];
+    this.id = 0;
 
     this.heightRatio = 1.3333333;
 
@@ -38,8 +45,8 @@ export default class LevelRender{
 		});
 	}
 
-  renderLevel(grass: Grass[], animals: AnimalList[], curWidthK: number, curHeightK: number){
-    grass.forEach((item, index, grassList) => {
+  renderLevel(curWidthK: number, curHeightK: number){
+    this.grass.forEach((item, index, grassList) => {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 			this.context.globalAlpha = 1;
 
@@ -58,7 +65,7 @@ export default class LevelRender{
 		});
 
 		
-		animals.forEach((item, index, animalList) => {
+		this.animals.forEach((item, index, animalList) => {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки
 			this.context.globalAlpha = 1;
 			
@@ -114,9 +121,9 @@ export default class LevelRender{
 			if (hungryPercent <= 0){ // Если умирает от голода
 				item.state = "death";
 			} else if (hungryPercent <= 0.38){ // Если ищет еду, то увеличиваем скорость и пытаемся найти еду
-				if (!item.isWantGrass && grass.length > 0){ // Если желаемая точка не трава и трава на карте есть, то ищем траву
+				if (!item.isWantGrass && this.grass.length > 0){ // Если желаемая точка не трава и трава на карте есть, то ищем траву
 					let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
-					grass.forEach((grass) => {
+					this.grass.forEach((grass) => {
 						if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now){
 							now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
 							item.wantX = grass.coordX;
@@ -145,13 +152,13 @@ export default class LevelRender{
 						
 						item.lastEat = new Date(item.lastEat.getTime() + item.food);
 						let now = 100000, grassIndex = 0;
-						grass.forEach((grass, index) => {
+						this.grass.forEach((grass, index) => {
 							if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now){
 								now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
 								grassIndex = index;
 							}
 						});
-						grass.splice(grassIndex, 1);
+						this.grass.splice(grassIndex, 1);
 						item.isWantGrass = false;
 						item.isEating = false;
 						item.eatTime = -1;
@@ -212,4 +219,45 @@ export default class LevelRender{
 
 		this.gameFrame += 1;
   }
+
+  createAnimal(name: string) {
+		if (!(typeof this.id !== "number"))
+			this.id = 0;
+		if (name === "chicken")
+			this.animals.push(new Chicken(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
+		this.id ++;
+	}
+
+  createGrass(clickX : number, clickY : number){
+		clickX -= 24; clickY -= 24;
+ 
+		const k = 42; //отступ между травами
+		if (clickX - k * 2 >= 400)
+			this.grass.push(new Grass(clickX - k * 2, clickY, Math.floor(Math.random() * 5) + 3));
+		if (clickX - k >= 400 && clickY + k <= 850)
+			this.grass.push(new Grass(clickX - k, clickY + k, Math.floor(Math.random() * 5) + 3));
+		if (clickY + k * 2 <= 850)
+			this.grass.push(new Grass(clickX, clickY + k * 2, Math.floor(Math.random() * 5) + 3));
+		if (clickX + k <= 1140 && clickY + k <= 850)
+			this.grass.push(new Grass(clickX + k, clickY + k, Math.floor(Math.random() * 5) + 3));
+		if (clickX + k <= 1140)
+			this.grass.push(new Grass(clickX + k * 2, clickY, Math.floor(Math.random() * 5) + 3));
+		if (clickX - k >= 400 && clickY - k >= 430)
+			this.grass.push(new Grass(clickX - k, clickY - k, Math.floor(Math.random() * 5) + 3));
+		if (clickY - k * 2>= 430)
+			this.grass.push(new Grass(clickX, clickY - k * 2, Math.floor(Math.random() * 5) + 3));
+		if (clickX + k <= 1140 && clickY - k >= 430)
+			this.grass.push(new Grass(clickX + k, clickY - k, Math.floor(Math.random() * 5) + 3));
+		
+		if (clickX - k >= 400)
+			this.grass.push(new Grass(clickX - k, clickY, Math.floor(Math.random() * 5) + 7));
+		if (clickY + k <= 850)
+			this.grass.push(new Grass(clickX, clickY + k, Math.floor(Math.random() * 5) + 7));
+		if (clickX + k <= 1140)
+			this.grass.push(new Grass(clickX + k, clickY, Math.floor(Math.random() * 5) + 7));
+		if (clickY + k <= 850)
+			this.grass.push(new Grass(clickX, clickY - k, Math.floor(Math.random() * 5) + 7));
+
+		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
+	}
 }
