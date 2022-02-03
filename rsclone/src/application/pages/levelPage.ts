@@ -7,6 +7,7 @@ import { levelTextOptions, userInterfaceOptions, animationBuildOptions, levelIma
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
+import LevelRender from "../common/levelRender";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -30,6 +31,7 @@ export default class LevelPage extends Control {
   a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
 
   // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
+<<<<<<< HEAD
   heightRatio: number;
   animals: AnimalList[];
   grass: Grass[];
@@ -39,6 +41,12 @@ export default class LevelPage extends Control {
   images = new Map<string, HTMLImageElement>();
   imagesPath: string[];
 
+=======
+  levelRender: LevelRender;
+	animals: AnimalList[];
+	grass: Grass[];
+	id: number;
+>>>>>>> 6b0376d274e75af00937889cab8cc565df789551
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -62,8 +70,12 @@ export default class LevelPage extends Control {
     };
 
     this.animals = [];
+<<<<<<< HEAD
     this.grass = [];
     this.imagesPath = levelImagesPath;
+=======
+		this.grass = [];
+>>>>>>> 6b0376d274e75af00937889cab8cc565df789551
     this.createAnimal("chicken");
 
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
@@ -79,11 +91,14 @@ export default class LevelPage extends Control {
 
     this.curWidthK = 1;
     this.curHeightK = 1;
-    this.heightRatio = 1.333333333;
 
+<<<<<<< HEAD
     this.gameFrame = 0;
     this.staggeredFrames = 3;
     this.id = 0;
+=======
+		this.id = 0;
+>>>>>>> 6b0376d274e75af00937889cab8cc565df789551
     this.animation = 0;
 
     this.animState = {
@@ -98,8 +113,10 @@ export default class LevelPage extends Control {
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
+    this.levelRender = new LevelRender(this.canvas.node, this.context);
 
     this.startUI();
+    this.levelRender.startLevel();
 
     window.onresize = () => {
       const coefficients = this.commonFunction.canvasScale();
@@ -114,8 +131,6 @@ export default class LevelPage extends Control {
     this.canvas.node.addEventListener("click", (e) => {
       this.canvasClickHundler(e, this.canvas.node, this.buttons);
     });
-
-    this.startLevel();
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[]) {
@@ -192,7 +207,9 @@ export default class LevelPage extends Control {
             break;
           }
           case 'mainArea': {
-            this.createGrass(event.clientX, event.clientY);
+            let rect = this.canvas.node.getBoundingClientRect()
+            console.log(rect.top, rect.left, event.clientX, event.clientY);
+            this.createGrass((event.clientX - rect.left * 2) * 2, event.clientY);
             break;
           }
           default: console.log("error");
@@ -229,6 +246,7 @@ export default class LevelPage extends Control {
 
     this.run(initialImages);
   }
+<<<<<<< HEAD
 
   private startLevel() {
     this.imagesPath.forEach(async (path) => {
@@ -241,6 +259,9 @@ export default class LevelPage extends Control {
     });
   }
 
+=======
+    
+>>>>>>> 6b0376d274e75af00937889cab8cc565df789551
   private async run(saveImg: HTMLImageElement[]) {
     this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
     this.context.globalAlpha = 1;
@@ -249,6 +270,7 @@ export default class LevelPage extends Control {
     this.buildSpawn();
     this.coin.coinAnimation();
 
+<<<<<<< HEAD
 
     this.grass.forEach((item, index, grassList) => {
       this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
@@ -423,6 +445,9 @@ export default class LevelPage extends Control {
 
     this.gameFrame += 1;
 
+=======
+    this.levelRender.renderLevel(this.grass, this.animals, this.curWidthK, this.curHeightK);
+>>>>>>> 6b0376d274e75af00937889cab8cc565df789551
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
