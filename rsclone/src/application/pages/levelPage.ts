@@ -7,6 +7,7 @@ import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 import LevelRender from "../common/levelRender";
+import PausePanel from "../../utils/panels/pausePanel";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -24,8 +25,8 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
-
   initialImages: HTMLImageElement[];
+  pausePanel: PausePanel;
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -63,7 +64,11 @@ export default class LevelPage extends Control {
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
+
     this.levelRender = new LevelRender(this.canvas.node, this.context);
+
+    this.pausePanel = new PausePanel(this.canvas.node, this.context);
+
 
     this.startUI();
     this.levelRender.startLevel();
@@ -127,13 +132,11 @@ export default class LevelPage extends Control {
         switch (btn.name) {
           case "Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            // ================================================
             // this.userInterfaceOptions.push(this.a);
-            // const img = this.commonFunction.loadImage(this.a.image).then(img => this.initialImages.push(img));
-            // ===================================================
-            // console.log(img);
-            setTimeout(this.gameMapBack, 250);
-            cancelAnimationFrame(this.animation);
+            // this.commonFunction.loadImage(this.a.image).then(img => this.initialImages.push(img));
+
+            // setTimeout(this.gameMapBack, 250);
+            // cancelAnimationFrame(this.animation);
             break;
           }
           case "well": {
@@ -190,11 +193,10 @@ export default class LevelPage extends Control {
     this.curWidthK = coefficients.curWidthK;
     this.curHeightK = coefficients.curHeightK;
 
-    const initialImages = await this.commonFunction.renderImages(loadImages);
+    this.initialImages = await this.commonFunction.renderImages(loadImages);
 
-    this.run(initialImages);
+    this.run(this.initialImages);
   }
-
 
   private async run(saveImg: HTMLImageElement[]) {
     this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
@@ -205,7 +207,7 @@ export default class LevelPage extends Control {
     this.coin.coinAnimation();
 
     this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
-
+    this.pausePanel.render();
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
@@ -216,6 +218,9 @@ export default class LevelPage extends Control {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
+
+    // здесь вызываем функцию drawImage с данными панели
+
   }
 
   //Секция анимаций для зданий ==================
