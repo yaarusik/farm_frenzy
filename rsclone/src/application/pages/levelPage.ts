@@ -27,6 +27,7 @@ export default class LevelPage extends Control {
   coin: Coin;
   initialImages: HTMLImageElement[];
   pausePanel: PausePanel;
+  pausePanelSwitch: boolean;
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -51,6 +52,7 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
 
     this.animation = 0;
+    this.pausePanelSwitch = false;
 
     this.animState = {
       well: true,
@@ -126,50 +128,52 @@ export default class LevelPage extends Control {
   }
 
   private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
-    buttons.forEach(btn => {
-      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-      if (this.commonFunction.determineCoords(event, scaleCoords)) {
-        switch (btn.name) {
-          case "Меню": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            // this.userInterfaceOptions.push(this.a);
-            // this.commonFunction.loadImage(this.a.image).then(img => this.initialImages.push(img));
+    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, canvas, this.curWidthK, this.curHeightK, this.pausePanelSwitch);
 
-            // setTimeout(this.gameMapBack, 250);
-            // cancelAnimationFrame(this.animation);
-            break;
+    else {
+      buttons.forEach(btn => {
+        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+        if (this.commonFunction.determineCoords(event, scaleCoords)) {
+          switch (btn.name) {
+            case "Меню": {
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.pausePanelSwitch = true;
+              // setTimeout(this.gameMapBack, 250);
+              // cancelAnimationFrame(this.animation);
+              break;
+            }
+            case "well": {
+              this.changeTotal(btn.name);
+              if (this.animState.well) this.well.wellAnimation(btn, this.animState);
+              if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
+              this.animState.well = false;
+              this.animState.waterIndicator = false;
+              break;
+            }
+            case 'chicken': {
+              this.levelRender.createAnimal("chicken");
+              this.changeTotal(btn.name);
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              break;
+            }
+            case 'pig': {
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.well.waterIndicatorChange();
+              console.log("chicken");
+              break;
+            }
+            case 'mainArea': {
+              this.levelRender.createGrass(event.clientX, event.clientY);
+              break;
+            }
+            default: console.log("error");
           }
-          case "well": {
-            this.changeTotal(btn.name);
-            if (this.animState.well) this.well.wellAnimation(btn, this.animState);
-            if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
-            this.animState.well = false;
-            this.animState.waterIndicator = false;
-            break;
-          }
-          case 'chicken': {
-            this.levelRender.createAnimal("chicken");
-            this.changeTotal(btn.name);
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            break;
-          }
-          case 'pig': {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.well.waterIndicatorChange();
-            console.log("chicken");
-            break;
-          }
-          case 'mainArea': {
-            this.levelRender.createGrass(event.clientX, event.clientY);
-            break;
-          }
-          default: console.log("error");
+        } else {
+          // переделать сброс кнопки
+          // this.buttonsClick(btn, 0, 0);
         }
-      } else {
-        // переделать сброс кнопки
-        // this.buttonsClick(btn, 0, 0);
-      }
-    });
+      });
+    }
   }
 
   private buttonsHover(btn: IButton, yStep: number, count: number) {
@@ -194,31 +198,33 @@ export default class LevelPage extends Control {
     this.curHeightK = coefficients.curHeightK;
 
     this.initialImages = await this.commonFunction.renderImages(loadImages);
-
     this.run(this.initialImages);
   }
 
   private async run(saveImg: HTMLImageElement[]) {
     this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
     this.context.globalAlpha = 1;
-    await this.render(saveImg);
+    this.render(saveImg);
+
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
-    this.coin.coinAnimation();
 
     this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
-    this.pausePanel.render();
+    if (this.pausePanelSwitch === true) {
+      this.pausePanel.render();
+    }
+    // console.log(this.pausePanelSwitch);
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
     });
   }
 
-  private async render(saveImg: HTMLImageElement[]) {
+  private render(saveImg: HTMLImageElement[]) {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
-
+    this.coin.coinAnimation();
     // здесь вызываем функцию drawImage с данными панели
 
   }

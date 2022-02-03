@@ -276,19 +276,6 @@ export const userInterfaceOptions = [
     swidth: 32,
     sheight: 32
   },
-  // {
-  //   type: "picture",
-  //   name: "pause",
-  //   image: "images/level/panels/pause_panel.png",
-  //   x: 569,
-  //   y: 300,
-  //   width: 462,
-  //   height: 600,
-  //   sx: 0,
-  //   sy: 0,
-  //   swidth: 0,
-  //   sheight: 0
-  // },
 ];
 
 
