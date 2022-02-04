@@ -6,8 +6,10 @@ import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from '.
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
+import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
+
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -24,10 +26,14 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
+
   initialImages: HTMLImageElement[];
   pausePanel: PausePanel;
   pausePanelSwitch: boolean;
   click: IFunctions;
+
+  timer: Timer;
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -75,7 +81,10 @@ export default class LevelPage extends Control {
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
 
+    this.timer = new Timer(this.canvas.node, this.context);
+
     this.levelRender = new LevelRender(this.canvas.node, this.context);
+
 
     this.pausePanel = new PausePanel(this.canvas.node, this.context);
 
@@ -219,6 +228,10 @@ export default class LevelPage extends Control {
     this.commonFunction.drawText(this.textOptions);
     this.coin.coinAnimation();
     // здесь вызываем функцию drawImage с данными панели
+
+    this.timer.drawText();
+
+
   }
 
   //Секция анимаций для зданий ==================
