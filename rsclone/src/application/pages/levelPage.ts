@@ -7,11 +7,8 @@ import { levelTextOptions, userInterfaceOptions, animationBuildOptions, levelIma
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
-<<<<<<< HEAD
-import Timer from "../../utils/timer/levelTimer";
-=======
 import LevelRender from "../common/levelRender";
->>>>>>> develop
+import Timer from "../../utils/timer/levelTimer";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -29,19 +26,8 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
-  // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
-<<<<<<< HEAD
-  heightRatio: number;
-	animals: AnimalList[];
-	grass: Grass[];
-	gameFrame: number;
-	staggeredFrames: number;
-	id: number; // Для животых
-	images = new Map<string, HTMLImageElement>();
-	imagesPath: string[];
   timer: Timer;
-=======
->>>>>>> develop
+  // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -92,11 +78,8 @@ export default class LevelPage extends Control {
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
-<<<<<<< HEAD
-    this.timer = new Timer(this.canvas.node, this.context);
-=======
+    this.timer = new Timer(this.context);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
->>>>>>> develop
 
     this.startUI();
     this.levelRender.startLevel();
@@ -248,13 +231,7 @@ export default class LevelPage extends Control {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
-<<<<<<< HEAD
     this.timer.drawText();
-
-    // пробуй вставить сюда
-
-=======
->>>>>>> develop
   }
 
   //Секция анимаций для зданий ==================
