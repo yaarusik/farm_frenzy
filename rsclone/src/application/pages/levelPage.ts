@@ -1,17 +1,14 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { Chicken, AnimalList, Grass } from "../types";
-import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
-import { levelTextOptions, userInterfaceOptions, animationBuildOptions, levelImagesPath } from './../../utils/gameData/levelData';
+import { IPicture, Coords, IButton, IText, IAnimBuild, IFunctions } from "./../iterfaces";
+import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
-<<<<<<< HEAD
 import Timer from "../../utils/timer/levelTimer";
-=======
 import LevelRender from "../common/levelRender";
->>>>>>> develop
+import PausePanel from "../../utils/panels/pausePanel";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -29,19 +26,14 @@ export default class LevelPage extends Control {
   well: Well;
   price: { [key: string]: number };
   coin: Coin;
-  // a: { type: string; name: string; image: string; x: number; y: number; width: number; height: number; sx: number; sy: number; swidth: number; sheight: number; };
-<<<<<<< HEAD
-  heightRatio: number;
-	animals: AnimalList[];
-	grass: Grass[];
-	gameFrame: number;
-	staggeredFrames: number;
-	id: number; // Для животых
-	images = new Map<string, HTMLImageElement>();
-	imagesPath: string[];
+
+  initialImages: HTMLImageElement[];
+  pausePanel: PausePanel;
+  pausePanelSwitch: boolean;
+  click: IFunctions;
+
   timer: Timer;
-=======
->>>>>>> develop
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -49,20 +41,7 @@ export default class LevelPage extends Control {
     this.userInterfaceOptions = userInterfaceOptions;
     this.textOptions = levelTextOptions;
     this.animationBuildOptions = animationBuildOptions;
-
-    // this.a = {
-    //   type: "picture",
-    //   name: "pause",
-    //   image: "images/level/panels/pause_panel.png",
-    //   x: 569,
-    //   y: 300,
-    //   width: 462,
-    //   height: 600,
-    //   sx: 0,
-    //   sy: 0,
-    //   swidth: 0,
-    //   sheight: 0
-    // };
+    this.initialImages = [];
 
     this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
 
@@ -79,6 +58,7 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
 
     this.animation = 0;
+    this.pausePanelSwitch = false;
 
     this.animState = {
       well: true,
@@ -90,13 +70,23 @@ export default class LevelPage extends Control {
       chicken: 100,
     };
 
+    this.click = {
+      isPaused: () => this.pausePanelSwitch = false,
+      onMain: () => this.onMain(),
+      onRestart: () => this.onRestart(),
+      onSettings: () => this.onSettings(),
+      onMap: () => this.onMap(),
+    };
+
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
-<<<<<<< HEAD
+
     this.timer = new Timer(this.canvas.node, this.context);
-=======
+
     this.levelRender = new LevelRender(this.canvas.node, this.context);
->>>>>>> develop
+
+
+    this.pausePanel = new PausePanel(this.canvas.node, this.context);
 
     this.startUI();
     this.levelRender.startLevel();
@@ -112,109 +102,94 @@ export default class LevelPage extends Control {
     });
 
     this.canvas.node.addEventListener("click", (e) => {
-      this.canvasClickHundler(e, this.canvas.node, this.buttons);
+      this.canvasClickHundler(e, this.buttons);
     });
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[]) {
-    buttons.forEach(btn => {
-      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-      if (this.commonFunction.determineCoords(event, scaleCoords)) {
-        if (btn.name === 'well' || btn.name === 'storage') {
-          console.log('well');
+    if (this.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else {
+      buttons.forEach(btn => {
+        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+        if (this.commonFunction.determineCoords(event, scaleCoords)) {
+          if (btn.name === 'well' || btn.name === 'storage') {
+            console.log('well');
+          } else {
+            this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
+            this.commonFunction.changeAnimation(btn, true, this.textOptions);
+          }
         } else {
-          this.buttonsHover(btn, btn.stepY, btn.hover);
-          this.changeAnimation(btn, true);
-        }
-
-      } else {
-        switch (btn.name) {
-          case "well": {
-            break;
-          }
-          case "pig":
-          case "chicken":
-          case "cow":
-          case "ostrich":
-          case "dog":
-          case "cat": {
-            const hoverCoords = 192;
-            const count = 1;
-            // если можно купить, ховер работает
-            this.buttonsHover(btn, hoverCoords, count);
-            break;
-          }
-          default: {
-            this.buttonsHover(btn, 0, 0);
-            this.changeAnimation(btn, false);
+          switch (btn.name) {
+            case "well": {
+              break;
+            }
+            case "pig":
+            case "chicken":
+            case "cow":
+            case "ostrich":
+            case "dog":
+            case "cat": {
+              const hoverCoords = 192;
+              const count = 1;
+              // если можно купить, ховер работает
+              this.commonFunction.buttonsHover(btn, hoverCoords, count);
+              break;
+            }
+            default: {
+              this.commonFunction.buttonsHover(btn, 0, 0);
+              this.commonFunction.changeAnimation(btn, false, this.textOptions);
+            }
           }
         }
-      }
-    });
+      });
+    }
+
   }
 
-  private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
-    buttons.forEach(btn => {
-      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-      if (this.commonFunction.determineCoords(event, scaleCoords)) {
-        switch (btn.name) {
-          case "Меню": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            // // ================================================
-            // this.userInterfaceOptions.push(this.a);
-            // const img = this.commonFunction.loadImage(this.a.image);
-            // this.loadImages.push(img);
-            // // ===================================================
-            // console.log(this.loadImages);
-            setTimeout(this.gameMapBack, 250);
-            cancelAnimationFrame(this.animation);
-            break;
+  private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
+    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
+    else {
+      buttons.forEach(btn => {
+        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+        if (this.commonFunction.determineCoords(event, scaleCoords)) {
+          switch (btn.name) {
+            case "Меню": {
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+              this.pausePanelSwitch = true;
+              break;
+            }
+            case "well": {
+              this.changeTotal(btn.name);
+              if (this.animState.well) this.well.wellAnimation(btn, this.animState);
+              if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
+              this.animState.well = false;
+              this.animState.waterIndicator = false;
+              break;
+            }
+            case 'chicken': {
+              this.levelRender.createAnimal("chicken");
+              this.changeTotal(btn.name);
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+              break;
+            }
+            case 'pig': {
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+              this.well.waterIndicatorChange();
+              console.log("chicken");
+              break;
+            }
+            case 'mainArea': {
+              this.levelRender.createGrass(event.clientX, event.clientY);
+              break;
+            }
+            default: console.log("error");
           }
-          case "well": {
-            this.changeTotal(btn.name);
-            if (this.animState.well) this.well.wellAnimation(btn, this.animState);
-            if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
-            this.animState.well = false;
-            this.animState.waterIndicator = false;
-            break;
-          }
-          case 'chicken': {
-            this.levelRender.createAnimal("chicken");
-            this.changeTotal(btn.name);
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            break;
-          }
-          case 'pig': {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.well.waterIndicatorChange();
-            console.log("chicken");
-            break;
-          }
-          case 'mainArea': {
-            this.levelRender.createGrass(event.clientX, event.clientY);
-            break;
-          }
-          default: console.log("error");
+        } else {
+          // переделать сброс кнопки
+          // this.buttonsClick(btn, 0, 0);
         }
-      } else {
-        // переделать сброс кнопки
-        // this.buttonsClick(btn, 0, 0);
-      }
-    });
-  }
-
-  private buttonsHover(btn: IButton, yStep: number, count: number) {
-    btn.sy = yStep * count;
-  }
-
-  private buttonsClick(btn: IButton, yStep: number, count: number) {
-    btn.sy = yStep * count;
-  }
-
-  private changeAnimation(btn: IPicture, animEnable: boolean) {
-    this.textOptions.forEach((item) => {
-      if (item.text === btn.name) item.animation = animEnable;
-    });
+      });
+    }
   }
 
   private async startUI() {
@@ -224,41 +199,42 @@ export default class LevelPage extends Control {
     this.curWidthK = coefficients.curWidthK;
     this.curHeightK = coefficients.curHeightK;
 
-    const initialImages = await this.commonFunction.renderImages(loadImages);
-
-    this.run(initialImages);
+    this.initialImages = await this.commonFunction.renderImages(loadImages);
+    this.run(this.initialImages);
   }
-    
+
   private async run(saveImg: HTMLImageElement[]) {
     this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
-		this.context.globalAlpha = 1;
-    await this.render(saveImg);
+    this.context.globalAlpha = 1;
+    this.render(saveImg);
+
     // СДЕЛАТЬ ПО КНОПКЕ
     this.buildSpawn();
-    this.coin.coinAnimation();
 
     this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
+    if (this.pausePanelSwitch === true) {
+      this.pausePanel.render();
+    }
+    // console.log(this.pausePanelSwitch);
 
     this.animation = requestAnimationFrame(() => {
       this.run(saveImg);
     });
   }
 
-  private async render(saveImg: HTMLImageElement[]) {
+  private render(saveImg: HTMLImageElement[]) {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
-<<<<<<< HEAD
+    this.coin.coinAnimation();
+    // здесь вызываем функцию drawImage с данными панели
+
     this.timer.drawText();
 
-    // пробуй вставить сюда
 
-=======
->>>>>>> develop
   }
 
   //Секция анимаций для зданий ==================
-
   // один раз только нужно запустить
   private buildSpawn() {
     this.animationBuildOptions.forEach((item, index) => {
@@ -274,7 +250,6 @@ export default class LevelPage extends Control {
         build.y += item.speed;
     }
   }
-
   private changeTotal(product: string) {
     if (this.animState.well) {
       initialData.totalLevelSum.level1 -= this.price[product];
@@ -287,9 +262,17 @@ export default class LevelPage extends Control {
     }
   }
 
-
   //Секция анимаций для зданий ==================
-  gameMapBack() {
+  onMap(): void {
+    throw new Error("Method not implemented.");
+  }
+  onMain(): void {
+    throw new Error("Method not implemented.");
+  }
+  onRestart(): void {
+    throw new Error("Method not implemented.");
+  }
+  onSettings(): void {
     throw new Error("Method not implemented.");
   }
 }
