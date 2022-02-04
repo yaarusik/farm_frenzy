@@ -1,13 +1,15 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { IPicture, Coords, IButton, IText, IAnimBuild } from "./../iterfaces";
+import { IPicture, Coords, IButton, IText, IAnimBuild, IFunctions } from "./../iterfaces";
 import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
+
+
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -28,6 +30,9 @@ export default class LevelPage extends Control {
   initialImages: HTMLImageElement[];
   pausePanel: PausePanel;
   pausePanelSwitch: boolean;
+  functions: IFunctions;
+
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -52,7 +57,7 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
 
     this.animation = 0;
-    this.pausePanelSwitch = false;
+    this.pausePanelSwitch = true;
 
     this.animState = {
       well: true,
@@ -62,6 +67,14 @@ export default class LevelPage extends Control {
     this.price = {
       well: 19,
       chicken: 100,
+    };
+
+    this.functions = {
+      isPaused: () => this.pausePanelSwitch = false,
+      onMain: () => this.onMain(),
+      onRestart: () => this.onRestart(),
+      onSettings: () => this.onSettings(),
+      onMap: () => this.onMap(),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -86,7 +99,7 @@ export default class LevelPage extends Control {
     });
 
     this.canvas.node.addEventListener("click", (e) => {
-      this.canvasClickHundler(e, this.canvas.node, this.buttons);
+      this.canvasClickHundler(e, this.buttons);
     });
   }
 
@@ -127,9 +140,8 @@ export default class LevelPage extends Control {
     });
   }
 
-  private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
-    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, canvas, this.curWidthK, this.curHeightK, this.pausePanelSwitch);
-
+  private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
+    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.functions, this.animation);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -138,8 +150,6 @@ export default class LevelPage extends Control {
             case "Меню": {
               this.buttonsClick(btn, btn.stepY, btn.click);
               this.pausePanelSwitch = true;
-              // setTimeout(this.gameMapBack, 250);
-              // cancelAnimationFrame(this.animation);
               break;
             }
             case "well": {
@@ -259,9 +269,17 @@ export default class LevelPage extends Control {
     }
   }
 
-
   //Секция анимаций для зданий ==================
-  gameMapBack() {
+  onMap(): void {
+    throw new Error("Method not implemented.");
+  }
+  onMain(): void {
+    throw new Error("Method not implemented.");
+  }
+  onRestart(): void {
+    throw new Error("Method not implemented.");
+  }
+  onSettings(): void {
     throw new Error("Method not implemented.");
   }
 }

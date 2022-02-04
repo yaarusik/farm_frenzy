@@ -69,9 +69,22 @@ export default class Application extends Control {
 	private levelCycle() {
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
 		const levelPage = new LevelPage(pageWrapper.node);
-		levelPage.gameMapBack = () => {
+
+		levelPage.onMap = () => {
 			levelPage.destroy();
 			this.gameMapCycle();
+		};
+		levelPage.onMain = () => {
+			levelPage.destroy();
+			this.mainCycle();
+		};
+		levelPage.onRestart = () => {
+			levelPage.destroy();
+			this.levelCycle();
+		};
+		levelPage.onSettings = () => {
+			levelPage.destroy();
+			this.settingsCycle();
 		};
 	}
 

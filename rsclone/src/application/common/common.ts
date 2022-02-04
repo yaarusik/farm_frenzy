@@ -95,5 +95,12 @@ export default class Common {
     };
   }
 
+  public buttonsClick(btn: IButton, yStep: number, count: number) {
+    btn.sy = yStep * count;
+  }
+
+  public buttonsHover(btn: IButton, yStep: number, count: number) {
+    btn.sy = yStep * count;
+  }
 
 }
