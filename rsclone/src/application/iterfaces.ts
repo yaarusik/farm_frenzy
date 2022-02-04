@@ -60,5 +60,12 @@ export interface IFunctions {
   onSettings: () => void;
 }
 
+export interface IKeyBoolean {
+  [key: string]: boolean;
+}
+
+export interface IKeyNumber {
+  [key: string]: number;
+}
 
 // LEVELSECTION =======================

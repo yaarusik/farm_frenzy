@@ -1,14 +1,16 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { IPicture, Coords, IButton, IText, IAnimBuild, IFunctions } from "./../iterfaces";
-import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from './../../utils/gameData/levelData';
+import { Coords, IButton, IText, IAnimBuild, IFunctions, IKeyBoolean, IKeyNumber } from "./../iterfaces";
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
+import StartPanel from "../../utils/panels/startPanel";
+import LevelInterface from "./../../utils/interface/levelInterface";
+import { animationBuildOptions } from "./../../utils/gameData/levelData";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -16,35 +18,23 @@ export default class LevelPage extends Control {
   commonFunction: Common;
   levelRender: LevelRender;
   animation: number;
-  userInterfaceOptions: IPicture[];
   curWidthK: number;
   curHeightK: number;
-  buttons: IButton[];
-  textOptions: IText[];
-  animationBuildOptions: IAnimBuild[];
-  animState: { [key: string]: boolean; };
+  animState: IKeyBoolean;
   well: Well;
-  price: { [key: string]: number };
+  price: IKeyNumber;
   coin: Coin;
-  initialImages: HTMLImageElement[];
   pausePanel: PausePanel;
-  pausePanelSwitch: boolean;
   click: IFunctions;
   timer: Timer;
-
+  startPanel: StartPanel;
+  panelState: { pausePanelSwitch: boolean; startPanelSwitch: boolean; };
+  levelInterface: LevelInterface;
+  btn: IButton[];
+  animationBuildOptions: IAnimBuild[];
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
-
-    this.userInterfaceOptions = userInterfaceOptions;
-    this.textOptions = levelTextOptions;
-    this.animationBuildOptions = animationBuildOptions;
-    this.initialImages = [];
-
-    this.buttons = <IButton[]>this.userInterfaceOptions.filter(btn => btn.type === "button");
-
-    this.well = new Well(this.userInterfaceOptions);
-    this.coin = new Coin(this.userInterfaceOptions);
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -54,9 +44,12 @@ export default class LevelPage extends Control {
 
     this.curWidthK = 1;
     this.curHeightK = 1;
-
     this.animation = 0;
-    this.pausePanelSwitch = false;
+
+    this.panelState = {
+      pausePanelSwitch: false,
+      startPanelSwitch: true
+    };
 
     this.animState = {
       well: true,
@@ -69,7 +62,7 @@ export default class LevelPage extends Control {
     };
 
     this.click = {
-      isPaused: () => this.pausePanelSwitch = false,
+      isPaused: () => this.panelState.pausePanelSwitch = false,
       onMain: () => this.onMain(),
       onRestart: () => this.onRestart(),
       onSettings: () => this.onSettings(),
@@ -79,12 +72,19 @@ export default class LevelPage extends Control {
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
 
+    this.levelInterface = new LevelInterface(this.canvas.node, this.context);
+    this.startPanel = new StartPanel(this.canvas.node, this.context);
     this.timer = new Timer(this.canvas.node, this.context);
-
     this.levelRender = new LevelRender(this.canvas.node, this.context);
-
-
     this.pausePanel = new PausePanel(this.canvas.node, this.context);
+
+    const { btn, anim, text } = this.levelInterface.getData();
+
+    this.animationBuildOptions = animationBuildOptions;
+    this.btn = btn;
+
+    this.well = new Well(anim);
+    this.coin = new Coin(anim);
 
     this.startUI();
     this.levelRender.startLevel();
@@ -96,16 +96,53 @@ export default class LevelPage extends Control {
     };
 
     this.canvas.node.addEventListener("mousemove", (e) => {
-      this.canvasMoveHundler(e, this.buttons);
+      this.canvasMoveHundler(e, [...btn, ...anim], text);
     });
 
     this.canvas.node.addEventListener("click", (e) => {
-      this.canvasClickHundler(e, this.buttons);
+      this.canvasClickHundler(e, [...btn, ...anim], text);
     });
   }
 
-  private canvasMoveHundler(event: MouseEvent, buttons: IButton[]) {
-    if (this.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
+
+  private async startUI() {
+    const coefficients = this.commonFunction.canvasScale();
+    this.curWidthK = coefficients.curWidthK;
+    this.curHeightK = coefficients.curHeightK;
+
+    this.run();
+  }
+
+  private async run() {
+    this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
+    this.context.globalAlpha = 1;
+    this.render();
+
+    // upload pause panel
+    if (this.panelState.pausePanelSwitch === true) this.pausePanel.render();
+
+    this.animation = requestAnimationFrame(() => {
+      this.run();
+    });
+  }
+
+  private render() {
+    this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
+    this.levelInterface.render();
+
+    if (this.panelState.startPanelSwitch) this.startPanel.render(); // upload start panel
+    else {
+      this.coin.coinAnimation();
+      this.timer.drawText();
+      // СДЕЛАТЬ ПО КНОПКЕ
+      this.buildSpawn();
+
+      this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
+    }
+  }
+
+  private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
+    if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -114,7 +151,7 @@ export default class LevelPage extends Control {
             console.log('well');
           } else {
             this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
-            this.commonFunction.changeAnimation(btn, true, this.textOptions);
+            this.commonFunction.changeAnimation(btn, true, text);
           }
         } else {
           switch (btn.name) {
@@ -135,17 +172,16 @@ export default class LevelPage extends Control {
             }
             default: {
               this.commonFunction.buttonsHover(btn, 0, 0);
-              this.commonFunction.changeAnimation(btn, false, this.textOptions);
+              this.commonFunction.changeAnimation(btn, false, text);
             }
           }
         }
       });
     }
-
   }
 
-  private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
-    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
+  private canvasClickHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
+    if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -153,11 +189,11 @@ export default class LevelPage extends Control {
           switch (btn.name) {
             case "Меню": {
               this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              this.pausePanelSwitch = true;
+              this.panelState.pausePanelSwitch = true;
               break;
             }
             case "well": {
-              this.changeTotal(btn.name);
+              this.changeTotal(btn.name, text);
               if (this.animState.well) this.well.wellAnimation(btn, this.animState);
               if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
               this.animState.well = false;
@@ -166,7 +202,7 @@ export default class LevelPage extends Control {
             }
             case 'chicken': {
               this.levelRender.createAnimal("chicken");
-              this.changeTotal(btn.name);
+              this.changeTotal(btn.name, text);
               this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               break;
             }
@@ -190,50 +226,12 @@ export default class LevelPage extends Control {
     }
   }
 
-  private async startUI() {
-    const loadImages = this.userInterfaceOptions.map(image => this.commonFunction.loadImage(image.image));
-
-    const coefficients = this.commonFunction.canvasScale();
-    this.curWidthK = coefficients.curWidthK;
-    this.curHeightK = coefficients.curHeightK;
-
-    this.initialImages = await this.commonFunction.renderImages(loadImages);
-    this.run(this.initialImages);
-  }
-
-  private async run(saveImg: HTMLImageElement[]) {
-    this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
-    this.context.globalAlpha = 1;
-    this.render(saveImg);
-
-    // СДЕЛАТЬ ПО КНОПКЕ
-    this.buildSpawn();
-
-    this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
-    if (this.pausePanelSwitch === true) {
-      this.pausePanel.render();
-    }
-    // console.log(this.pausePanelSwitch);
-
-    this.animation = requestAnimationFrame(() => {
-      this.run(saveImg);
-    });
-  }
-
-  private render(saveImg: HTMLImageElement[]) {
-    this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
-    this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
-    this.commonFunction.drawText(this.textOptions);
-    this.coin.coinAnimation();
-    // здесь вызываем функцию drawImage с данными панели
-    this.timer.drawText();
-  }
 
   //Секция анимаций для зданий ==================
   // один раз только нужно запустить
   private buildSpawn() {
     this.animationBuildOptions.forEach((item, index) => {
-      this.buttons.forEach(build => {
+      this.btn.forEach(build => {
         setTimeout(() => this.buildAnimation(item, build), 500 * index);
       });
     });
@@ -245,10 +243,13 @@ export default class LevelPage extends Control {
         build.y += item.speed;
     }
   }
-  private changeTotal(product: string) {
+
+  //Секция анимаций для зданий ==================
+
+  private changeTotal(product: string, text: IText[]) {
     if (this.animState.well) {
       initialData.totalLevelSum.level1 -= this.price[product];
-      this.textOptions.forEach(item => {
+      text.forEach(item => {
         if (item.name === 'total') {
           console.log('total');
           item.text = initialData.totalLevelSum.level1.toString();
@@ -257,7 +258,6 @@ export default class LevelPage extends Control {
     }
   }
 
-  //Секция анимаций для зданий ==================
   onMap(): void {
     throw new Error("Method not implemented.");
   }
