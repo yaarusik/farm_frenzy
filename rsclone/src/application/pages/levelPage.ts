@@ -8,9 +8,6 @@ import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
-
-
-
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -30,9 +27,7 @@ export default class LevelPage extends Control {
   initialImages: HTMLImageElement[];
   pausePanel: PausePanel;
   pausePanelSwitch: boolean;
-  functions: IFunctions;
-
-
+  click: IFunctions;
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -57,7 +52,7 @@ export default class LevelPage extends Control {
     this.curHeightK = 1;
 
     this.animation = 0;
-    this.pausePanelSwitch = true;
+    this.pausePanelSwitch = false;
 
     this.animState = {
       well: true,
@@ -69,7 +64,7 @@ export default class LevelPage extends Control {
       chicken: 100,
     };
 
-    this.functions = {
+    this.click = {
       isPaused: () => this.pausePanelSwitch = false,
       onMain: () => this.onMain(),
       onRestart: () => this.onRestart(),
@@ -83,7 +78,6 @@ export default class LevelPage extends Control {
     this.levelRender = new LevelRender(this.canvas.node, this.context);
 
     this.pausePanel = new PausePanel(this.canvas.node, this.context);
-
 
     this.startUI();
     this.levelRender.startLevel();
@@ -104,51 +98,54 @@ export default class LevelPage extends Control {
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[]) {
-    buttons.forEach(btn => {
-      const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-      if (this.commonFunction.determineCoords(event, scaleCoords)) {
-        if (btn.name === 'well' || btn.name === 'storage') {
-          console.log('well');
+    if (this.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else {
+      buttons.forEach(btn => {
+        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+        if (this.commonFunction.determineCoords(event, scaleCoords)) {
+          if (btn.name === 'well' || btn.name === 'storage') {
+            console.log('well');
+          } else {
+            this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
+            this.commonFunction.changeAnimation(btn, true, this.textOptions);
+          }
         } else {
-          this.buttonsHover(btn, btn.stepY, btn.hover);
-          this.changeAnimation(btn, true);
+          switch (btn.name) {
+            case "well": {
+              break;
+            }
+            case "pig":
+            case "chicken":
+            case "cow":
+            case "ostrich":
+            case "dog":
+            case "cat": {
+              const hoverCoords = 192;
+              const count = 1;
+              // если можно купить, ховер работает
+              this.commonFunction.buttonsHover(btn, hoverCoords, count);
+              break;
+            }
+            default: {
+              this.commonFunction.buttonsHover(btn, 0, 0);
+              this.commonFunction.changeAnimation(btn, false, this.textOptions);
+            }
+          }
         }
+      });
+    }
 
-      } else {
-        switch (btn.name) {
-          case "well": {
-            break;
-          }
-          case "pig":
-          case "chicken":
-          case "cow":
-          case "ostrich":
-          case "dog":
-          case "cat": {
-            const hoverCoords = 192;
-            const count = 1;
-            // если можно купить, ховер работает
-            this.buttonsHover(btn, hoverCoords, count);
-            break;
-          }
-          default: {
-            this.buttonsHover(btn, 0, 0);
-            this.changeAnimation(btn, false);
-          }
-        }
-      }
-    });
   }
 
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
-    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.functions, this.animation);
+    if (this.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
         if (this.commonFunction.determineCoords(event, scaleCoords)) {
           switch (btn.name) {
             case "Меню": {
-              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               this.pausePanelSwitch = true;
               break;
             }
@@ -163,11 +160,11 @@ export default class LevelPage extends Control {
             case 'chicken': {
               this.levelRender.createAnimal("chicken");
               this.changeTotal(btn.name);
-              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               break;
             }
             case 'pig': {
-              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               this.well.waterIndicatorChange();
               console.log("chicken");
               break;
@@ -184,20 +181,6 @@ export default class LevelPage extends Control {
         }
       });
     }
-  }
-
-  private buttonsHover(btn: IButton, yStep: number, count: number) {
-    btn.sy = yStep * count;
-  }
-
-  private buttonsClick(btn: IButton, yStep: number, count: number) {
-    btn.sy = yStep * count;
-  }
-
-  private changeAnimation(btn: IPicture, animEnable: boolean) {
-    this.textOptions.forEach((item) => {
-      if (item.text === btn.name) item.animation = animEnable;
-    });
   }
 
   private async startUI() {
@@ -236,11 +219,9 @@ export default class LevelPage extends Control {
     this.commonFunction.drawText(this.textOptions);
     this.coin.coinAnimation();
     // здесь вызываем функцию drawImage с данными панели
-
   }
 
   //Секция анимаций для зданий ==================
-
   // один раз только нужно запустить
   private buildSpawn() {
     this.animationBuildOptions.forEach((item, index) => {
@@ -256,7 +237,6 @@ export default class LevelPage extends Control {
         build.y += item.speed;
     }
   }
-
   private changeTotal(product: string) {
     if (this.animState.well) {
       initialData.totalLevelSum.level1 -= this.price[product];

@@ -1,38 +1,53 @@
-import { Coords, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { pausePanelImg, pausePanelBtn, pausePanelText } from "./../gameData/pausePanelData";
-
-
-
 export default class PausePanel extends Common {
+  pausePanelImg: IPicture[];
   initialImage: HTMLImageElement[];
+  pausePanelBtn: IButton[];
   initialBtn: HTMLImageElement[];
-
+  pausePanelText: IText[];
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
 
+    this.pausePanelImg = pausePanelImg;
+    this.pausePanelBtn = pausePanelBtn;
+    this.pausePanelText = pausePanelText;
 
     this.startPanel();
   }
 
   private async startPanel() {
-    const loadImage = pausePanelImg.map(image => this.loadImage(image.image));
-    const loadBtn = pausePanelBtn.map(image => this.loadImage(image.image));
+    const loadImage = this.pausePanelImg.map(image => this.loadImage(image.image));
+    const loadBtn = this.pausePanelBtn.map(image => this.loadImage(image.image));
     this.initialBtn = await this.renderImages(loadBtn);
     this.initialImage = await this.renderImages(loadImage);
   }
 
   public render() {
-    this.drawImage(this.initialImage, pausePanelImg);
-    this.drawImage(this.initialBtn, pausePanelBtn);
-    this.drawText(pausePanelText);
+    this.drawImage(this.initialImage, this.pausePanelImg);
+    this.drawImage(this.initialBtn, this.pausePanelBtn);
+    this.drawText(this.pausePanelText);
+  }
+
+  public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
+    this.pausePanelBtn.forEach(btn => {
+      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        this.buttonsHover(btn, btn.stepY, btn.hover);
+        this.changeAnimation(btn, true, this.pausePanelText);
+      } else {
+        this.buttonsHover(btn, 0, 0);
+        this.changeAnimation(btn, false, this.pausePanelText);
+      }
+    });
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number, func: IFunctions, cancelAnim: number): void {
-    pausePanelBtn.forEach(btn => {
+    this.pausePanelBtn.forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
@@ -68,7 +83,6 @@ export default class PausePanel extends Common {
           case "Помощь": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => alert("будем делать эту страничку?"), 200);
-            // setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
             break;
           }
           default: {
