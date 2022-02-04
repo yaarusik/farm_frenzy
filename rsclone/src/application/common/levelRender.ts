@@ -34,7 +34,7 @@ export default class LevelRender{
 		this.staggeredFrames = 3;
   }
 
-  startLevel() {
+  public startLevel() {
 		this.imagesPath.forEach(async (path) => {
 			const petName = path.slice(12, 12 + path.slice(12).indexOf("/"));
 			const anim = path.slice(path.lastIndexOf("/") + 1, -4);
@@ -45,7 +45,7 @@ export default class LevelRender{
 		});
 	}
 
-  renderLevel(curWidthK: number, curHeightK: number){
+  public renderLevel(curWidthK: number, curHeightK: number){
     this.grass.forEach((item, index, grassList) => {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 			this.context.globalAlpha = 1;
@@ -220,7 +220,7 @@ export default class LevelRender{
 		this.gameFrame += 1;
   }
 
-  createAnimal(name: string) {
+  public createAnimal(name: string) {
 		if (!(typeof this.id !== "number"))
 			this.id = 0;
 		if (name === "chicken")
@@ -228,7 +228,7 @@ export default class LevelRender{
 		this.id ++;
 	}
 
-  createGrass(clickX : number, clickY : number){
+  public createGrass(clickX : number, clickY : number){
 		clickX -= 24; clickY -= 24;
  
 		const k = 42; //отступ между травами
@@ -244,7 +244,7 @@ export default class LevelRender{
 			this.grass.push(new Grass(clickX + k * 2, clickY, Math.floor(Math.random() * 5) + 3));
 		if (clickX - k >= 400 && clickY - k >= 430)
 			this.grass.push(new Grass(clickX - k, clickY - k, Math.floor(Math.random() * 5) + 3));
-		if (clickY - k * 2>= 430)
+		if (clickY - k * 2 >= 430)
 			this.grass.push(new Grass(clickX, clickY - k * 2, Math.floor(Math.random() * 5) + 3));
 		if (clickX + k <= 1140 && clickY - k >= 430)
 			this.grass.push(new Grass(clickX + k, clickY - k, Math.floor(Math.random() * 5) + 3));

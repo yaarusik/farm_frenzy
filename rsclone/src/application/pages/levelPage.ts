@@ -8,6 +8,7 @@ import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
 import LevelRender from "../common/levelRender";
+import { Rect } from "fabric/fabric-impl";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -167,11 +168,17 @@ export default class LevelPage extends Control {
           case 'pig': {
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.well.waterIndicatorChange();
-            console.log("chicken");
+            console.log("pig");
             break;
           }
           case 'mainArea': {
-            this.levelRender.createGrass(event.clientX, event.clientY);
+            let canvasRect = this.canvas.node.getBoundingClientRect();
+            let grassX, grassY;
+            grassX = (event.clientX - canvasRect.left) * 2 / 1.333;
+            grassY = (event.screenY - canvasRect.top) * 2 * ((this.curHeightK) / (this.curWidthK) / 1.333333);
+            console.log(event.clientX, event.clientY, " | ", " | ", grassX, grassY, " | ", this.curWidthK, this.curHeightK);
+            this.levelRender.createGrass(grassX, grassY);
+            this.levelRender.createGrass(700, 500);
             break;
           }
           default: console.log("error");
