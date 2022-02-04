@@ -16,6 +16,7 @@ export default class Coin {
     const stagger = 5;
     if (this.gameFrame % stagger === 0) {
       if (coin.sy < maxHeight) {
+        console.log(coin.sy);
         coin.sy += coin.stepY;
       } else {
         coin.sy = 0;
