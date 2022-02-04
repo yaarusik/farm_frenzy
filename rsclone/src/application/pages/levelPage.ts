@@ -6,8 +6,8 @@ import { levelTextOptions, userInterfaceOptions, animationBuildOptions } from '.
 import Well from "../../utils/animation/well";
 import Coin from "../../utils/animation/coin";
 import { initialData } from "./../common/initialData";
+import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
-
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -25,7 +25,10 @@ export default class LevelPage extends Control {
   price: { [key: string]: number };
   coin: Coin;
 
+
   initialImages: HTMLImageElement[];
+  timer: Timer;
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -63,7 +66,11 @@ export default class LevelPage extends Control {
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
+
+    this.timer = new Timer(this.canvas.node, this.context);
+
     this.levelRender = new LevelRender(this.canvas.node, this.context);
+
 
     this.startUI();
     this.levelRender.startLevel();
@@ -127,13 +134,6 @@ export default class LevelPage extends Control {
         switch (btn.name) {
           case "Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            // ================================================
-            // this.userInterfaceOptions.push(this.a);
-            // const img = this.commonFunction.loadImage(this.a.image).then(img => this.initialImages.push(img));
-            // ===================================================
-            // console.log(img);
-            setTimeout(this.gameMapBack, 250);
-            cancelAnimationFrame(this.animation);
             break;
           }
           case "well": {
@@ -216,6 +216,9 @@ export default class LevelPage extends Control {
     this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
     this.commonFunction.drawImage(saveImg, this.userInterfaceOptions);
     this.commonFunction.drawText(this.textOptions);
+
+    this.timer.drawText();
+    // пробуй вставить сюда
   }
 
   //Секция анимаций для зданий ==================
