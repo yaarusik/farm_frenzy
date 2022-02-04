@@ -1,6 +1,7 @@
 import { IPicture, IText, Coords, IButton } from './../iterfaces';
 import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
+import { Text } from 'fabric/fabric-impl';
 
 export default class Common {
   canvas: HTMLCanvasElement;
@@ -46,7 +47,7 @@ export default class Common {
 
   // функция для отрисовки текста или анимации текста
   public drawText(textArr: IText[]) {
-    const letterSpacing = 0.5;
+    const letterSpacing = 0.7;
     const step = 3;
     textArr.forEach(text => {
       this.context.fillStyle = text.color;
@@ -95,5 +96,18 @@ export default class Common {
     };
   }
 
+  public buttonsClick(btn: IButton, yStep: number, count: number) {
+    btn.sy = yStep * count;
+  }
+
+  public buttonsHover(btn: IButton, yStep: number, count: number) {
+    btn.sy = yStep * count;
+  }
+
+  public changeAnimation(btn: IPicture, animEnable: boolean, text: IText[]) {
+    text.forEach((item) => {
+      if (item.text === btn.name) item.animation = animEnable;
+    });
+  }
 
 }

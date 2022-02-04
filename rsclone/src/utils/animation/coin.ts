@@ -23,6 +23,4 @@ export default class Coin {
     }
     this.gameFrame += 1;
   }
-
-
 }
