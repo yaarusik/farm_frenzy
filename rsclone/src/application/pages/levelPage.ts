@@ -67,6 +67,7 @@ export default class LevelPage extends Control {
       onRestart: () => this.onRestart(),
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
+      isStart: () => this.panelState.startPanelSwitch = false,
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -143,6 +144,7 @@ export default class LevelPage extends Control {
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -182,6 +184,7 @@ export default class LevelPage extends Control {
 
   private canvasClickHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
+    else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
