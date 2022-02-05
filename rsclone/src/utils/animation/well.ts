@@ -1,10 +1,9 @@
-import { IButton, IPicture } from "../../application/iterfaces";
+import { IButton } from "../../application/iterfaces";
 export default class Well {
-  userInterfaceOptions: IPicture[];
-  animationImage: IButton[];
-  constructor (iterfaceOption: IPicture[]) {
-    this.userInterfaceOptions = iterfaceOption;
-    this.animationImage = <IButton[]>this.userInterfaceOptions.filter(anim => anim.type === "animation");
+
+  animbtnOptions: IButton[];
+  constructor (animbtnOptions: IButton[],) {
+    this.animbtnOptions = animbtnOptions;
   }
   public wellAnimation(btn: IButton, animState: { [key: string]: boolean; }) {
     let frameY = 0;
@@ -29,7 +28,8 @@ export default class Well {
 
   // водный индикатор
   public waterIndicatorChange() {
-    const waterIndicator = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
+    const waterIndicator = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
+
     const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
     const step = 5;
     if (waterIndicator.sy < maxHeight) {
@@ -41,7 +41,8 @@ export default class Well {
 
   // пополнение воды
   public fullWaterIndicator(animState: { [key: string]: boolean; }) {
-    const water = <IButton>this.animationImage.find(item => item.name === 'waterIndicator');
+    const water = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
+
     let frameY = 0;
     const timer = setInterval(() => {
       if (water.frameY) {
