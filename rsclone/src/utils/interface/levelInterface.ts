@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { lvlInterfaceImg, lvlInterfaceBtn, lvlInterfaceAnim, levelTextOptions } from './../gameData/levelData';
 

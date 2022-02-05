@@ -1,16 +1,15 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { Coords, IButton, IText, IAnimBuild, IFunctions, IKeyBoolean, IKeyNumber } from "./../iterfaces";
-import Well from "../../utils/animation/well";
+import { Coords, IButton, IText, IFunctions } from "./../iterfaces";
 import Coin from "../../utils/animation/coin";
-import { initialData } from "./../common/initialData";
 import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
 import StartPanel from "../../utils/panels/startPanel";
 import LevelInterface from "./../../utils/interface/levelInterface";
-import { animationBuildOptions } from "./../../utils/gameData/levelData";
+import BuildSpawn from "../../utils/animation/spawnBuild";
+
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -20,9 +19,6 @@ export default class LevelPage extends Control {
   animation: number;
   curWidthK: number;
   curHeightK: number;
-  animState: IKeyBoolean;
-  well: Well;
-  price: IKeyNumber;
   coin: Coin;
   pausePanel: PausePanel;
   click: IFunctions;
@@ -31,7 +27,7 @@ export default class LevelPage extends Control {
   panelState: { pausePanelSwitch: boolean; startPanelSwitch: boolean; };
   levelInterface: LevelInterface;
   btn: IButton[];
-  animationBuildOptions: IAnimBuild[];
+  buildSpawn: BuildSpawn;
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -51,16 +47,6 @@ export default class LevelPage extends Control {
       startPanelSwitch: true
     };
 
-    this.animState = {
-      well: true,
-      waterIndicator: true,
-    };
-
-    this.price = {
-      well: 19,
-      chicken: 100,
-    };
-
     this.click = {
       isPaused: () => this.panelState.pausePanelSwitch = false,
       onMain: () => this.onMain(),
@@ -77,14 +63,14 @@ export default class LevelPage extends Control {
     this.startPanel = new StartPanel(this.canvas.node, this.context);
     this.timer = new Timer(this.context);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
+
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
+
 
     const { btn, anim, text } = this.levelInterface.getData();
-
-    this.animationBuildOptions = animationBuildOptions;
     this.btn = btn;
 
-    this.well = new Well(anim);
     this.coin = new Coin(anim);
 
     this.startUI();
@@ -135,9 +121,7 @@ export default class LevelPage extends Control {
     else {
       this.coin.coinAnimation();
       this.timer.drawText();
-      // СДЕЛАТЬ ПО КНОПКЕ
-      this.buildSpawn();
-
+      this.buildSpawn.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
     }
   }
@@ -149,17 +133,10 @@ export default class LevelPage extends Control {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
         if (this.commonFunction.determineCoords(event, scaleCoords)) {
-          if (btn.name === 'well' || btn.name === 'storage') {
-            console.log('well');
-          } else {
-            this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
-            this.commonFunction.changeAnimation(btn, true, text);
-          }
+          this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
+          this.commonFunction.changeAnimation(btn, true, text);
         } else {
           switch (btn.name) {
-            case "well": {
-              break;
-            }
             case "pig":
             case "chicken":
             case "cow":
@@ -186,6 +163,9 @@ export default class LevelPage extends Control {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else {
+      //взаимодействие с зданиями
+      this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
+
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
         if (this.commonFunction.determineCoords(event, scaleCoords)) {
@@ -196,24 +176,15 @@ export default class LevelPage extends Control {
               this.timer.isRunning = false;
               break;
             }
-            case "well": {
-              this.changeTotal(btn.name, text);
-              if (this.animState.well) this.well.wellAnimation(btn, this.animState);
-              if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
-              this.animState.well = false;
-              this.animState.waterIndicator = false;
-              break;
-            }
             case 'chicken': {
               this.levelRender.createAnimal("chicken");
-              this.changeTotal(btn.name, text);
+              this.buildSpawn.changeTotal(btn.name, text);
               this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               break;
             }
             case 'pig': {
+              // счетчик потом сделать
               this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              this.well.waterIndicatorChange();
-              console.log("chicken");
               break;
             }
             case 'mainArea': {
@@ -225,38 +196,6 @@ export default class LevelPage extends Control {
         } else {
           // переделать сброс кнопки
           // this.buttonsClick(btn, 0, 0);
-        }
-      });
-    }
-  }
-
-
-  //Секция анимаций для зданий ==================
-  // один раз только нужно запустить
-  private buildSpawn() {
-    this.animationBuildOptions.forEach((item, index) => {
-      this.btn.forEach(build => {
-        setTimeout(() => this.buildAnimation(item, build), 500 * index);
-      });
-    });
-  }
-
-  private buildAnimation(item: IAnimBuild, build: IButton) {
-    if (item.name === build.name) {
-      if (item.maxY > build.y)
-        build.y += item.speed;
-    }
-  }
-
-  //Секция анимаций для зданий ==================
-
-  private changeTotal(product: string, text: IText[]) {
-    if (this.animState.well) {
-      initialData.totalLevelSum.level1 -= this.price[product];
-      text.forEach(item => {
-        if (item.name === 'total') {
-          console.log('total');
-          item.text = initialData.totalLevelSum.level1.toString();
         }
       });
     }
