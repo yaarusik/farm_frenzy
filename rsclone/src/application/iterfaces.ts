@@ -58,6 +58,7 @@ export interface IFunctions {
   onRestart: () => void;
   onMap: () => void;
   onSettings: () => void;
+  isStart: () => void;
 }
 
 export interface IKeyBoolean {
