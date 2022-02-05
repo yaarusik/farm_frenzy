@@ -1,14 +1,16 @@
 import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { pausePanelImg, pausePanelBtn, pausePanelText } from "./../gameData/pausePanelData";
+import Timer from "../timer/levelTimer";
 export default class PausePanel extends Common {
   pausePanelImg: IPicture[];
   initialImage: HTMLImageElement[];
   pausePanelBtn: IButton[];
   initialBtn: HTMLImageElement[];
   pausePanelText: IText[];
+  timer: Timer;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
@@ -16,6 +18,7 @@ export default class PausePanel extends Common {
     this.pausePanelImg = pausePanelImg;
     this.pausePanelBtn = pausePanelBtn;
     this.pausePanelText = pausePanelText;
+    this.timer = timer;
 
     this.startPanel();
   }
@@ -54,6 +57,8 @@ export default class PausePanel extends Common {
           case "Продолжить": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.isPaused(), 200);
+            this.timer.isRunning = true;
+            console.log(this.timer.isRunning);
             break;
           }
           case "Главное Меню": {

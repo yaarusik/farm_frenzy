@@ -75,9 +75,9 @@ export default class LevelPage extends Control {
 
     this.levelInterface = new LevelInterface(this.canvas.node, this.context);
     this.startPanel = new StartPanel(this.canvas.node, this.context);
-    this.timer = new Timer(this.canvas.node, this.context);
+    this.timer = new Timer(this.context);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
-    this.pausePanel = new PausePanel(this.canvas.node, this.context);
+    this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
 
     const { btn, anim, text } = this.levelInterface.getData();
 
@@ -193,6 +193,7 @@ export default class LevelPage extends Control {
             case "Меню": {
               this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
               this.panelState.pausePanelSwitch = true;
+              this.timer.isRunning = false;
               break;
             }
             case "well": {

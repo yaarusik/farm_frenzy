@@ -3,6 +3,11 @@
 $minwidth: 560px; // Случайная величина, чтобы работало
 $fontfamily: sans-serif;
 
+@font-face {
+   font-family: "Vag_Rounded-Bold CY";
+   src: url(../fonts/vag-rounded.otf);
+}
+
 * {
    padding: 0;
    margin: 0;
@@ -38,7 +43,7 @@ body {
 body {
    line-height: 1;
    font-size: 14px;
-   font-family: $fontfamily;
+   font-family: "Vag_Rounded-Bold CY";
    -ms-text-size-adjust: 100%;
    -moz-text-size-adjust: 100%;
    -webkit-text-size-adjust: 100%;
@@ -46,7 +51,7 @@ body {
 input,
 button,
 textarea {
-   font-family: $fontfamily;
+   font-family: "Vag_Rounded-Bold CY";
 }
 input::-ms-clear {
    display: none;

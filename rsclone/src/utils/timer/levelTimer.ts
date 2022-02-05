@@ -1,19 +1,18 @@
 export default class Timer {
-    canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
     x: number;
     y: number;
     min: number;
     sec: number;
+    isRunning: boolean;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
-        this.canvas = canvas;
+    constructor(context: CanvasRenderingContext2D) {
         this.context = context;
         this.x = 1388;
         this.y = 1183;
         this.min = 0;
         this.sec = 0;
-
+        this.isRunning = true;
     }
 
     content() {
@@ -27,6 +26,10 @@ export default class Timer {
         if (this.min >= 60) return;
         this.context.fillText(this.content(), this.x, this.y);
 
+        if (this.isRunning) this.updateTimer();
+    }
+
+    updateTimer() {
         if (this.sec >= 60) {
             this.sec = 0;
             this.min += 1;
