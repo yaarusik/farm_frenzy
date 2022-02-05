@@ -1,4 +1,5 @@
-export const userInterfaceOptions = [
+
+export const lvlInterfaceImg = [
   {
     type: "picture",
     name: "mainField",
@@ -7,19 +8,6 @@ export const userInterfaceOptions = [
     y: 0,
     width: 1600,
     height: 1200,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
-  {
-    type: "button",
-    name: "mainArea",
-    image: "images/level/level-back.jpg",
-    x: 400,
-    y: 430,
-    width: 740,
-    height: 420,
     sx: 0,
     sy: 0,
     swidth: 0,
@@ -37,22 +25,6 @@ export const userInterfaceOptions = [
     sy: 0,
     swidth: 0,
     sheight: 0
-  },
-  {
-    type: "button",
-    name: "levelPanel",
-    image: "images/level/uiLevel/but_panel.png",
-    stepY: 124,
-    hover: 1,
-    click: 2,
-    x: 1328,
-    y: 1046,
-    width: 270,
-    height: 154,
-    sx: 0,
-    sy: 0,
-    swidth: 288,
-    sheight: 124
   },
   {
     type: "picture",
@@ -81,22 +53,6 @@ export const userInterfaceOptions = [
     sheight: 0
   },
   {
-    type: "button",
-    name: "Меню",
-    image: "images/level/uiLevel/button_menu.png",
-    stepY: 44,
-    hover: 1,
-    click: 2,
-    x: 8,
-    y: 1110,
-    width: 138,
-    height: 78,
-    sx: 0,
-    sy: 0,
-    swidth: 80,
-    sheight: 44
-  },
-  {
     type: "picture",
     name: "buy",
     image: "images/level/animal/buy_panel.png",
@@ -110,10 +66,79 @@ export const userInterfaceOptions = [
     sheight: 0
   },
   {
+    type: "picture",
+    name: "road",
+    image: "images/level/uiLevel/road.png",
+    x: 970,
+    y: 0,
+    width: 630,
+    height: 166,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+
+];
+
+export const lvlInterfaceBtn = [
+  {
+    type: "button",
+    name: "mainArea",
+    image: "images/level/level-back.jpg",
+    x: 400,
+    y: 430,
+    hover: 1,
+    click: 2,
+    stepY: 0,
+    stepX: 0,
+    width: 740,
+    height: 420,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  {
+    type: "button",
+    name: "levelPanel",
+    image: "images/level/uiLevel/but_panel.png",
+    stepY: 124,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    x: 1328,
+    y: 1046,
+    width: 270,
+    height: 154,
+    sx: 0,
+    sy: 0,
+    swidth: 288,
+    sheight: 124
+  },
+  {
+    type: "button",
+    name: "Меню",
+    image: "images/level/uiLevel/button_menu.png",
+    stepY: 44,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    x: 8,
+    y: 1110,
+    width: 138,
+    height: 78,
+    sx: 0,
+    sy: 0,
+    swidth: 80,
+    sheight: 44
+  },
+  {
     type: "button",
     name: "pig",
     image: "images/level/animal/buy_pig.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 118,
@@ -130,6 +155,7 @@ export const userInterfaceOptions = [
     name: "chicken",
     image: "images/level/animal/buy_chicken.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 4,
@@ -146,6 +172,7 @@ export const userInterfaceOptions = [
     name: "cow",
     image: "images/level/animal/buy_cow.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 233,
@@ -162,6 +189,7 @@ export const userInterfaceOptions = [
     name: "ostrich",
     image: "images/level/animal/buy_ostrich.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 346,
@@ -178,6 +206,7 @@ export const userInterfaceOptions = [
     name: "dog",
     image: "images/level/animal/buy_dog1.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 460,
@@ -194,6 +223,7 @@ export const userInterfaceOptions = [
     name: "cat",
     image: "images/level/animal/buy_cat1.png",
     stepY: 64,
+    stepX: 0,
     hover: 1,
     click: 2,
     x: 578,
@@ -206,24 +236,15 @@ export const userInterfaceOptions = [
     sheight: 64
   },
   {
-    type: "picture",
-    name: "road",
-    image: "images/level/uiLevel/road.png",
-    x: 970,
-    y: 0,
-    width: 630,
-    height: 166,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
-  {
     type: "button",
     name: "storage",
     image: "images/level/builds/storage/storage_1.png",
     x: 530,
-    y: -200,
+    y: -300,
+    stepY: 0,
+    stepX: 0,
+    hover: 1,
+    click: 2,
     width: 300,
     height: 240,
     sx: 0,
@@ -237,6 +258,9 @@ export const userInterfaceOptions = [
     image: "images/level/builds/well/house_well_step_1.png",
     frameY: 16,
     stepY: 100,
+    stepX: 0,
+    hover: 1,
+    click: 2,
     x: 720,
     y: -200,
     width: 230,
@@ -246,6 +270,9 @@ export const userInterfaceOptions = [
     swidth: 128,
     sheight: 100
   },
+];
+
+export const lvlInterfaceAnim = [
   {
     type: "animation",
     name: "waterIndicator",
@@ -254,6 +281,9 @@ export const userInterfaceOptions = [
     y: 200,
     width: 22,
     stepY: 52,
+    stepX: 0,
+    hover: 1,
+    click: 2,
     height: 100,
     frameY: 27,
     sx: 0,
@@ -270,25 +300,15 @@ export const userInterfaceOptions = [
     width: 50,
     height: 50,
     stepY: 32,
+    stepX: 0,
+    hover: 1,
+    click: 2,
     frameY: 15,
     sx: 0,
     sy: 0,
     swidth: 32,
     sheight: 32
   },
-  // {
-  //   type: "picture",
-  //   name: "pause",
-  //   image: "images/level/panels/pause_panel.png",
-  //   x: 569,
-  //   y: 300,
-  //   width: 462,
-  //   height: 600,
-  //   sx: 0,
-  //   sy: 0,
-  //   swidth: 0,
-  //   sheight: 0
-  // },
 ];
 
 
@@ -314,7 +334,7 @@ export const levelTextOptions = [
     text: 'Меню',
     fontSize: '24px Vag_Rounded-Bold CY',
     color: '#fff',
-    x: 44,
+    x: 41,
     y: 1153,
     animation: false,
   },
@@ -324,7 +344,7 @@ export const levelTextOptions = [
     fontSize: '40px Vag_Rounded-Bold CY',
     color: '#f7f21a',
     x: 1076,
-    y: 124,
+    y: 126,
     animation: false,
   },
 ];

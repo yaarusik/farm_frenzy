@@ -46,13 +46,27 @@ export interface IAnimBuild {
   maxY: number,
   speed: number
 }
-
 export interface IBuild extends IPicture {
   frameX: number,
   frameY: number,
   stepY?: number;
   stepX?: number;
 }
+export interface IFunctions {
+  isPaused: () => boolean;
+  onMain: () => void;
+  onRestart: () => void;
+  onMap: () => void;
+  onSettings: () => void;
+  isStart: () => void;
+}
 
+export interface IKeyBoolean {
+  [key: string]: boolean;
+}
+
+export interface IKeyNumber {
+  [key: string]: number;
+}
 
 // LEVELSECTION =======================
