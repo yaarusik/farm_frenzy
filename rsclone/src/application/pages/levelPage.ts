@@ -210,7 +210,7 @@ export default class LevelPage extends Control {
               const rect = this.canvas.node.getBoundingClientRect();
               const clickX = (event.clientX - rect.left) * this.curWidthK;
               const clickY = (event.clientY - rect.top) * this.curHeightK;
-              this.buildSpawn.waterChange();
+              this.buildSpawn.waterChange(this.isGrace);
               if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
               break;
             }
