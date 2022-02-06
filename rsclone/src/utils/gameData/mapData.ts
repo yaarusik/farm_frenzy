@@ -55,7 +55,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "1",
     image: "images/map/new__level.png",
     id: 1,
     x: 560,
@@ -70,7 +70,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "2",
     image: "images/map/new__level.png",
     id: 2,
     x: 635,
@@ -85,7 +85,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "3",
     image: "images/map/new__level.png",
     id: 3,
     x: 716,
@@ -100,7 +100,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "4",
     image: "images/map/new__level.png",
     id: 4,
     x: 805,
@@ -115,7 +115,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "5",
     image: "images/map/new__level.png",
     id: 5,
     x: 898,
@@ -130,7 +130,7 @@ export const imagesOptions = [
   },
   {
     type: "button",
-    name: "уровень",
+    name: "6",
     image: "images/map/new__level.png",
     id: 6,
     x: 995,

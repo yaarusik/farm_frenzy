@@ -5,7 +5,7 @@ import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
 import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 export default class GameMapPage extends Control {
-	startLevel!: () => void;
+	startLevel!: (lever: number) => void;
 	onBack!: () => void;
 	onSelectShop!: () => void;
 
@@ -126,9 +126,19 @@ export default class GameMapPage extends Control {
 						cancelAnimationFrame(this.animation);
 						break;
 					}
-					case "уровень": {
+					case "1": {
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(this.startLevel, 250);
+						setTimeout(() => {
+							this.startLevel(1);
+						}, 250);
+						cancelAnimationFrame(this.animation);
+						break;
+					}
+					case "2": {
+						this.buttonsClick(btn, btn.stepY);
+						setTimeout(() => {
+							this.startLevel(2);
+						}, 250);
 						cancelAnimationFrame(this.animation);
 						break;
 					}
