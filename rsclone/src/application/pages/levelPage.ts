@@ -177,7 +177,7 @@ export default class LevelPage extends Control {
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
-    else if (!this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)){
+    else if (!this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)) {
       //взаимодействие с зданиями
       this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
       buttons.forEach(btn => {
