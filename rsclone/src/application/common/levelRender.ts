@@ -132,7 +132,7 @@ export default class LevelRender {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 			this.context.globalAlpha = 1;
 
-			const frame = Math.min(Math.max(Math.floor(this.gameFrame / Math.floor(this.staggeredFrames * 1.5)) % 16, item.age), item.maxAge);
+			const frame = item.age;
 			if (item.age < item.maxAge)
 				item.age++;
 
@@ -186,19 +186,18 @@ export default class LevelRender {
 				item.productAge = 0;
 			}
 
-			const timeNow = new Date;
-			const hungryTime = (timeNow.getTime() - item.lastEat.getTime());
-			const hungryPercent = (item.food - hungryTime) / item.food;
+			item.lastEat ++;
+			const hungryPercent = (item.food - item.lastEat) / item.food;
 
-			if (timeNow.getTime() - item.lastEat.getTime() < item.food) {
+			if (item.lastEat < item.food) {
 				imageFile = this.images.get("hungerBar") as HTMLImageElement;
 				dx = dy = 0;
 				const dWidth = Math.floor(40 * hungryPercent);
 				const dHeight = 8;
-				const sx = Math.floor(item.coordX + item.width * 0.5);
-				const sy = Math.floor(item.coordY + item.height * 1.5);
+				const sx = Math.floor(item.coordX + item.width * 0.4);
+				const sy = Math.floor(item.coordY + item.height * 1.6);
 				sWidth = dWidth * 2;
-				sHeight = 8 * 2;
+				sHeight = dHeight * 2;
 				if (imageFile instanceof HTMLImageElement) // Костыль из-за того, что картинка не всегда успевает загружаться, почему-то конкретно эта
 					this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 			}
@@ -235,7 +234,7 @@ export default class LevelRender {
 					if (item.eatTime == 16 * 4) { // Если закончил есть
 						item.state = item.state.slice(4, item.state.length);
 
-						item.lastEat = new Date(item.lastEat.getTime() + Math.floor(item.food * 0.4));
+						item.lastEat -= item.food * 0.4;
 						let now = 100000, grassIndex = 0;
 						this.grass.forEach((grass, index) => {
 							if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {

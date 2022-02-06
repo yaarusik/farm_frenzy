@@ -12,8 +12,8 @@ export class Animal {
   frameRand: number;
   wantX: number;
   wantY: number;
-  lastEat: Date; // Время последнего насыщения
-  food: number; // кол-во миллисекунд от полного насыщение до смерти от голода
+  lastEat: number;
+  food: number;
   speedBoost: number;
   isDead: boolean;
   opacity: number;
@@ -24,7 +24,7 @@ export class Animal {
   productNeed: number;
   productName: string;
 
-  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, lastEat: Date, productName: string) {
+  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
     this.type = type;
     this.name = name;
     this.id = id;
@@ -38,8 +38,8 @@ export class Animal {
     this.frameRand = Math.floor(Math.random() * this.frameNum);
     this.wantX = this.coordX;
     this.wantY = this.coordY;
-    this.food = food;
-    this.lastEat = lastEat;
+    this.food = food * 60;
+    this.lastEat = 0;
     this.speedBoost = 1;
     this.isDead = false;
     this.opacity = 1;
@@ -54,7 +54,7 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15000, new Date, 'egg');
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15, 'egg');
   }
 }
 
