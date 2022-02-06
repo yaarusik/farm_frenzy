@@ -11,6 +11,7 @@ import LevelInterface from "./../../utils/interface/levelInterface";
 import BuildSpawn from "../../utils/animation/spawnBuild";
 import Total from "./../../utils/total/total";
 import { initialData } from './../common/initialData';
+import Products from "../../utils/store/products";
 
 
 export default class LevelPage extends Control {
@@ -32,10 +33,14 @@ export default class LevelPage extends Control {
   buildSpawn: BuildSpawn;
   total: Total;
   isGrace: { grace: boolean; };
+  products: Products;
+  level: number;
 
 
-  constructor (parentNode: HTMLElement) {
+  constructor (parentNode: HTMLElement, level: number) {
     super(parentNode);
+    this.level = level;
+
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -68,12 +73,13 @@ export default class LevelPage extends Control {
     this.commonFunction = new Common(this.canvas.node, this.context);
 
     this.levelInterface = new LevelInterface(this.canvas.node, this.context);
-    this.startPanel = new StartPanel(this.canvas.node, this.context);
+    this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
     this.timer = new Timer(this.canvas.node, this.context);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
+    this.products = new Products(this.canvas.node, this.context);
 
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -98,7 +104,6 @@ export default class LevelPage extends Control {
       this.canvasClickHundler(e, [...btn, ...anim]);
     });
   }
-
 
   private async startUI() {
     const coefficients = this.commonFunction.canvasScale();
@@ -132,6 +137,7 @@ export default class LevelPage extends Control {
       this.timer.drawText();
       this.buildSpawn.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
+      // this.products.render();
     }
   }
 
