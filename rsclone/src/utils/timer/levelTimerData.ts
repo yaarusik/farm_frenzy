@@ -1,5 +1,3 @@
-export const level = 0;
-
 export const timerData = [
     {
         x: 1492,

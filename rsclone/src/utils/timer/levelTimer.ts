@@ -1,5 +1,5 @@
 import Picture from "../classes/canvasBtn";
-import { level, timerData } from "./levelTimerData";
+import { timerData } from "./levelTimerData";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -18,21 +18,23 @@ export default class Timer {
     textY: number;
     goldImg: HTMLImageElement;
     silvImg: HTMLImageElement;
+    level: number;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
         this.context = context;
+        this.level = level;
         this.x = 1388;
         this.y = 1183;
         this.min = 0;
         this.sec = 0;
         this.isRunning = true;
-        this.goldMin = timerData[level].goldMin;
-        this.goldSec = timerData[level].goldSec;
-        this.silvMin = timerData[level].silvMin;
-        this.silvSec = timerData[level].silvSec;
-        this.textX = timerData[level].x;
-        this.textY = timerData[level].y;
+        this.goldMin = timerData[this.level - 1].goldMin;
+        this.goldSec = timerData[this.level - 1].goldSec;
+        this.silvMin = timerData[this.level - 1].silvMin;
+        this.silvSec = timerData[this.level - 1].silvSec;
+        this.textX = timerData[this.level - 1].x;
+        this.textY = timerData[this.level - 1].y;
         this.strip = {
             gold: "images/level/uiLevel/play_strip.png",
             silver: "images/level/uiLevel/play_strip_silver.png",
