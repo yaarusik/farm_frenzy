@@ -64,7 +64,7 @@ export default class LevelPage extends Control {
 
     this.levelInterface = new LevelInterface(this.canvas.node, this.context);
     this.startPanel = new StartPanel(this.canvas.node, this.context);
-    this.timer = new Timer(this.context);
+    this.timer = new Timer(this.canvas.node, this.context);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
@@ -131,6 +131,7 @@ export default class LevelPage extends Control {
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
+    this.levelRender.moveHundler(event, this.curWidthK, this.curHeightK);
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
@@ -176,10 +177,9 @@ export default class LevelPage extends Control {
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
-    else {
+    else if (!this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)){
       //взаимодействие с зданиями
       this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
-
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
         if (this.commonFunction.determineCoords(event, scaleCoords)) {
@@ -202,7 +202,11 @@ export default class LevelPage extends Control {
               break;
             }
             case 'mainArea': {
-              this.levelRender.createGrass(event.clientX, event.clientY);
+              let rect = this.canvas.node.getBoundingClientRect();
+              let clickX = (event.clientX - rect.left) * this.curWidthK;
+              let clickY = (event.clientY - rect.top) * this.curHeightK;
+
+              this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
               break;
             }
             default: console.log("error");

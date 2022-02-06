@@ -39,19 +39,19 @@ export const lvlInterfaceImg = [
     swidth: 0,
     sheight: 0
   },
-  {
-    type: "picture",
-    name: "strip",
-    image: "images/level/uiLevel/play_strip.png",
-    x: 1470,
-    y: 1148,
-    width: 120,
-    height: 48,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
+  // {
+  //   type: "picture",
+  //   name: "strip",
+  //   image: "images/level/uiLevel/play_strip.png",
+  //   x: 1470,
+  //   y: 1148,
+  //   width: 120,
+  //   height: 48,
+  //   sx: 0,
+  //   sy: 0,
+  //   swidth: 0,
+  //   sheight: 0
+  // },
   {
     type: "picture",
     name: "buy",
@@ -302,6 +302,9 @@ export const levelImagesPath = [
   "images/pets/chicken/death.png",
   "images/pets/chicken/eat-left.png",
   "images/pets/chicken/eat-right.png",
+  "images/products/egg/normal.png",
+  "images/products/egg/hover.png",
+  "images/products/egg/mask.png",
   "images/level/uiLevel/hungerBar.png",
   "images/level/grass.png",
 ];
