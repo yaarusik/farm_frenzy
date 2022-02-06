@@ -57,5 +57,4 @@ export const buildSpawnAnim = [
     swidth: 12,
     sheight: 53
   },
-
-]
+];
