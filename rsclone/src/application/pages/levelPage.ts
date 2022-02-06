@@ -195,7 +195,7 @@ export default class LevelPage extends Control {
               let clickX = (event.clientX - rect.left) * this.curWidthK;
               let clickY = (event.clientY - rect.top) * this.curHeightK;
 
-              this.levelRender.createGrass(clickX, clickY);
+              this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
               break;
             }
             default: console.log("error");

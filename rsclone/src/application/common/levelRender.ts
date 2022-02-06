@@ -36,8 +36,6 @@ export default class LevelRender {
 
 		this.gameFrame = 0;
 		this.staggeredFrames = 3;
-
-		this.createProduct('egg', 'field', 300, 300);
 	}
 
 	public moveHundler(event: MouseEvent, widthK: number, heightK: number){
@@ -138,8 +136,8 @@ export default class LevelRender {
 			const imageFile = this.images.get("grass") as HTMLImageElement;
 			const dx = 48 * (frame % 4);
 			const dy = 48 * Math.floor(frame / 4);
-			const sWidth = 48 * curWidthK * this.heightRatio;
-			const sHeight = 48 * curHeightK * this.heightRatio;
+			const sWidth = 48 * 2;
+			const sHeight = 48 * 2;
 
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, dx, dy, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
@@ -173,8 +171,8 @@ export default class LevelRender {
 			let imageFile = this.images.get(animName) as HTMLImageElement;
 			let dx = item.width * (frame % 4);
 			let dy = item.height * Math.floor(frame / 4);
-			let sWidth = item.width * curWidthK * this.heightRatio;
-			let sHeight = item.height * curHeightK * this.heightRatio;
+			let sWidth = item.width * 2;
+			let sHeight = item.height * 2;
 
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
@@ -310,8 +308,8 @@ export default class LevelRender {
 		this.id++;
 	}
 
-  public createGrass(clickX : number, clickY : number){
-		clickX -= 24; clickY -= 24;
+  public createGrass(clickX : number, clickY : number, widthK: number, heightK: number){
+		clickX -= 24 * widthK; clickY -= 24 * heightK;
 
 		const k = 42; //отступ между травами
 		if (clickX - k * 2 >= 400)
