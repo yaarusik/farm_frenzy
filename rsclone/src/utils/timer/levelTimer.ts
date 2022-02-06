@@ -16,6 +16,8 @@ export default class Timer {
     silvSec: number;
     textX: number;
     textY: number;
+    goldImg: HTMLImageElement;
+    silvImg: HTMLImageElement;
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
         this.canvas = canvas;
@@ -38,7 +40,12 @@ export default class Timer {
             y: 1148,
             width: 120,
             height: 48
-          };
+        };
+        this.goldImg = new Image();
+        this.goldImg.src = this.strip.gold;
+
+        this.silvImg = new Image();
+        this.silvImg.src = this.strip.silver;
     }
 
     private content(min: number, sec: number) {
@@ -65,10 +72,7 @@ export default class Timer {
     }
 
     public drawStrip() {
-        const img = new Image();
-        img.src = this.min >= this.goldMin && this.sec >= this.goldSec ? this.strip.silver : this.strip.gold;
-        
-        const image = new Picture(img, this.strip.x, this.strip.y, this.strip.width, this.strip.height);
+        const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
         image.draw(this.context);
         
         if (this.min >= this.goldMin && this.sec >= this.goldSec) {
