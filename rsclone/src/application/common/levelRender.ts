@@ -192,9 +192,9 @@ export default class LevelRender {
 				dx = dy = 0;
 				const dWidth = Math.floor(40 * hungryPercent);
 				const dHeight = 8;
-				const sx = Math.floor(item.coordX + 18 * this.heightRatio);
-				const sy = Math.floor(item.coordY + item.height + 28 * this.heightRatio);
-				sWidth = Math.floor(dWidth * 1.9);
+				const sx = Math.floor(item.coordX + item.width * 0.5);
+				const sy = Math.floor(item.coordY + item.height * 1.5);
+				sWidth = dWidth * 2;
 				sHeight = 8 * 2;
 				if (imageFile instanceof HTMLImageElement) // Костыль из-за того, что картинка не всегда успевает загружаться, почему-то конкретно эта
 					this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
