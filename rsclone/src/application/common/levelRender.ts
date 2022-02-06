@@ -56,6 +56,7 @@ export default class LevelRender {
 	}
 
 	public clickHundler(event: MouseEvent, widthK: number, heightK: number){
+		let isClicked = false;
 		this.products.forEach((item) => {
 			if (item.place === 'house')
 				return;
@@ -67,9 +68,11 @@ export default class LevelRender {
 			};
 			if (this.commonFunction.determineCoords(event, productCoords)){
 				item.place = "house";
+				isClicked = true;
 			} else
 				item.place = "field";
 		});
+		return isClicked;
 	}
 
   public startLevel() {
