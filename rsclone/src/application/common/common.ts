@@ -87,7 +87,7 @@ export default class Common {
     return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
   }
 
-  public scaleCoords(btn: IButton, curWidthK: number, curHeightK: number) {
+  public scaleCoords(btn: IButton, curWidthK: number, curHeightK: number) : Coords {
     return {
       currentX: btn.x / curWidthK,
       currentW: btn.width / curWidthK,

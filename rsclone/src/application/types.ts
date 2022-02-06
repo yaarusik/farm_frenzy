@@ -20,8 +20,11 @@ export class Animal {
   isWantGrass: boolean;
   isEating: boolean;
   eatTime: number;
+  productAge: number;
+  productNeed: number;
+  productName: string;
 
-  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, lastEat: Date) {
+  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, lastEat: Date, productName: string) {
     this.type = type;
     this.name = name;
     this.id = id;
@@ -43,12 +46,15 @@ export class Animal {
     this.isWantGrass = false;
     this.isEating = false;
     this.eatTime = -1;
+    this.productAge = 0;
+    this.productNeed = 4 * 60;
+    this.productName = productName;
   }
 }
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15000, new Date);
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15000, new Date, 'egg');
   }
 }
 
@@ -65,5 +71,29 @@ export class Grass{
     this.coordX = x;
     this.coordY = y;
     this.maxAge = maxAge;
+  }
+}
+
+export class Product{
+  name: string;
+  place: string;
+  coordX: number;
+  coordY: number;
+  age: number;
+  blinkAge: number;
+  maxAge: number;
+  isBlinking: boolean;
+  isHover: boolean;
+
+  constructor(name: string, place: string, coordX : number, coordY: number){
+    this.name = name;
+    this.place = place;
+    this.age = 0;
+    this.blinkAge = 8 * 60;
+    this.maxAge = 11 * 60;
+    this.coordX = coordX;
+    this.coordY = coordY;
+    this.isBlinking = false;
+    this.isHover = false;
   }
 }
