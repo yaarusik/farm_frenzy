@@ -91,8 +91,8 @@ export default class BuildSpawn extends Common {
     });
   }
 
-  public waterChange() {
-    this.well.waterIndicatorChange();
+  public waterChange(grace: { [key: string]: boolean }) {
+    this.well.waterIndicatorChange(grace);
   }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
