@@ -47,7 +47,7 @@ export class Animal {
     this.isEating = false;
     this.eatTime = -1;
     this.productAge = 0;
-    this.productNeed = 4 * 60;
+    this.productNeed = 20 * 60;
     this.productName = productName;
   }
 }
