@@ -153,27 +153,18 @@ export default class LevelRender {
 			this.context.globalAlpha = 1;
 
 			const animName = item.name + '-' + item.state;
-			if (typeof this.images.get(animName) === 'undefined' || typeof this.images.get("hungerBar") === undefined)
-				return;
-			let frameK = 1.5;
-			if (item.state === "death" || item.state.includes("eat")) // Замедляем анимацию в таком случае
-				frameK = 4;
-			if (item.state.includes("eat"))
-				item.eatTime++;
-			let frame = (Math.floor(this.gameFrame / (this.staggeredFrames / item.speedBoost * frameK)) + (item.state === "death" ? 0 : item.frameRand)) % 16;
-			if (item.isDead && item.opacity > 0) {
-				frame = 15; // Оставляем последний кадр
-				this.context.globalAlpha = item.opacity;
-				item.opacity -= 0.025; // Уменьшаем непрозначность животного понемногу;
-			} if (item.isDead && item.opacity <= 0) {// Если животное уже умерло и анимация смерти закончилась, то удаляем животное
+
+			if (item.state === 'death' && item.frame === 15 && item.opacity <= 0){
 				animalList.splice(index, 1);
 				return;
+			} else if (item.state === 'death' && item.frame === 15){
+				this.context.globalAlpha = item.opacity;
+				item.opacity -= 0.025;
 			}
-			if (item.state === "death" && frame === 15)
-				item.isDead = true;
+			
 			let imageFile = this.images.get(animName) as HTMLImageElement;
-			let dx = item.width * (frame % 4);
-			let dy = item.height * Math.floor(frame / 4);
+			let dx = item.width * (item.frame % 4);
+			let dy = item.height * Math.floor(item.frame / 4);
 			let sWidth = item.width * 2;
 			let sHeight = item.height * 2;
 
@@ -181,13 +172,30 @@ export default class LevelRender {
 				this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 
 			item.productAge ++;
+			if (!item.state.includes('eat'))
+				item.lastEat ++;
+			if (item.state !== "death" || item.frame !== 15){
+				let frameK = item.speedBoost;
+				if (item.state === 'death' || item.state.includes('eat'))
+					frameK = 0.5;
+
+				if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
+					item.frame = (item.frame + 1) % item.frameNum;
+				else if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
+					item.frame = (item.frame + 1) % item.frameNum;
+			}
+
+			item.speedBoost = 1;
+
+			if (item.state === 'death')
+				return;
+
 			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
 				this.createProduct('egg', 'field', item.coordX, item.coordY);
 				item.productAge = 0;
 			}
 
-			item.lastEat ++;
-			const hungryPercent = (item.food - item.lastEat) / item.food;
+			let hungryPercent = (item.food - item.lastEat) / item.food;
 
 			if (item.lastEat < item.food) {
 				imageFile = this.images.get("hungerBar") as HTMLImageElement;
@@ -198,12 +206,13 @@ export default class LevelRender {
 				const sy = Math.floor(item.coordY + item.height * 1.6);
 				sWidth = dWidth * 2;
 				sHeight = dHeight * 2;
-				if (imageFile instanceof HTMLImageElement) // Костыль из-за того, что картинка не всегда успевает загружаться, почему-то конкретно эта
+				if (imageFile instanceof HTMLImageElement)
 					this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 			}
 
 			if (hungryPercent <= 0) { // Если умирает от голода
 				item.state = "death";
+				item.frame = 0;
 			} else if (hungryPercent <= 0.38) { // Если ищет еду, то увеличиваем скорость и пытаемся найти еду
 				if (!item.isWantGrass && this.grass.length > 0) { // Если желаемая точка не трава и трава на карте есть, то ищем траву
 					let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
@@ -217,21 +226,17 @@ export default class LevelRender {
 					item.isWantGrass = true;
 				}
 				item.speedBoost = 2;
-			} else {
-				item.speedBoost = 1;
 			}
 
 			if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3) { // Если достаточно близко к желаемой точке
 				if (item.isWantGrass) { // Если пришёл поесть
-					if (item.eatTime === -1) {
-						item.eatTime = 0;
-						item.isEating = true;
+					if (!item.state.includes('eat')){
 						if (item.state.includes("left"))
 							item.state = "eat-left";
 						else
 							item.state = "eat-right";
-					}
-					if (item.eatTime == 16 * 4) { // Если закончил есть
+						item.frame = 0;
+					} else if (item.frame === 15){
 						item.state = item.state.slice(4, item.state.length);
 
 						item.lastEat -= item.food * 0.4;
@@ -244,8 +249,22 @@ export default class LevelRender {
 						});
 						this.grass.splice(grassIndex, 1);
 						item.isWantGrass = false;
-						item.isEating = false;
-						item.eatTime = -1;
+						
+						hungryPercent = (item.food - item.lastEat) / item.food;
+						if (hungryPercent <= 0.95){
+							if (this.grass.length > 0) { // Если трава на карте есть, то ищем траву
+								let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
+								this.grass.forEach((grass) => {
+									if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
+										now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
+										item.wantX = grass.coordX;
+										item.wantY = grass.coordY;
+									}
+								});
+								item.isWantGrass = true;
+							}
+							item.speedBoost = 2;
+						}
 					}
 				} else { // Иначе, если просто пришёл в желаемую точку прогулки
 					item.wantX = 400 + Math.floor(Math.random() * 740); // То генерируем новую

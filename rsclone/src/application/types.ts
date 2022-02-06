@@ -9,13 +9,12 @@ export class Animal {
   width: number;
   height: number;
   frameNum: number;
-  frameRand: number;
+  frame: number;
   wantX: number;
   wantY: number;
   lastEat: number;
   food: number;
   speedBoost: number;
-  isDead: boolean;
   opacity: number;
   isWantGrass: boolean;
   isEating: boolean;
@@ -35,13 +34,12 @@ export class Animal {
     this.width = width;
     this.height = height;
     this.frameNum = frameNum;
-    this.frameRand = Math.floor(Math.random() * this.frameNum);
+    this.frame = Math.floor(Math.random() * 16);
     this.wantX = this.coordX;
     this.wantY = this.coordY;
     this.food = food * 60;
     this.lastEat = 0;
     this.speedBoost = 1;
-    this.isDead = false;
     this.opacity = 1;
     this.isWantGrass = false;
     this.isEating = false;
@@ -54,7 +52,7 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15, 'egg');
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 5, 'egg');
   }
 }
 
