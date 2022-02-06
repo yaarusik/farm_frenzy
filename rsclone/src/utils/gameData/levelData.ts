@@ -309,6 +309,9 @@ export const levelImagesPath = [
   "images/pets/chicken/death.png",
   "images/pets/chicken/eat-left.png",
   "images/pets/chicken/eat-right.png",
+  "images/products/egg/normal.png",
+  "images/products/egg/hover.png",
+  "images/products/egg/mask.png",
   "images/level/uiLevel/hungerBar.png",
   "images/level/grass.png",
 ];
