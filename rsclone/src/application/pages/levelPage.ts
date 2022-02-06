@@ -31,6 +31,8 @@ export default class LevelPage extends Control {
   btn: IButton[];
   buildSpawn: BuildSpawn;
   total: Total;
+  isGrace: { grace: boolean; };
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
@@ -44,10 +46,13 @@ export default class LevelPage extends Control {
     this.curWidthK = 1;
     this.curHeightK = 1;
     this.animation = 0;
+    this.isGrace = {
+      grace: true,
+    };
 
     this.panelState = {
       pausePanelSwitch: false,
-      startPanelSwitch: true
+      startPanelSwitch: true,
     };
 
     this.click = {
@@ -202,11 +207,11 @@ export default class LevelPage extends Control {
               break;
             }
             case 'mainArea': {
-              let rect = this.canvas.node.getBoundingClientRect();
-              let clickX = (event.clientX - rect.left) * this.curWidthK;
-              let clickY = (event.clientY - rect.top) * this.curHeightK;
-
-              this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+              const rect = this.canvas.node.getBoundingClientRect();
+              const clickX = (event.clientX - rect.left) * this.curWidthK;
+              const clickY = (event.clientY - rect.top) * this.curHeightK;
+              this.buildSpawn.waterChange();
+              if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
               break;
             }
             default: console.log("error");
