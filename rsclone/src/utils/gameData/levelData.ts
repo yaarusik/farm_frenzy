@@ -39,19 +39,19 @@ export const lvlInterfaceImg = [
     swidth: 0,
     sheight: 0
   },
-  {
-    type: "picture",
-    name: "strip",
-    image: "images/level/uiLevel/play_strip.png",
-    x: 1470,
-    y: 1148,
-    width: 120,
-    height: 48,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
+  // {
+  //   type: "picture",
+  //   name: "strip",
+  //   image: "images/level/uiLevel/play_strip.png",
+  //   x: 1470,
+  //   y: 1148,
+  //   width: 120,
+  //   height: 48,
+  //   sx: 0,
+  //   sy: 0,
+  //   swidth: 0,
+  //   sheight: 0
+  // },
   {
     type: "picture",
     name: "buy",
