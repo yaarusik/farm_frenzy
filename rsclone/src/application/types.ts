@@ -52,7 +52,7 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 5, 'egg');
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15, 'egg');
   }
 }
 
