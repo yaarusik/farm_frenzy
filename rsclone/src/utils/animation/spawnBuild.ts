@@ -65,17 +65,15 @@ export default class BuildSpawn extends Common {
     }
   }
 
-
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
-    this.btn.forEach(btn => {
-      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+    this.btn.forEach(button => {
+      const scaleCoords: Coords = this.scaleCoords(button, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
-        switch (btn.name) {
+        switch (button.name) {
           case "well": {
-            if (this.animState.well) this.well.wellAnimation(btn, this.animState);
+            initialData.changeTotal(button.name);
+            if (this.animState.well) this.well.wellAnimation(button, this.animState);
             if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
-            this.animState.well = false;
-            this.animState.waterIndicator = false;
             break;
           }
           case "storage": {
@@ -87,32 +85,25 @@ export default class BuildSpawn extends Common {
           }
         }
       } else {
-        this.buttonsClick(btn, 0, 0);
+        // this.buttonsClick(button, 0, 0);
       }
     });
   }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
-    this.btn.forEach(btn => {
-      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+    this.btn.forEach(button => {
+      const scaleCoords: Coords = this.scaleCoords(button, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
+        switch (button.name) {
+          case 'well': {
+            break;
+          }
+        }
         // this.buttonsHover(btn, btn.stepY, btn.hover);
       } else {
-        this.buttonsHover(btn, 0, 0);
+        // this.buttonsHover(button, 0, 0);
       }
     });
-  }
-
-  public changeTotal(product: string, text: IText[]) {
-    if (this.animState.well) {
-      initialData.totalLevelSum.level1 -= this.price[product];
-      text.forEach(item => {
-        if (item.name === 'total') {
-          console.log('total');
-          item.text = initialData.totalLevelSum.level1.toString();
-        }
-      });
-    }
   }
 }
 
