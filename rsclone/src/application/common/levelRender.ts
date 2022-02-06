@@ -1,4 +1,4 @@
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+
 import { levelImagesPath } from "../../utils/gameData/levelData";
 import { Coords } from "../iterfaces";
 import { Grass, AnimalList, Chicken, Product } from "../types";
@@ -38,35 +38,35 @@ export default class LevelRender {
 		this.staggeredFrames = 3;
 	}
 
-	public moveHundler(event: MouseEvent, widthK: number, heightK: number){
+	public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
 		this.products.forEach((item) => {
 			if (item.place === 'house')
 				return;
-			let productCoords : Coords = {
+			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
-				currentW: 48 * 2  / widthK,
+				currentW: 48 * 2 / widthK,
 				currentH: 48 * 2 / heightK
 			};
-			if (this.commonFunction.determineCoords(event, productCoords)){
+			if (this.commonFunction.determineCoords(event, productCoords)) {
 				item.isHover = true;
 			} else
 				item.isHover = false;
 		});
 	}
 
-	public clickHundler(event: MouseEvent, widthK: number, heightK: number){
+	public clickHundler(event: MouseEvent, widthK: number, heightK: number) {
 		let isClicked = false;
 		this.products.forEach((item) => {
 			if (item.place === 'house')
 				return;
-			let productCoords : Coords = {
+			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
-				currentW: 48 * 2  / widthK,
+				currentW: 48 * 2 / widthK,
 				currentH: 48 * 2 / heightK
 			};
-			if (this.commonFunction.determineCoords(event, productCoords)){
+			if (this.commonFunction.determineCoords(event, productCoords)) {
 				item.place = "house";
 				isClicked = true;
 			} else
@@ -75,14 +75,14 @@ export default class LevelRender {
 		return isClicked;
 	}
 
-  public startLevel() {
+	public startLevel() {
 		this.imagesPath.forEach(async (path) => {
 			let animName = '';
 			const anim = path.slice(path.lastIndexOf("/") + 1, -4);
-			if (path.includes('pets')){
+			if (path.includes('pets')) {
 				const petName = path.slice(12, 12 + path.slice(12).indexOf("/"));
 				animName = petName + "-" + anim;
-			} else if (path.includes('products')){
+			} else if (path.includes('products')) {
 				const productName = path.slice(16, 16 + path.slice(16).indexOf("/"));
 				animName = productName + "-" + anim;
 			} else {
@@ -92,7 +92,7 @@ export default class LevelRender {
 		});
 	}
 
-  public renderLevel(curWidthK: number, curHeightK: number){
+	public renderLevel(curWidthK: number, curHeightK: number) {
 		this.renderProducts(curWidthK, curHeightK);
 		this.renderGrass(curWidthK, curHeightK);
 		this.renderAnimals(curWidthK, curHeightK);
@@ -100,7 +100,7 @@ export default class LevelRender {
 		this.gameFrame += 1;
 	}
 
-	protected renderProducts(curWidthK: number, curHeightK: number){
+	protected renderProducts(curWidthK: number, curHeightK: number) {
 		this.products.forEach((item, index, productList) => {
 			if (item.place === 'house') // Продукты на скалде надо отрисовывать в другом месте
 				return;
@@ -119,7 +119,7 @@ export default class LevelRender {
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, 0, 0, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 
-			item.age ++;
+			item.age++;
 			if (item.age >= item.maxAge && (this.gameFrame % 40) < 20)
 				productList.splice(index, 1);
 			else if (item.age >= item.blinkAge)
@@ -127,7 +127,7 @@ export default class LevelRender {
 		});
 	}
 
-	protected renderGrass(curWidthK: number, curHeightK: number){
+	protected renderGrass(curWidthK: number, curHeightK: number) {
 		this.grass.forEach((item, index, grassList) => {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 			this.context.globalAlpha = 1;
@@ -147,7 +147,7 @@ export default class LevelRender {
 		});
 	}
 
-	protected renderAnimals(curWidthK: number, curHeightK: number){
+	protected renderAnimals(curWidthK: number, curHeightK: number) {
 		this.animals.forEach((item, index, animalList) => {
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки
 			this.context.globalAlpha = 1;
@@ -180,13 +180,13 @@ export default class LevelRender {
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 
-			item.productAge ++;
-			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
+			item.productAge++;
+			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)) {
 				this.createProduct('egg', 'field', item.coordX, item.coordY);
 				item.productAge = 0;
 			}
 
-			item.lastEat ++;
+			item.lastEat++;
 			const hungryPercent = (item.food - item.lastEat) / item.food;
 
 			if (item.lastEat < item.food) {
@@ -302,7 +302,7 @@ export default class LevelRender {
 		});
 	}
 
-  public createAnimal(name: string) {
+	public createAnimal(name: string) {
 		if (!(typeof this.id !== "number"))
 			this.id = 0;
 		if (name === "chicken")
@@ -310,7 +310,7 @@ export default class LevelRender {
 		this.id++;
 	}
 
-  public createGrass(clickX : number, clickY : number, widthK: number, heightK: number){
+	public createGrass(clickX: number, clickY: number, widthK: number, heightK: number) {
 		clickX -= 24 * widthK; clickY -= 24 * heightK;
 
 		const k = 42; //отступ между травами
@@ -343,7 +343,7 @@ export default class LevelRender {
 		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
 	}
 
-	public createProduct(name: string, place: string, coordX : number, coordY: number){
+	public createProduct(name: string, place: string, coordX: number, coordY: number) {
 		this.products.push(new Product(name, place, coordX, coordY));
 	}
 }
