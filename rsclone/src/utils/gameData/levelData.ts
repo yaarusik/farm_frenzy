@@ -286,16 +286,9 @@ export const levelTextOptions = [
     y: 1153,
     animation: false,
   },
-  {
-    name: 'total',
-    text: "100",
-    fontSize: '40px Vag_Rounded-Bold CY',
-    color: '#f7f21a',
-    x: 1076,
-    y: 126,
-    animation: false,
-  },
 ];
+
+
 
 export const levelImagesPath = [
   "images/pets/chicken/down.png",
