@@ -29,6 +29,8 @@ class InitialData {
     one: '100',
   };
 
+  // общий объект для dizable кнопок и менять их состояние
+
   wellDisable = false;
 
   constructor () {
@@ -49,7 +51,7 @@ class InitialData {
 
   public changeTotal(btnName: string) {
     const isTotal = this.checkTotal(this.levelShop[btnName]);
-    if (isTotal && this.wellDisable) {
+    if (isTotal) {
       this.totalText.text = +this.totalText.text - this.levelShop[btnName] + '';
     }
   }

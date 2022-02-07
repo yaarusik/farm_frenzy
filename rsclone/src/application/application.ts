@@ -14,7 +14,7 @@ export default class Application extends Control {
 
 		// this.mainCycle();
 		// this.gameMapCycle();
-		this.levelCycle();
+		this.levelCycle(1);
 	}
 	// главная страница
 	private mainCycle() {
@@ -47,9 +47,9 @@ export default class Application extends Control {
 			gameMapPage.destroy();
 			this.shopCycle();
 		};
-		gameMapPage.startLevel = () => {
+		gameMapPage.startLevel = (level: number) => {
 			gameMapPage.destroy();
-			this.levelCycle();
+			this.levelCycle(level);
 		};
 		gameMapPage.onBack = () => {
 			gameMapPage.destroy();
@@ -66,9 +66,9 @@ export default class Application extends Control {
 		};
 	}
 
-	private levelCycle() {
+	private levelCycle(level: number) {
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
-		const levelPage = new LevelPage(pageWrapper.node);
+		const levelPage = new LevelPage(pageWrapper.node, level);
 
 		levelPage.onMap = () => {
 			levelPage.destroy();
@@ -80,7 +80,8 @@ export default class Application extends Control {
 		};
 		levelPage.onRestart = () => {
 			levelPage.destroy();
-			this.levelCycle();
+			// запомнить может баги давать
+			this.levelCycle(level);
 		};
 		levelPage.onSettings = () => {
 			levelPage.destroy();

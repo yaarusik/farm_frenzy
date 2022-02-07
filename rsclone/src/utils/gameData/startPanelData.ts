@@ -147,6 +147,3 @@ export const startPanelText = [
 
 
 
-// export const firstLvlImg = [
-//   {}
-// ]
