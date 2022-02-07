@@ -89,21 +89,10 @@ export default class LevelRender {
 
   public renderLevel(curWidthK: number, curHeightK: number){
 		const renderList : (AnimalList | Product | Grass)[] = [];
-		this.animals.forEach((item) => renderList.push(item));
 		this.products.forEach((item) => renderList.push(item));
 		this.grass.forEach((item) => renderList.push(item));
-		renderList.sort((a, b) => {
-			let aY, bY;
-			if (a instanceof Product || a instanceof Grass)
-				aY = a.coordY - 48 * 2;
-			else
-				aY = a.coordY - a.height;
-			if (b instanceof Product || b instanceof Grass)
-				bY = b.coordY - 48 * 2;
-			else
-				bY = b.coordY - b.height;
-			return aY - bY;
-		});
+		this.animals.forEach((item) => renderList.push(item));
+		renderList.sort(this.sortCoord);
 
 		renderList.forEach((item) => {
 			if (item instanceof Product)
@@ -133,7 +122,7 @@ export default class LevelRender {
 		const sWidth = 48 * 2;
 		const sHeight = 48 * 2;
 		if (item.isBlinking && (this.gameFrame % 40) < 20)
-			this.context.globalAlpha = 0.4;
+			this.context.globalAlpha = 0.5;
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, 0, 0, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 
@@ -377,5 +366,23 @@ export default class LevelRender {
 
 	public createProduct(name: string, coordX: number, coordY: number) {
 		this.products.push(new Product(name, coordX, coordY));
+	}
+
+	protected sortCoord(a : AnimalList | Product | Grass, b : AnimalList | Product | Grass) : number {
+		let aY = a.coordY, bY = b.coordY;
+		let grassK = 2.25, productK = 1.75; // Нужен для правильного баланса между животными и остальным
+		if (a instanceof Grass)
+			aY -= 48 * grassK;
+		else if (a instanceof Product)
+			aY -= 48 * productK;
+		else 
+			aY -= a.height;
+		if (b instanceof Grass)
+			bY -= 48 * grassK;
+		else if (b instanceof Product)
+			bY -= 48 * productK;
+		else
+			bY -= b.height;
+		return aY - bY;
 	}
 }

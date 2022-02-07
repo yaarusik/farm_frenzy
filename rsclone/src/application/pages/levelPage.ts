@@ -190,7 +190,6 @@ export default class LevelPage extends Control {
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else {
       let clickList = this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK);
-      console.log(clickList);
       if (clickList.length == 0){
         //взаимодействие с зданиями
         this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
