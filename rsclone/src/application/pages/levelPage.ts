@@ -11,6 +11,7 @@ import LevelInterface from "./../../utils/interface/levelInterface";
 import BuildSpawn from "../../utils/animation/spawnBuild";
 import Total from "./../../utils/total/total";
 import { initialData } from './../common/initialData';
+import Products from "../../utils/store/products";
 
 
 export default class LevelPage extends Control {
@@ -31,9 +32,15 @@ export default class LevelPage extends Control {
   btn: IButton[];
   buildSpawn: BuildSpawn;
   total: Total;
+  isGrace: { grace: boolean; };
+  products: Products;
+  level: number;
 
-  constructor (parentNode: HTMLElement) {
+
+  constructor (parentNode: HTMLElement, level: number) {
     super(parentNode);
+    this.level = level;
+
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -44,10 +51,13 @@ export default class LevelPage extends Control {
     this.curWidthK = 1;
     this.curHeightK = 1;
     this.animation = 0;
+    this.isGrace = {
+      grace: true,
+    };
 
     this.panelState = {
       pausePanelSwitch: false,
-      startPanelSwitch: true
+      startPanelSwitch: true,
     };
 
     this.click = {
@@ -63,12 +73,13 @@ export default class LevelPage extends Control {
     this.commonFunction = new Common(this.canvas.node, this.context);
 
     this.levelInterface = new LevelInterface(this.canvas.node, this.context);
-    this.startPanel = new StartPanel(this.canvas.node, this.context);
-    this.timer = new Timer(this.canvas.node, this.context);
+    this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
+    this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
+    this.products = new Products(this.canvas.node, this.context);
 
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -93,7 +104,6 @@ export default class LevelPage extends Control {
       this.canvasClickHundler(e, [...btn, ...anim]);
     });
   }
-
 
   private async startUI() {
     const coefficients = this.commonFunction.canvasScale();
@@ -127,6 +137,7 @@ export default class LevelPage extends Control {
       this.timer.drawText();
       this.buildSpawn.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
+      // this.products.render();
     }
   }
 
@@ -177,45 +188,49 @@ export default class LevelPage extends Control {
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
-    else if (!this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)){
-      //взаимодействие с зданиями
-      this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
-      buttons.forEach(btn => {
-        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-        if (this.commonFunction.determineCoords(event, scaleCoords)) {
-          switch (btn.name) {
-            case "Меню": {
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              this.panelState.pausePanelSwitch = true;
-              this.timer.isRunning = false;
-              break;
+    else {
+      let clickList = this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK);
+      console.log(clickList);
+      if (clickList.length == 0){
+        //взаимодействие с зданиями
+        this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
+        buttons.forEach(btn => {
+          const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+          if (this.commonFunction.determineCoords(event, scaleCoords)) {
+            switch (btn.name) {
+              case "Меню": {
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                this.panelState.pausePanelSwitch = true;
+                this.timer.isRunning = false;
+                break;
+              }
+              case 'chicken': {
+                this.levelRender.createAnimal("chicken");
+                initialData.changeTotal(btn.name);
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                break;
+              }
+              case 'pig': {
+                initialData.changeTotal(btn.name);
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                break;
+              }
+              case 'mainArea': {
+                const rect = this.canvas.node.getBoundingClientRect();
+                const clickX = (event.clientX - rect.left) * this.curWidthK;
+                const clickY = (event.clientY - rect.top) * this.curHeightK;
+                this.buildSpawn.waterChange(this.isGrace);
+                if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+                break;
+              }
+              default: console.log("error");
             }
-            case 'chicken': {
-              this.levelRender.createAnimal("chicken");
-              initialData.changeTotal(btn.name);
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              break;
-            }
-            case 'pig': {
-              initialData.changeTotal(btn.name);
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              break;
-            }
-            case 'mainArea': {
-              let rect = this.canvas.node.getBoundingClientRect();
-              let clickX = (event.clientX - rect.left) * this.curWidthK;
-              let clickY = (event.clientY - rect.top) * this.curHeightK;
-
-              this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
-              break;
-            }
-            default: console.log("error");
+          } else {
+            // переделать сброс кнопки
+            // this.buttonsClick(btn, 0, 0);
           }
-        } else {
-          // переделать сброс кнопки
-          // this.buttonsClick(btn, 0, 0);
-        }
-      });
+        });
+      }
     }
   }
 

@@ -52,7 +52,7 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 5, 'egg');
+    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15, 'egg');
   }
 }
 
@@ -74,7 +74,6 @@ export class Grass{
 
 export class Product{
   name: string;
-  place: string;
   coordX: number;
   coordY: number;
   age: number;
@@ -83,9 +82,8 @@ export class Product{
   isBlinking: boolean;
   isHover: boolean;
 
-  constructor(name: string, place: string, coordX : number, coordY: number){
+  constructor(name: string, coordX : number, coordY: number){
     this.name = name;
-    this.place = place;
     this.age = 0;
     this.blinkAge = 8 * 60;
     this.maxAge = 11 * 60;

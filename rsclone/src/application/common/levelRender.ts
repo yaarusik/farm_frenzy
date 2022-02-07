@@ -1,4 +1,4 @@
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+
 import { levelImagesPath } from "../../utils/gameData/levelData";
 import { Coords } from "../iterfaces";
 import { Grass, AnimalList, Chicken, Product } from "../types";
@@ -38,51 +38,46 @@ export default class LevelRender {
 		this.staggeredFrames = 3;
 	}
 
-	public moveHundler(event: MouseEvent, widthK: number, heightK: number){
+	public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
 		this.products.forEach((item) => {
-			if (item.place === 'house')
-				return;
-			let productCoords : Coords = {
+			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
-				currentW: 48 * 2  / widthK,
+				currentW: 48 * 2 / widthK,
 				currentH: 48 * 2 / heightK
 			};
-			if (this.commonFunction.determineCoords(event, productCoords)){
+			if (this.commonFunction.determineCoords(event, productCoords)) {
 				item.isHover = true;
 			} else
 				item.isHover = false;
 		});
 	}
 
-	public clickHundler(event: MouseEvent, widthK: number, heightK: number){
-		let isClicked = false;
-		this.products.forEach((item) => {
-			if (item.place === 'house')
-				return;
-			let productCoords : Coords = {
+	public clickHundler(event: MouseEvent, widthK: number, heightK: number) : String[] {
+		let clickList : String[] = [];
+		this.products.forEach((item, index, productList) => {
+			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
-				currentW: 48 * 2  / widthK,
+				currentW: 48 * 2 / widthK,
 				currentH: 48 * 2 / heightK
 			};
-			if (this.commonFunction.determineCoords(event, productCoords)){
-				item.place = "house";
-				isClicked = true;
-			} else
-				item.place = "field";
+			if (this.commonFunction.determineCoords(event, productCoords)) {
+				clickList.push(item.name);
+				productList.splice(index, 1);
+			}
 		});
-		return isClicked;
+		return clickList;
 	}
 
-  public startLevel() {
+	public startLevel() {
 		this.imagesPath.forEach(async (path) => {
 			let animName = '';
 			const anim = path.slice(path.lastIndexOf("/") + 1, -4);
-			if (path.includes('pets')){
+			if (path.includes('pets')) {
 				const petName = path.slice(12, 12 + path.slice(12).indexOf("/"));
 				animName = petName + "-" + anim;
-			} else if (path.includes('products')){
+			} else if (path.includes('products')) {
 				const productName = path.slice(16, 16 + path.slice(16).indexOf("/"));
 				animName = productName + "-" + anim;
 			} else {
@@ -210,7 +205,7 @@ export default class LevelRender {
 			return;
 
 		if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
-			this.createProduct('egg', 'field', item.coordX, item.coordY);
+			this.createProduct('egg', item.coordX, item.coordY);
 			item.productAge = 0;
 		}
 
@@ -339,7 +334,7 @@ export default class LevelRender {
 		}
 	}
 
-  public createAnimal(name: string) {
+	public createAnimal(name: string) {
 		if (!(typeof this.id !== "number"))
 			this.id = 0;
 		if (name === "chicken")
@@ -347,7 +342,7 @@ export default class LevelRender {
 		this.id++;
 	}
 
-  public createGrass(clickX : number, clickY : number, widthK: number, heightK: number){
+	public createGrass(clickX: number, clickY: number, widthK: number, heightK: number) {
 		clickX -= 24 * widthK; clickY -= 24 * heightK;
 
 		const k = 42; //отступ между травами
@@ -380,7 +375,7 @@ export default class LevelRender {
 		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
 	}
 
-	public createProduct(name: string, place: string, coordX : number, coordY: number){
-		this.products.push(new Product(name, place, coordX, coordY));
+	public createProduct(name: string, coordX: number, coordY: number) {
+		this.products.push(new Product(name, coordX, coordY));
 	}
 }

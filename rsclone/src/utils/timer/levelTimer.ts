@@ -1,5 +1,5 @@
 import Picture from "../classes/canvasBtn";
-import { level, timerData } from "./levelTimerData";
+import { timerData } from "./levelTimerData";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -16,21 +16,25 @@ export default class Timer {
     silvSec: number;
     textX: number;
     textY: number;
+    goldImg: HTMLImageElement;
+    silvImg: HTMLImageElement;
+    level: number;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
         this.context = context;
+        this.level = level;
         this.x = 1388;
         this.y = 1183;
         this.min = 0;
         this.sec = 0;
         this.isRunning = true;
-        this.goldMin = timerData[level].goldMin;
-        this.goldSec = timerData[level].goldSec;
-        this.silvMin = timerData[level].silvMin;
-        this.silvSec = timerData[level].silvSec;
-        this.textX = timerData[level].x;
-        this.textY = timerData[level].y;
+        this.goldMin = timerData[this.level - 1].goldMin;
+        this.goldSec = timerData[this.level - 1].goldSec;
+        this.silvMin = timerData[this.level - 1].silvMin;
+        this.silvSec = timerData[this.level - 1].silvSec;
+        this.textX = timerData[this.level - 1].x;
+        this.textY = timerData[this.level - 1].y;
         this.strip = {
             gold: "images/level/uiLevel/play_strip.png",
             silver: "images/level/uiLevel/play_strip_silver.png",
@@ -38,7 +42,12 @@ export default class Timer {
             y: 1148,
             width: 120,
             height: 48
-          };
+        };
+        this.goldImg = new Image();
+        this.goldImg.src = this.strip.gold;
+
+        this.silvImg = new Image();
+        this.silvImg.src = this.strip.silver;
     }
 
     private content(min: number, sec: number) {
@@ -65,10 +74,7 @@ export default class Timer {
     }
 
     public drawStrip() {
-        const img = new Image();
-        img.src = this.min >= this.goldMin && this.sec >= this.goldSec ? this.strip.silver : this.strip.gold;
-        
-        const image = new Picture(img, this.strip.x, this.strip.y, this.strip.width, this.strip.height);
+        const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
         image.draw(this.context);
         
         if (this.min >= this.goldMin && this.sec >= this.goldSec) {

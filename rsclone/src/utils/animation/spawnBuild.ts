@@ -29,6 +29,8 @@ export default class BuildSpawn extends Common {
       waterIndicator: true,
     };
 
+
+
     this.price = {
       well: 19,
       chicken: 100,
@@ -77,7 +79,6 @@ export default class BuildSpawn extends Common {
             break;
           }
           case "storage": {
-            this.well.waterIndicatorChange();
             break;
           }
           default: {
@@ -88,6 +89,10 @@ export default class BuildSpawn extends Common {
         // this.buttonsClick(button, 0, 0);
       }
     });
+  }
+
+  public waterChange(grace: { [key: string]: boolean }) {
+    this.well.waterIndicatorChange(grace);
   }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
