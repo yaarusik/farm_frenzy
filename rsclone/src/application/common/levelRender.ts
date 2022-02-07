@@ -40,8 +40,6 @@ export default class LevelRender {
 
 	public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
 		this.products.forEach((item) => {
-			if (item.place === 'house')
-				return;
 			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
@@ -55,11 +53,9 @@ export default class LevelRender {
 		});
 	}
 
-	public clickHundler(event: MouseEvent, widthK: number, heightK: number) {
-		let isClicked = false;
-		this.products.forEach((item) => {
-			if (item.place === 'house')
-				return;
+	public clickHundler(event: MouseEvent, widthK: number, heightK: number) : String[] {
+		let clickList : String[] = [];
+		this.products.forEach((item, index, productList) => {
 			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
@@ -67,12 +63,11 @@ export default class LevelRender {
 				currentH: 48 * 2 / heightK
 			};
 			if (this.commonFunction.determineCoords(event, productCoords)) {
-				item.place = "house";
-				isClicked = true;
-			} else
-				item.place = "field";
+				clickList.push(item.name);
+				productList.splice(index, 1);
+			}
 		});
-		return isClicked;
+		return clickList;
 	}
 
 	public startLevel() {
@@ -102,8 +97,6 @@ export default class LevelRender {
 
 	protected renderProducts(curWidthK: number, curHeightK: number) {
 		this.products.forEach((item, index, productList) => {
-			if (item.place === 'house') // Продукты на скалде надо отрисовывать в другом месте
-				return;
 			this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 			this.context.globalAlpha = 1;
 			let animName = item.name;
@@ -191,7 +184,7 @@ export default class LevelRender {
 				return;
 
 			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
-				this.createProduct('egg', 'field', item.coordX, item.coordY);
+				this.createProduct('egg', item.coordX, item.coordY);
 				item.productAge = 0;
 			}
 
@@ -362,7 +355,7 @@ export default class LevelRender {
 		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
 	}
 
-	public createProduct(name: string, place: string, coordX: number, coordY: number) {
-		this.products.push(new Product(name, place, coordX, coordY));
+	public createProduct(name: string, coordX: number, coordY: number) {
+		this.products.push(new Product(name, coordX, coordY));
 	}
 }
