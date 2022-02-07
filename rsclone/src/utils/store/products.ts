@@ -9,15 +9,81 @@ export default class Products extends Common {
     super(canvas, context);
     this.initialProducts = [];
 
+
     this.products = [
       {
         type: "picture",
         name: "egg",
         image: "images/level/products_mini/mini_egg.png",
-        x: 630,
-        y: 1130,
-        width: 30,
-        height: 30,
+        x: 600,
+        y: 1090,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
+      {
+        type: "picture",
+        name: "egg",
+        image: "images/level/products_mini/mini_egg.png",
+        x: 600,
+        y: 1067,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
+      {
+        type: "picture",
+        name: "egg",
+        image: "images/level/products_mini/mini_egg.png",
+        x: 600,
+        y: 1044,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
+      {
+        type: "picture",
+        name: "egg",
+        image: "images/level/products_mini/mini_egg.png",
+        x: 600,
+        y: 1021,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
+      {
+        type: "picture",
+        name: "egg",
+        image: "images/level/products_mini/mini_egg.png",
+        x: 600,
+        y: 998,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
+      {
+        type: "picture",
+        name: "egg",
+        image: "images/level/products_mini/mini_egg.png",
+        x: 623,
+        y: 1090,
+        width: 23,
+        height: 23,
         sx: 0,
         sy: 0,
         swidth: 0,
