@@ -199,6 +199,7 @@ export default class LevelPage extends Control {
       this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
 
       if (this.storageProducts.length === 0) {
+
         //взаимодействие с зданиями
         this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
         buttons.forEach(btn => {
