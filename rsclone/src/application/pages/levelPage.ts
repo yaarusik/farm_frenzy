@@ -222,6 +222,7 @@ export default class LevelPage extends Control {
                 break;
               }
               case 'pig': {
+                this.levelRender.createAnimal("pig");
                 initialData.changeTotal(btn.name);
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 break;

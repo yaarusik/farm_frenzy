@@ -56,19 +56,27 @@ export class Chicken extends Animal {
   }
 }
 
-export type AnimalList = Chicken; // Потом сюда надо дописывать других животных через |
+export class Pig extends Animal {
+  constructor (id: number, coordX: number, coordY: number) {
+    super("pet", "pig", id, "down", "images/pets/pig/down.png", coordX, coordY, 112, 112, 16, 15, 'meat');
+  }
+}
+
+export type AnimalList = Chicken | Pig; // Потом сюда надо дописывать других животных через |
 
 export class Grass{
   coordX : number;
   coordY : number;
   age : number;
   maxAge : number;
+  isUsed : boolean;
 
   constructor(x : number, y : number, maxAge : number){
     this.age = 0;
     this.coordX = x;
     this.coordY = y;
     this.maxAge = maxAge;
+    this.isUsed = false;
   }
 }
 

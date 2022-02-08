@@ -1,7 +1,7 @@
 
 import { levelImagesPath } from "../../utils/gameData/levelData";
 import { Coords } from "../iterfaces";
-import { Grass, AnimalList, Chicken, Product } from "../types";
+import { Grass, AnimalList, Chicken, Product, Pig } from "../types";
 import Common from "./common";
 
 
@@ -111,6 +111,8 @@ export default class LevelRender {
 	}
 
 	protected renderProduct(item: Product, curWidthK: number, curHeightK: number, isPaused: boolean){
+		if (item.name != 'egg')
+			console.log(item)
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
 		let animName = item.name;
@@ -200,7 +202,7 @@ export default class LevelRender {
 			return;
 
 		if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
-			this.createProduct('egg', item.coordX, item.coordY);
+			this.createProduct(item.productName, item.coordX, item.coordY);
 			item.productAge = 0;
 		}
 
@@ -211,8 +213,8 @@ export default class LevelRender {
 			dx = dy = 0;
 			const dWidth = Math.floor(40 * hungryPercent);
 			const dHeight = 8;
-			const sx = Math.floor(item.coordX + item.width * 0.4);
-			const sy = Math.floor(item.coordY + item.height * 1.6);
+			const sx = item.coordX + item.width - 40;
+			const sy = item.coordY + item.height * 1.5 + 8;
 			sWidth = dWidth * 2;
 			sHeight = dHeight * 2;
 			if (imageFile instanceof HTMLImageElement)
@@ -227,15 +229,19 @@ export default class LevelRender {
 			item.frame = 0;
 		} else if (hungryPercent <= 0.38) { // Если ищет еду, то увеличиваем скорость и пытаемся найти еду
 			if (!item.isWantGrass && this.grass.length > 0) { // Если желаемая точка не трава и трава на карте есть, то ищем траву
-				let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
-				this.grass.forEach((grass) => {
-					if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
+				let now = 100000, grassIndex = -1;
+				this.grass.forEach((grass, index) => {
+					if (!grass.isUsed && (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
 						now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
 						item.wantX = grass.coordX;
 						item.wantY = grass.coordY;
+						grassIndex = index;
 					}
 				});
-				item.isWantGrass = true;
+				if (grassIndex !== -1){
+					this.grass[grassIndex].isUsed = true;
+					item.isWantGrass = true;
+				}
 			}
 			item.speedBoost = 2;
 		}
@@ -264,23 +270,27 @@ export default class LevelRender {
 					
 					hungryPercent = (item.food - item.lastEat) / item.food;
 					if (hungryPercent <= 0.95){
-						if (this.grass.length > 0) { // Если трава на карте есть, то ищем траву
-							let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
-							this.grass.forEach((grass) => {
-								if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
+						if (this.grass.length > 0) {
+							let now = 100000, grassIndex = -1;
+							this.grass.forEach((grass, index) => {
+								if (!grass.isUsed && (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
 									now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
 									item.wantX = grass.coordX;
 									item.wantY = grass.coordY;
+									grassIndex = index;
 								}
 							});
-							item.isWantGrass = true;
+							if (grassIndex !== -1){
+								this.grass[grassIndex].isUsed = true;
+								item.isWantGrass = true;
+							}
 						}
 						item.speedBoost = 2;
 					}
 				}
 			} else { // Иначе, если просто пришёл в желаемую точку прогулки
 				item.wantX = 400 + Math.floor(Math.random() * 740); // То генерируем новую
-				item.wantY = 430 + Math.floor(Math.random() * 420);
+				item.wantY = 410 + Math.floor(Math.random() * 440);
 			}
 		}
 
@@ -337,6 +347,8 @@ export default class LevelRender {
 			this.id = 0;
 		if (name === "chicken")
 			this.animals.push(new Chicken(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
+		if (name === "pig")
+			this.animals.push(new Pig(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
 		this.id++;
 	}
 
@@ -380,18 +392,22 @@ export default class LevelRender {
 	protected sortCoord(a : AnimalList | Product | Grass, b : AnimalList | Product | Grass) : number {
 		let aY = a.coordY, bY = b.coordY;
 		let grassK = 2.25, productK = 1.75; // Нужен для правильного баланса между животными и остальным
+		let animalsK : {[key: string]: number} = {
+			'chicken': 1,
+			'pig': 0.1,
+		};
 		if (a instanceof Grass)
 			aY -= 48 * grassK;
 		else if (a instanceof Product)
 			aY -= 48 * productK;
 		else 
-			aY -= a.height;
+			aY -= a.height * animalsK[a.name];
 		if (b instanceof Grass)
 			bY -= 48 * grassK;
 		else if (b instanceof Product)
 			bY -= 48 * productK;
 		else
-			bY -= b.height;
+			bY -= b.height * animalsK[b.name];
 		return aY - bY;
 	}
 }
