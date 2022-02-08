@@ -28,19 +28,6 @@ export const lvlInterfaceImg = [
   },
   {
     type: "picture",
-    name: "clock",
-    image: "images/level/uiLevel/play_clock.png",
-    x: 1340,
-    y: 1150,
-    width: 38,
-    height: 44,
-    sx: 0,
-    sy: 0,
-    swidth: 0,
-    sheight: 0
-  },
-  {
-    type: "picture",
     name: "buy",
     image: "images/level/animal/buy_panel.png",
     x: 0,

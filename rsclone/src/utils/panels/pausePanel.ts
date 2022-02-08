@@ -2,6 +2,8 @@ import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/
 import Common from "./../../application/common/common";
 import { pausePanelImg, pausePanelBtn, pausePanelText } from "./../gameData/pausePanelData";
 import Timer from "../timer/levelTimer";
+import SettingsPage from "../../application/pages/settingsPage";
+import Control from "../../builder/controller";
 export default class PausePanel extends Common {
   pausePanelImg: IPicture[];
   initialImage: HTMLImageElement[];
@@ -9,8 +11,11 @@ export default class PausePanel extends Common {
   initialBtn: HTMLImageElement[];
   pausePanelText: IText[];
   timer: Timer;
+  node: HTMLElement;
+  canvasContainer: Control<HTMLElement>;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer, 
+  node: HTMLElement, canvasContainer: Control<HTMLElement>) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
@@ -19,6 +24,8 @@ export default class PausePanel extends Common {
     this.pausePanelBtn = pausePanelBtn;
     this.pausePanelText = pausePanelText;
     this.timer = timer;
+    this.node = node;
+    this.canvasContainer = canvasContainer;
 
     this.startPanel();
   }
@@ -80,8 +87,14 @@ export default class PausePanel extends Common {
             break;
           }
           case "Настройки": {
+            let settings;
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.onSettings(), 200);
+            this.canvasContainer.node.style.display = "none";
+            if (this.node.childElementCount < 2) {
+              settings = new SettingsPage(this.node);
+              (<HTMLElement>settings.node.children[0]).classList.add("map");
+            }
+            // setTimeout(() => func.onSettings(), 200);
             setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
             break;
           }

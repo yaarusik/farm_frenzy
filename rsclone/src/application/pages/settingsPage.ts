@@ -1,9 +1,13 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
+import { Music, musicVal } from "../../utils/music/music";
 
 export default class SettingsPage extends Control {
   wrapper: Control<HTMLElement>;
   buttonEffect = new ButtonEffect();
+  soundVal: string;
+  musicVal: string;
+  music: Music;
   
   constructor(parentNode: HTMLElement){
     super(parentNode);
@@ -11,6 +15,11 @@ export default class SettingsPage extends Control {
     this.wrapper = new Control(this.node, "div", "wrapper main", "");
     this.resizeWindow();
     window.addEventListener("resize", this.resizeWindow);
+
+    this.soundVal = "50";
+    this.musicVal = musicVal;
+
+    this.music = new Music();
 
     const panel = new Control(this.wrapper.node, "div", "panel panel__settings", "");
 
@@ -24,7 +33,7 @@ export default class SettingsPage extends Control {
     const soundBar = new Control(soundBox.node, "div", "sound__bar", "");
 
     const soundMinVolume = new Control(soundBar.node, "div", "sound__volume-min settings__volume", "");
-    this.createRangeInput(soundBar.node, "sound__input settings__range");
+    this.createRangeInput(soundBar.node, "sound__input settings__range", this.soundVal);
     const soundMaxVolume = new Control(soundBar.node, "div", "sound__volume-max settings__volume", "");
 
     const soundLine = new Control(soundBar.node, "div", "settings__line", "");
@@ -36,7 +45,7 @@ export default class SettingsPage extends Control {
     const musicBar = new Control(musicBox.node, "div", "music__bar", "");
 
     const musicMinVolume = new Control(musicBar.node, "div", "music__volume-min settings__volume", "");
-    this.createRangeInput(musicBar.node, "music__input settings__range");
+    this.createRangeInput(musicBar.node, "music__input settings__range", this.musicVal);
     const musicMaxVolume = new Control(musicBar.node, "div", "music__volume-max settings__volume", "");
 
     const musicLine = new Control(musicBar.node, "div", "settings__line", "");
@@ -51,17 +60,27 @@ export default class SettingsPage extends Control {
 
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
+
+    console.log(this.node.childElementCount);
+
     mainBackBtn.node.onclick = () => {
-      this.onBack();
+      if (this.node.children[0].className.includes("map")) {
+        (<HTMLElement>this.node.parentElement?.children[0]).style.display = "block";
+      } else {
+        this.onBack();
+      }
     };
 
 }
-  createRangeInput(parent: HTMLElement, className: string) {
+  createRangeInput(parent: HTMLElement, className: string, val: string) {
     const input = new Control<HTMLInputElement>(parent, "input", className, "");
+    input.node.value = val;
     input.node.type = "range";
     input.node.min = "0";
     input.node.max = "100";
     input.node.step = "1";
+
+    input.node.onchange = () => this.volumeChanging(input.node.value, className.split(" ")[0]);
   }
 
   onBack() {
@@ -70,4 +89,21 @@ export default class SettingsPage extends Control {
   resizeWindow = () =>{
     this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
   };
+
+  volumeChanging(val: string, className: string) {
+    if (className === "sound__input") {
+      this.soundChange(val);
+    } else {
+      this.musicChange(val);
+    }
+  }
+
+  musicChange(val: string) {
+    this.musicVal = val;
+    this.music.changeMusicVolume(val);
+  }
+
+  soundChange(val: string) {
+    this.soundVal = val;
+  }
 }

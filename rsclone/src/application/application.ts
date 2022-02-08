@@ -6,8 +6,10 @@ import LevelPage from "./pages/levelPage";
 import SettingsPage from "./pages/settingsPage";
 import AwardsPage from "./pages/awardsPage";
 import AuthorsPage from "./pages/authorsPage";
+import { Music } from "../utils/music/music";
 
 export default class Application extends Control {
+	music: Music;
 	constructor (parentNode: HTMLElement) {
 		super(parentNode);
 		// preloader
@@ -15,6 +17,9 @@ export default class Application extends Control {
 		// this.mainCycle();
 		// this.gameMapCycle();
 		this.levelCycle(1);
+		
+		this.music = new Music();
+		this.music.start();
 	}
 	// главная страница
 	private mainCycle() {
