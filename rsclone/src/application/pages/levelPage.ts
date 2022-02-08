@@ -35,6 +35,10 @@ export default class LevelPage extends Control {
   isGrace: { grace: boolean; };
   products: Products;
   level: number;
+  storageProducts: string[];
+
+
+
 
 
   constructor (parentNode: HTMLElement, level: number) {
@@ -54,6 +58,8 @@ export default class LevelPage extends Control {
     this.isGrace = {
       grace: true,
     };
+
+    this.storageProducts = [];
 
     this.panelState = {
       pausePanelSwitch: false,
@@ -137,7 +143,7 @@ export default class LevelPage extends Control {
       this.timer.drawText();
       this.buildSpawn.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
-      // this.products.render();
+      this.products.render();
     }
   }
 
@@ -188,45 +194,54 @@ export default class LevelPage extends Control {
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
-    else if (!this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)) {
-      //взаимодействие с зданиями
-      this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
-      buttons.forEach(btn => {
-        const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
-        if (this.commonFunction.determineCoords(event, scaleCoords)) {
-          switch (btn.name) {
-            case "Меню": {
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              this.panelState.pausePanelSwitch = true;
-              this.timer.isRunning = false;
-              break;
+    else {
+      // убрать отсюда
+      this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
+
+      if (this.storageProducts.length === 0) {
+
+        //взаимодействие с зданиями
+        this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
+        buttons.forEach(btn => {
+          const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
+          if (this.commonFunction.determineCoords(event, scaleCoords)) {
+            switch (btn.name) {
+              case "Меню": {
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                this.panelState.pausePanelSwitch = true;
+                this.timer.isRunning = false;
+                break;
+              }
+              case 'chicken': {
+                this.levelRender.createAnimal("chicken");
+                initialData.changeTotal(btn.name);
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                break;
+              }
+              case 'pig': {
+                initialData.changeTotal(btn.name);
+                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                break;
+              }
+              case 'mainArea': {
+                const rect = this.canvas.node.getBoundingClientRect();
+                const clickX = (event.clientX - rect.left) * this.curWidthK;
+                const clickY = (event.clientY - rect.top) * this.curHeightK;
+                this.buildSpawn.waterChange(this.isGrace);
+                if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+
+                break;
+              }
+              default: console.log("error");
             }
-            case 'chicken': {
-              this.levelRender.createAnimal("chicken");
-              initialData.changeTotal(btn.name);
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              break;
-            }
-            case 'pig': {
-              initialData.changeTotal(btn.name);
-              this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
-              break;
-            }
-            case 'mainArea': {
-              const rect = this.canvas.node.getBoundingClientRect();
-              const clickX = (event.clientX - rect.left) * this.curWidthK;
-              const clickY = (event.clientY - rect.top) * this.curHeightK;
-              this.buildSpawn.waterChange(this.isGrace);
-              if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
-              break;
-            }
-            default: console.log("error");
+          } else {
+            // переделать сброс кнопки
+            // this.buttonsClick(btn, 0, 0);
           }
-        } else {
-          // переделать сброс кнопки
-          // this.buttonsClick(btn, 0, 0);
-        }
-      });
+        });
+      } else {
+        this.products.add(this.storageProducts);
+      }
     }
   }
 

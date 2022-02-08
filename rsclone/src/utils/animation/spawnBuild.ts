@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IText } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn, buildSpawnAnim } from "./../gameData/spawnData";
 import Well from "./well";
