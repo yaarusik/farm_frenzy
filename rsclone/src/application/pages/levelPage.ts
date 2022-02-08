@@ -35,6 +35,10 @@ export default class LevelPage extends Control {
   isGrace: { grace: boolean; };
   products: Products;
   level: number;
+  storageProducts: string[];
+
+
+
 
 
   constructor (parentNode: HTMLElement, level: number) {
@@ -54,6 +58,8 @@ export default class LevelPage extends Control {
     this.isGrace = {
       grace: true,
     };
+
+    this.storageProducts = [];
 
     this.panelState = {
       pausePanelSwitch: false,
@@ -137,7 +143,7 @@ export default class LevelPage extends Control {
       this.timer.drawText();
       this.buildSpawn.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
-      // this.products.render();
+      this.products.render();
     }
   }
 
@@ -189,8 +195,11 @@ export default class LevelPage extends Control {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else {
-      let clickList = this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK);
-      if (clickList.length == 0){
+      // убрать отсюда
+      this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
+
+      if (this.storageProducts.length === 0) {
+
         //взаимодействие с зданиями
         this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
         buttons.forEach(btn => {
@@ -220,6 +229,7 @@ export default class LevelPage extends Control {
                 const clickY = (event.clientY - rect.top) * this.curHeightK;
                 this.buildSpawn.waterChange(this.isGrace);
                 if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+
                 break;
               }
               default: console.log("error");
@@ -229,6 +239,8 @@ export default class LevelPage extends Control {
             // this.buttonsClick(btn, 0, 0);
           }
         });
+      } else {
+        this.products.add(this.storageProducts);
       }
     }
   }

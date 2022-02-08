@@ -53,8 +53,8 @@ export default class LevelRender {
 		});
 	}
 
-	public clickHundler(event: MouseEvent, widthK: number, heightK: number) : String[] {
-		let clickList : String[] = [];
+	public clickHundler(event: MouseEvent, widthK: number, heightK: number): string[] {
+		const clickList: string[] = [];
 		this.products.forEach((item, index, productList) => {
 			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
@@ -150,6 +150,7 @@ export default class LevelRender {
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, dx, dy, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 	}
+
 
 	protected renderAnimal(item : AnimalList, curWidthK: number, curHeightK: number){
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки
