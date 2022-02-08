@@ -53,8 +53,8 @@ export default class LevelRender {
 		});
 	}
 
-	public clickHundler(event: MouseEvent, widthK: number, heightK: number) : String[] {
-		let clickList : String[] = [];
+	public clickHundler(event: MouseEvent, widthK: number, heightK: number): string[] {
+		const clickList: string[] = [];
 		this.products.forEach((item, index, productList) => {
 			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
@@ -147,14 +147,14 @@ export default class LevelRender {
 
 			const animName = item.name + '-' + item.state;
 
-			if (item.state === 'death' && item.frame === 15 && item.opacity <= 0){
+			if (item.state === 'death' && item.frame === 15 && item.opacity <= 0) {
 				animalList.splice(index, 1);
 				return;
-			} else if (item.state === 'death' && item.frame === 15){
+			} else if (item.state === 'death' && item.frame === 15) {
 				this.context.globalAlpha = item.opacity;
 				item.opacity -= 0.025;
 			}
-			
+
 			let imageFile = this.images.get(animName) as HTMLImageElement;
 			let dx = item.width * (item.frame % 4);
 			let dy = item.height * Math.floor(item.frame / 4);
@@ -164,10 +164,10 @@ export default class LevelRender {
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 
-			item.productAge ++;
+			item.productAge++;
 			if (!item.state.includes('eat'))
-				item.lastEat ++;
-			if (item.state !== "death" || item.frame !== 15){
+				item.lastEat++;
+			if (item.state !== "death" || item.frame !== 15) {
 				let frameK = item.speedBoost;
 				if (item.state === 'death' || item.state.includes('eat'))
 					frameK = 0.5;
@@ -183,7 +183,7 @@ export default class LevelRender {
 			if (item.state === 'death')
 				return;
 
-			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
+			if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)) {
 				this.createProduct('egg', item.coordX, item.coordY);
 				item.productAge = 0;
 			}
@@ -223,13 +223,13 @@ export default class LevelRender {
 
 			if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3) { // Если достаточно близко к желаемой точке
 				if (item.isWantGrass) { // Если пришёл поесть
-					if (!item.state.includes('eat')){
+					if (!item.state.includes('eat')) {
 						if (item.state.includes("left"))
 							item.state = "eat-left";
 						else
 							item.state = "eat-right";
 						item.frame = 0;
-					} else if (item.frame === 15){
+					} else if (item.frame === 15) {
 						item.state = item.state.slice(4, item.state.length);
 
 						item.lastEat -= item.food * 0.4;
@@ -242,9 +242,9 @@ export default class LevelRender {
 						});
 						this.grass.splice(grassIndex, 1);
 						item.isWantGrass = false;
-						
+
 						hungryPercent = (item.food - item.lastEat) / item.food;
-						if (hungryPercent <= 0.95){
+						if (hungryPercent <= 0.95) {
 							if (this.grass.length > 0) { // Если трава на карте есть, то ищем траву
 								let now = 10000000; // Очень много, чтобы любое расстояние было ближе чем
 								this.grass.forEach((grass) => {
