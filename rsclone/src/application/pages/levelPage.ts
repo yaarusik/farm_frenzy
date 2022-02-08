@@ -12,7 +12,7 @@ import BuildSpawn from "../../utils/animation/spawnBuild";
 import Total from "./../../utils/total/total";
 import { initialData } from './../common/initialData';
 import Products from "../../utils/store/products";
-
+import Progress from "./../../utils/gameProgress/progress";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -36,6 +36,7 @@ export default class LevelPage extends Control {
   products: Products;
   level: number;
   storageProducts: string[];
+  progress: Progress;
 
 
 
@@ -85,7 +86,8 @@ export default class LevelPage extends Control {
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer);
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
-    this.products = new Products(this.canvas.node, this.context);
+    this.progress = new Progress(this.canvas.node, this.context, this.level);
+    this.products = new Products(this.canvas.node, this.context, this.progress);
 
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -142,6 +144,7 @@ export default class LevelPage extends Control {
       this.coin.coinAnimation();
       this.timer.drawText();
       this.buildSpawn.render();
+      this.progress.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
       this.products.render();
     }

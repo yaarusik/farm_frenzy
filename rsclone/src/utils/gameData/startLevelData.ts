@@ -12,19 +12,6 @@ const imgOne = [
     swidth: 60,
     sheight: 64
   },
-  {
-    type: "button",
-    name: "egg",
-    image: "images/level/initial/egg.png",
-    x: 824,
-    y: 888,
-    width: 30,
-    height: 32,
-    sx: 0,
-    sy: 0,
-    swidth: 60,
-    sheight: 64
-  },
 ];
 
 const textOne = [

@@ -27,7 +27,9 @@ export interface IText {
   fontSize: string;
   color: string;
   name?: string;
+  id?: number
 }
+
 
 export interface IButton extends IPicture {
   hover: number;

@@ -80,7 +80,6 @@ export default class StartPanel extends Common {
         this.context.shadowColor = '';
       }
       this.context.strokeText(item.text, item.x, item.y);
-
       this.context.fillText(item.text, item.x, item.y);
     });
   }
