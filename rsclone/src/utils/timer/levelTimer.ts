@@ -19,6 +19,8 @@ export default class Timer {
     goldImg: HTMLImageElement;
     silvImg: HTMLImageElement;
     level: number;
+    clock: { src: string; x: number; y: number; width: number; height: number; };
+    clockImg: HTMLImageElement;
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
@@ -43,11 +45,21 @@ export default class Timer {
             width: 120,
             height: 48
         };
+        this.clock = {
+            src: "images/level/uiLevel/play_clock.png",
+            x: 1340,
+            y: 1150,
+            width: 38,
+            height: 44,
+        };
         this.goldImg = new Image();
         this.goldImg.src = this.strip.gold;
 
         this.silvImg = new Image();
         this.silvImg.src = this.strip.silver;
+
+        this.clockImg = new Image();
+        this.clockImg.src = this.clock.src;
     }
 
     private content(min: number, sec: number) {
@@ -76,6 +88,9 @@ export default class Timer {
     public drawStrip() {
         const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
         image.draw(this.context);
+
+        const clockImage = new Picture(this.clockImg, this.clock.x, this.clock.y, this.clock.width, this.clock.height);
+        clockImage.draw(this.context);
         
         if (this.min >= this.goldMin && this.sec >= this.goldSec) {
             this.context.fillStyle = "#f7f9f7";

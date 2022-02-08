@@ -1,5 +1,6 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
+import { Music } from "../../utils/music/music";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
