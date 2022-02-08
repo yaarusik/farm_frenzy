@@ -78,6 +78,8 @@ export default class Products extends Common {
   }
 
   async render() {
+    this.context.restore();
+    this.context.globalAlpha = 1;
     this.drawImage(this.initialProducts, this.productRender);
   }
 

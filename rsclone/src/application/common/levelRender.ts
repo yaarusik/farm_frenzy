@@ -87,7 +87,7 @@ export default class LevelRender {
 		});
 	}
 
-  public renderLevel(curWidthK: number, curHeightK: number){
+  public renderLevel(curWidthK: number, curHeightK: number, isPaused: boolean){
 		const renderList : (AnimalList | Product | Grass)[] = [];
 		this.products.forEach((item) => renderList.push(item));
 		this.grass.forEach((item) => renderList.push(item));
@@ -96,21 +96,21 @@ export default class LevelRender {
 
 		renderList.forEach((item) => {
 			if (item instanceof Product)
-				this.renderProduct(item, curWidthK, curHeightK);
+				this.renderProduct(item, curWidthK, curHeightK, isPaused);
 			else if (item instanceof Grass)
-				this.renderGrass(item, curWidthK, curHeightK);
+				this.renderGrass(item, curWidthK, curHeightK, isPaused);
 			else 
-				this.renderAnimal(item, curWidthK, curHeightK);
+				this.renderAnimal(item, curWidthK, curHeightK, isPaused);
 		});
 
 		// this.renderProducts(curWidthK, curHeightK);
 		// this.renderGrass(curWidthK, curHeightK);
 		// this.renderAnimals(curWidthK, curHeightK);
-
-		this.gameFrame += 1;
+		if (!isPaused)
+			this.gameFrame += 1;
 	}
 
-	protected renderProduct(item: Product, curWidthK: number, curHeightK: number){
+	protected renderProduct(item: Product, curWidthK: number, curHeightK: number, isPaused: boolean){
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
 		let animName = item.name;
@@ -126,33 +126,36 @@ export default class LevelRender {
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, 0, 0, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 
-		item.age ++;
-		if (item.age >= item.maxAge && (this.gameFrame % 40) < 20)
-			this.products.splice(this.products.indexOf(item), 1);
-		else if (item.age >= item.blinkAge)
-			item.isBlinking = true;
+		if (!isPaused){
+			item.age ++;
+			if (item.age >= item.maxAge && (this.gameFrame % 40) < 20)
+				this.products.splice(this.products.indexOf(item), 1);
+			else if (item.age >= item.blinkAge)
+				item.isBlinking = true;
+		}
 	}
 
-	protected renderGrass(item : Grass, curWidthK: number, curHeightK: number){
+	protected renderGrass(item : Grass, curWidthK: number, curHeightK: number, isPaused: boolean){
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
 
 		const frame = item.age;
-		if (item.age < item.maxAge)
-			item.age++;
-
+		
 		const imageFile = this.images.get("grass") as HTMLImageElement;
 		const dx = 48 * (frame % 4);
 		const dy = 48 * Math.floor(frame / 4);
 		const sWidth = 48 * 2;
 		const sHeight = 48 * 2;
-
+		
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, dx, dy, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
+
+		if (item.age < item.maxAge && !isPaused)
+			item.age++;
 	}
 
 
-	protected renderAnimal(item : AnimalList, curWidthK: number, curHeightK: number){
+	protected renderAnimal(item : AnimalList, curWidthK: number, curHeightK: number, isPaused: boolean){
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки
 		this.context.globalAlpha = 1;
 
@@ -175,18 +178,20 @@ export default class LevelRender {
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
 
-		item.productAge ++;
-		if (!item.state.includes('eat'))
-			item.lastEat ++;
-		if (item.state !== "death" || item.frame !== 15){
-			let frameK = item.speedBoost;
-			if (item.state === 'death' || item.state.includes('eat'))
-				frameK = 0.5;
+		if (!isPaused) {
+			item.productAge ++;
+			if (!item.state.includes('eat'))
+				item.lastEat ++;
+			if (item.state !== "death" || item.frame !== 15){
+				let frameK = item.speedBoost;
+				if (item.state === 'death' || item.state.includes('eat'))
+					frameK = 0.5;
 
-			if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
-				item.frame = (item.frame + 1) % item.frameNum;
-			else if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
-				item.frame = (item.frame + 1) % item.frameNum;
+				if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
+					item.frame = (item.frame + 1) % item.frameNum;
+				else if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
+					item.frame = (item.frame + 1) % item.frameNum;
+			}
 		}
 
 		item.speedBoost = 1;
@@ -213,6 +218,9 @@ export default class LevelRender {
 			if (imageFile instanceof HTMLImageElement)
 				this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 		}
+
+		if (isPaused)
+			return;
 
 		if (hungryPercent <= 0) { // Если умирает от голода
 			item.state = "death";

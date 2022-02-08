@@ -122,7 +122,7 @@ export default class LevelPage extends Control {
   }
 
   private async run() {
-    this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
+    this.context.restore();
     this.context.globalAlpha = 1;
     this.render();
 
@@ -145,7 +145,7 @@ export default class LevelPage extends Control {
       this.timer.drawText();
       this.buildSpawn.render();
       this.progress.render();
-      this.levelRender.renderLevel(this.curWidthK, this.curHeightK);
+      this.levelRender.renderLevel(this.curWidthK, this.curHeightK, this.panelState.pausePanelSwitch);
       this.products.render();
     }
   }
