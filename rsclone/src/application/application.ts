@@ -10,20 +10,20 @@ import { Music } from "../utils/music/music";
 
 export default class Application extends Control {
 	music: Music;
-	constructor (parentNode: HTMLElement) {
-		super(parentNode);
+	constructor (parentNode: HTMLElement, tagName: string, className: string) {
+		super(parentNode, tagName, className);
 		// preloader
 
-		// this.mainCycle();
+		this.mainCycle();
 		// this.gameMapCycle();
-		this.levelCycle(1);
+		// this.levelCycle(1);
 
 		this.music = new Music();
 		this.music.start();
 	}
 	// главная страница
 	private mainCycle() {
-		const startPage = new StartPage(this.node);
+		const startPage = new StartPage(this.node, 'div', 'main__page');
 		startPage.onSelectMap = () => {
 			startPage.destroy();
 			// preloader
@@ -49,14 +49,17 @@ export default class Application extends Control {
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
 		const gameMapPage = new GameMapPage(pageWrapper.node, "div", "map", "");
 		gameMapPage.onSelectShop = () => {
+			pageWrapper.destroy();
 			gameMapPage.destroy();
 			this.shopCycle();
 		};
 		gameMapPage.startLevel = (level: number) => {
+			pageWrapper.destroy();
 			gameMapPage.destroy();
 			this.levelCycle(level);
 		};
 		gameMapPage.onBack = () => {
+			pageWrapper.destroy();
 			gameMapPage.destroy();
 			this.mainCycle();
 		};
@@ -72,23 +75,27 @@ export default class Application extends Control {
 	}
 
 	private levelCycle(level: number) {
-		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
-		const levelPage = new LevelPage(pageWrapper.node, level);
+		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map level", "");
+		const levelPage = new LevelPage(pageWrapper.node, "div", 'level__page', level);
 
 		levelPage.onMap = () => {
+			pageWrapper.destroy();
 			levelPage.destroy();
 			this.gameMapCycle();
 		};
 		levelPage.onMain = () => {
+			pageWrapper.destroy();
 			levelPage.destroy();
 			this.mainCycle();
 		};
 		levelPage.onRestart = () => {
+			pageWrapper.destroy();
 			levelPage.destroy();
 			// запомнить может баги давать
 			this.levelCycle(level);
 		};
 		levelPage.onSettings = () => {
+			pageWrapper.destroy();
 			levelPage.destroy();
 			this.settingsCycle();
 		};

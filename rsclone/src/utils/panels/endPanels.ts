@@ -1,18 +1,15 @@
 import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
-import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
-import { levelInitial } from "../gameData/startLevelData";
+import { endBtn, endImg, endStaticText, endText } from './../gameData/endPanelData';
 
-export default class StartPanel extends Common {
-  startPanelImg: IPicture[];
+export default class EndPanel extends Common {
+  endPanelImg: IPicture[];
   initialImage: HTMLImageElement[];
-  startPanelBtn: IButton[];
   initialBtn: HTMLImageElement[];
-  startPanelStaticText: IText[];
-  startPanelText: IText[];
-  
-
-  startImg: HTMLImageElement[]
+  endPanelStaticText: IText[];
+  startImg: HTMLImageElement[];
+  endPanelBtn: IButton[];
+  endPanelText: IText[];
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
@@ -20,43 +17,34 @@ export default class StartPanel extends Common {
     this.initialBtn = [];
     this.startImg = [];
 
-    this.startPanelImg = startPanelImg;
-    this.startPanelBtn = startPanelBtn;
-    this.startPanelStaticText = startPanelStaticText;
-    this.startPanelText = startPanelText;
-
-    this.levelInitial = levelInitial;
+    this.endPanelImg = endImg;
+    this.endPanelStaticText = endStaticText;
+    this.endPanelBtn = endBtn;
+    this.endPanelText = endText;
 
     this.startPanel();
   }
 
   private async startPanel() {
-
-    const loadStartImg = this.levelInitial[this.level].img.map(image => this.loadImage(image.image));
-    this.startImg = await this.renderImages(loadStartImg);
-    const loadImage = this.startPanelImg.map(image => this.loadImage(image.image));
-    const loadBtn = this.startPanelBtn.map(image => this.loadImage(image.image));
-    this.initialBtn = await this.renderImages(loadBtn);
+    const loadImage = this.endPanelImg.map(image => this.loadImage(image.image));
+    const loadBtn = this.endPanelBtn.map(btn => this.loadImage(btn.image));
     this.initialImage = await this.renderImages(loadImage);
+    this.initialBtn = await this.renderImages(loadBtn);
 
   }
 
   public render() {
-    this.drawImage(this.initialImage, this.startPanelImg);
-    this.drawImage(this.initialBtn, this.startPanelBtn);
-    this.drawImage(this.startImg, this.levelInitial[this.level].img);
-    this.drawStaticText(this.startPanelStaticText);
-
-    this.drawText([...this.startPanelText, ...this.levelInitial[this.level].text]);
-
-
+    this.drawImage(this.initialImage, this.endPanelImg);
+    this.drawImage(this.initialBtn, this.endPanelBtn);
+    this.drawStaticText(this.endPanelStaticText);
+    this.drawText(this.endPanelText);
   }
 
   drawStaticText(text: IText[]) {
     text.forEach(item => {
       this.context.fillStyle = item.color;
       this.context.font = item.fontSize;
-      if (item.text === 'Цели уровня') {
+      if (item.text === 'Результаты уровня') {
         this.context.shadowColor = '#7f5f30';
         this.context.shadowBlur = 10;
       } else {
@@ -77,26 +65,26 @@ export default class StartPanel extends Common {
   }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
-    this.startPanelBtn.forEach(btn => {
+    this.endPanelBtn.forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
         this.buttonsHover(btn, btn.stepY, btn.hover);
-        this.changeAnimation(btn, true, this.startPanelText);
+        this.changeAnimation(btn, true, this.endPanelText);
       } else {
         this.buttonsHover(btn, 0, 0);
-        this.changeAnimation(btn, false, this.startPanelText);
+        this.changeAnimation(btn, false, this.endPanelText);
       }
     });
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number, func: IFunctions): void {
-    this.startPanelBtn.forEach(btn => {
+    this.endPanelBtn.forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.isStart(), 200);
+            setTimeout(() => func.onMap(), 200);
             break;
           }
           default: {

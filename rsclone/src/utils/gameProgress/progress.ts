@@ -22,8 +22,8 @@ export default class Progress extends Common {
     };
   };
   startDone: HTMLImageElement[];
-
-
+  goals: number;
+  goalsDone: Set<string>;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
@@ -37,10 +37,12 @@ export default class Progress extends Common {
     this.levelInitial[this.level].text.forEach(product => {
       if (product.name) this.productsScore[product.name] = { current: 0, max: Number(product.text.slice(-1)) };
     });
-    console.log(this.productsScore);
+
+    this.goals = Object.getOwnPropertyNames(this.productsScore).length;
+
+    this.goalsDone = new Set();
 
     this.startProgress();
-
   }
 
   private async startProgress() {
@@ -65,8 +67,16 @@ export default class Progress extends Common {
       }
       if ((this.productsScore[product.name].current === this.productsScore[product.name].max)) {
         this.doneView(product);
+        this.goalsDone.add(product.name);
       }
     }
+  }
+
+  public endGameCheck() {
+    if (this.goalsDone.size === this.goals) {
+      return true;
+    }
+    return false;
   }
 
   private doneView(product: IText) {
@@ -75,7 +85,6 @@ export default class Progress extends Common {
       this.done[product.id].height = 29;
       this.done[product.id].width = 40;
     }
-    alert('уровень пройден');
   }
 
 
