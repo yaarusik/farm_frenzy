@@ -35,16 +35,12 @@ export const buildSpawnBtn = [
     swidth: 128,
     sheight: 100
   },
-];
-
-
-export const buildSpawnAnim = [
   {
     type: "animation",
     name: "waterIndicator",
     image: "images/level/indicators/indicator_water.png",
     x: 930,
-    y: 200,
+    y: -198,
     width: 22,
     stepY: 52,
     stepX: 0,
@@ -57,4 +53,7 @@ export const buildSpawnAnim = [
     swidth: 12,
     sheight: 53
   },
+
 ];
+
+
