@@ -14,9 +14,9 @@ export default class Application extends Control {
 		super(parentNode);
 		// preloader
 
-		// this.mainCycle();
+		this.mainCycle();
 		// this.gameMapCycle();
-		this.levelCycle(1);
+		// this.levelCycle(1);
 		
 		this.music = new Music();
 		this.music.start();

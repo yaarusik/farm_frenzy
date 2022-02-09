@@ -4,6 +4,7 @@ import { pausePanelImg, pausePanelBtn, pausePanelText } from "./../gameData/paus
 import Timer from "../timer/levelTimer";
 import SettingsPage from "../../application/pages/settingsPage";
 import Control from "../../builder/controller";
+import { Music } from "../music/music";
 export default class PausePanel extends Common {
   pausePanelImg: IPicture[];
   initialImage: HTMLImageElement[];
@@ -13,6 +14,7 @@ export default class PausePanel extends Common {
   timer: Timer;
   node: HTMLElement;
   canvasContainer: Control<HTMLElement>;
+  music: Music;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer, 
   node: HTMLElement, canvasContainer: Control<HTMLElement>) {
@@ -26,6 +28,7 @@ export default class PausePanel extends Common {
     this.timer = timer;
     this.node = node;
     this.canvasContainer = canvasContainer;
+    this.music = new Music();
 
     this.startPanel();
   }
@@ -72,18 +75,21 @@ export default class PausePanel extends Common {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.onMain(), 200);
             setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.music.onStart();
             break;
           }
           case "Перезапустить": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.onRestart(), 200);
             setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.music.onMain();
             break;
           }
           case "Карта": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.onMap(), 200);
             setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.music.onMain();
             break;
           }
           case "Настройки": {
