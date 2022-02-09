@@ -1,4 +1,5 @@
 import { IPicture, IKeyNumber } from "../../application/iterfaces";
+import Progress from "../gameProgress/progress";
 import Common from "./../../application/common/common";
 
 export default class Products extends Common {
@@ -15,12 +16,15 @@ export default class Products extends Common {
   changeColumn: number;
   maxColumn: number;
   columnCount: number;
+  progress: Progress;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, progress: Progress) {
     super(canvas, context);
     this.initialProducts = [];
     // товар, который приходит
     this.goods = [];
+
+    this.progress = progress;
 
     this.storageHeight = 5;
     // максимальное количество колонок
@@ -101,6 +105,8 @@ export default class Products extends Common {
             this.updateProduct();
             // сохранение количества продуктов
             this.productsCounter[product]++;
+            // отображение прогресса игры
+            this.progress.scoreCheck(product);
           }
         });
       });
