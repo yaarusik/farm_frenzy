@@ -75,6 +75,30 @@ export default class LevelRender {
 				productList.splice(index, 1);
 			}
 		});
+
+		this.animals.forEach((item) => {
+			if (item.type !== 'bear')
+				return;
+			const bearCoords: Coords = {
+				currentX: item.coordX / widthK,
+				currentY: item.coordY / heightK,
+				currentW: item.width * 2 / widthK,
+				currentH: item.height * 2 / heightK
+			};
+
+			if (this.commonFunction.determineCoords(event, bearCoords)) {
+				item.cageRemain = 2 * 60;
+				if (item.cageBuild < 8)
+					item.cageBuild ++;
+				if (item.cageBuild === 8){
+					item.state = 'cage';
+					item.frame = 0;
+					item.cageRemain = 100000 * 60; // Костыль, потом заменить
+				}
+
+				clickList.push('');
+			}
+		});
 		return clickList;
 	}
 
@@ -209,39 +233,57 @@ export default class LevelRender {
 	}
 
 	private renderBear(item: Bear, isPaused: boolean){
+		let imageFile = new Image();
+		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
+
+
+		imageFile = this.images.get("build-1") as HTMLImageElement;
+		dx = 160 * (item.cageBuild % 3);
+		dy = 160 * Math.floor(item.cageBuild / 3);
+		dWidth = 160;
+		dHeight = 160;
+		sx = item.coordX - 160 / 6;
+		sy = item.coordY - 160 / 5;
+		sWidth = dWidth * 1.5;
+		sHeight = dHeight * 1.5;
+		
+		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+
+		if (item.state === 'cage'){
+			if (item.cageRemain <= 0){
+				item.cageBuild --;
+				item.cageRemain = 2 * 60;
+			}
+			item.cageRemain --;
+			return;
+		}
+
+		if (item.cageBuild > 0){
+			if (item.cageRemain <= 0){
+				item.cageBuild --;
+				item.cageRemain = 2 * 60;
+			}
+			item.cageRemain --;
+		}
+
+		
+		item.speedBoost = 1.4 - item.cageBuild / 10;
+		item = this.nextFrame(item, isPaused);
+		
 		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
 			while(Math.abs(item.coordX - item.wantX) < 400 && Math.abs(item.coordY - item.wantY) < 400)
 					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
 					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
 		}
-		item.speedBoost = 1.4;
-		item = this.nextFrame(item, isPaused);
-		item.speedBoost = 0.6;
+
+		item.speedBoost = 0.6 - item.cageBuild / 16;
 		item = this.nextCoord(item);
+		
 
 		this.animals.forEach((pet) => {
 			if (pet.type !== "pet")
 				return;
-			let bearCollision = 0;
-			// if (this.isNear(pet.coordX, pet.coordY, item.coordX, item.coordY, bearCollision) ||
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX, item.coordY, bearCollision) ||
-			// 		this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX, item.coordY, bearCollision) || 
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX, item.coordY, bearCollision) ||
-
-			// 		this.isNear(pet.coordX, pet.coordY, item.coordX + item.width, item.coordY, bearCollision) ||
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX + item.width, item.coordY, bearCollision) ||
-			// 		this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX + item.width, item.coordY, bearCollision) || 
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY + pet.height + item.width, item.coordX, item.coordY, bearCollision) ||
-
-			// 		this.isNear(pet.coordX, pet.coordY, item.coordX, item.coordY + item.height, bearCollision) ||
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX, item.coordY + item.height, bearCollision) ||
-			// 		this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX, item.coordY + item.height, bearCollision) || 
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX, item.coordY + item.height, bearCollision) ||
-
-			// 		this.isNear(pet.coordX, pet.coordY, item.coordX + item.width, item.coordY + item.height, bearCollision) ||
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX + item.width, item.coordY + item.height, bearCollision) ||
-			// 		this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX + item.width, item.coordY + item.height, bearCollision) || 
-			// 		this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX + item.width, item.coordY + item.height, bearCollision))
+			let bearCollision = 50;
 			if (this.isBearNear(pet.coordX, pet.coordY, pet.width, pet.height, item.coordX, item.coordY, item.width, item.height, bearCollision) <= 0)
 				this.petAway(pet);
 		});
@@ -418,10 +460,10 @@ export default class LevelRender {
 		let dist = -1;
 
 		if((d1 - collision < ((w1 + w2) / 2) && (d2 + collision >= ((h1 + h2) / 2)))) {
-			dist = d2 - ((h1 + h2) / 2);
+			dist = Math.max(1, d2 - ((h1 + h2) / 2));
 		} else if((d1 + collision >= ((w1 + w2)/ 2)) && (d2 - collision < ((h1 + h2) / 2))) {
-			dist = d1 - ((w1 + w2)/ 2);
-		} else if((d1 + collision >= ((w1 + w2)/ 2)) && (d2  + collision>= ((h1 + h2) / 2))) {
+			dist = Math.max(d1 - ((w1 + w2)/ 2));
+		} else if((d1 + collision >= ((w1 + w2)/ 2)) && (d2  + collision >= ((h1 + h2) / 2))) {
 			let deltaX = d1 - ((w1 + w2)/ 2);
 			let deltaY = d2 - ((h1 + h2)/ 2);
 			dist = Math.sqrt(deltaX * deltaX  + deltaY * deltaY);

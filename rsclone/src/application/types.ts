@@ -23,6 +23,10 @@ export class Animal {
   productNeed: number;
   productName: string;
 
+  // Только для медведей, надо потом разобраться и вынести нормально в класс Bear
+  cageBuild: number;
+  cageRemain: number;
+
   constructor (type: string, name: string, id: number, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
     this.type = type;
     this.name = name;
@@ -47,6 +51,9 @@ export class Animal {
     this.productAge = 0;
     this.productNeed = 20 * 60;
     this.productName = productName;
+
+    this.cageBuild = 0;
+    this.cageRemain = 0;
   }
 }
 
