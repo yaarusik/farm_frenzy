@@ -26,6 +26,7 @@ export class Animal {
   // Только для медведей, надо потом разобраться и вынести нормально в класс Bear
   cageBuild: number;
   cageRemain: number;
+  isEscape: boolean;
 
   constructor (type: string, name: string, id: number, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
     this.type = type;
@@ -54,6 +55,7 @@ export class Animal {
 
     this.cageBuild = 0;
     this.cageRemain = 0;
+    this.isEscape = false;
   }
 }
 

@@ -238,6 +238,16 @@ export default class LevelRender {
 		let imageFile = new Image();
 		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
+		if (item.isEscape){
+			item.speedBoost = 3;
+			item = this.nextFrame(item, isPaused);
+			item.speedBoost = 7;
+			item = this.nextCoord(item);
+			if (item.coordX < -100 || item.coordX > 1600)
+			this.animals.splice(this.animals.indexOf(item), 1);
+			return;
+		}
+
 
 		imageFile = this.images.get("build-1") as HTMLImageElement;
 		dx = 160 * (item.cageBuild % 3);
@@ -253,7 +263,15 @@ export default class LevelRender {
 
 		if (item.state === 'cage'){
 			if (item.cageRemain <= 0){
-				this.animals.splice(this.animals.indexOf(item), 1);
+				item.isEscape = true;
+				item.wantY = item.coordY;
+				if (item.coordX < 800){
+					item.state = 'left';
+					item.wantX = -200;
+				} else {
+					item.state = 'right';
+					item.wantX = 1800;
+				}
 				return;
 			} else if (item.cageRemain <= 3 * 60)
 				item = this.nextFrame(item, isPaused);
