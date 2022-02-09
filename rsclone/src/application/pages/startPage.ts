@@ -4,13 +4,15 @@ import ButtonEffect from "./../../builder/button";
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
    buttonEffect = new ButtonEffect();
-
    constructor (parentNode: HTMLElement, tagName: string, className: string) {
       super(parentNode, tagName, className);
+
 
       this.wrapper = new Control(this.node, "div", "wrapper main", "");
       this.resizeWindow();
       window.addEventListener("resize", this.resizeWindow);
+
+      this.music = new Music();
 
       const logo = new Control<HTMLImageElement>(this.wrapper.node, "img", "logo", "");
       logo.node.src = "images/main/logo-ru.png";
@@ -28,6 +30,7 @@ export default class StartPage extends Control {
       this.buttonEffect.devideButton(campaignBtn.node);
       campaignBtn.node.onclick = () => {
          this.onSelectMap();
+         this.music.onMain();
       };
 
       const endlessBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn btn_disabled", "Бесконечная");

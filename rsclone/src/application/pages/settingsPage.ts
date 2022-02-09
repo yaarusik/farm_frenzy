@@ -58,6 +58,7 @@ export default class SettingsPage extends Control {
     fullScreenLabel.node.setAttribute("for", "fullScreen");
     const checkedInput = new Control(fullScreenLabel.node, "div", "input__checked", "");
 
+    
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
 

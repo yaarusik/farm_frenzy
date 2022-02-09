@@ -4,6 +4,7 @@ import Control from "../../builder/controller";
 import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
 import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
+import { Music } from "../../utils/music/music";
 export default class GameMapPage extends Control {
 	startLevel!: (lever: number) => void;
 	onBack!: () => void;
@@ -18,9 +19,12 @@ export default class GameMapPage extends Control {
 	textOptions: IText[];
 	commonFunction: Common;
 	animation: number;
+	music: Music;
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
+
+		this.music = new Music();
 
 		this.textOptions = textOptions;
 		this.imagesOptions = imagesOptions;
@@ -124,6 +128,7 @@ export default class GameMapPage extends Control {
 						this.buttonsClick(btn, btn.stepY);
 						setTimeout(this.onBack, 250);
 						cancelAnimationFrame(this.animation);
+						this.music.onStart();
 						break;
 					}
 					case "1": {
@@ -132,6 +137,7 @@ export default class GameMapPage extends Control {
 							this.startLevel(1);
 						}, 250);
 						cancelAnimationFrame(this.animation);
+						this.music.onMain();
 						break;
 					}
 					case "2": {
@@ -140,6 +146,7 @@ export default class GameMapPage extends Control {
 							this.startLevel(2);
 						}, 250);
 						cancelAnimationFrame(this.animation);
+						this.music.onMain();
 						break;
 					}
 					default: console.log("error");
