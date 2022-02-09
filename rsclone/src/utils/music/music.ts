@@ -5,12 +5,10 @@ export function changeVal(val: string) {
     musicVal = val;
 }
 
-const musicStart = new Audio();
-musicStart.src = "audio/start.mp3";
+const musicStart = new Audio("audio/start.mp3");
 musicStart.volume = 0.5;
 
-const musicMain = new Audio();
-musicMain.src = "audio/main.mp3";
+const musicMain = new Audio("audio/main.mp3");
 musicMain.volume = 0.5;
 
 export class Music {
@@ -29,15 +27,28 @@ export class Music {
     }
 
     public startMusicPlay() {
-        musicStart.play();
-        musicStart.addEventListener("ended", this.startMainMusic);
-
         window.removeEventListener("click", this.startMusicPlay);
+        if (musicMain.paused) {
+            musicMain.pause();
+            musicMain.currentTime = 0;
+            musicStart.play();
+            musicStart.addEventListener("ended", this.onMain);
+        }
     }
 
-    private startMainMusic() {
+    onStart() {
+        musicMain.pause();
+        musicMain.currentTime = 0;
+        musicStart.currentTime = 0;
+        musicStart.play();
+    }
+
+    onMain() {
+        musicStart.pause();
+        musicStart.currentTime = 0;
+        musicMain.currentTime = 0;
+        musicMain.loop = true;
         musicMain.play();
-        musicMain.onended = () => this.startMainMusic();
     }
 
 }
