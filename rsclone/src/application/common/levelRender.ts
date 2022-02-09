@@ -292,9 +292,10 @@ export default class LevelRender {
 		item = this.nextFrame(item, isPaused);
 		
 		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
-			while(Math.abs(item.coordX - item.wantX) < 400 && Math.abs(item.coordY - item.wantY) < 400)
+			while(Math.abs(item.coordX - item.wantX) < 200 && Math.abs(item.coordY - item.wantY) < 200){
 					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
 					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+			}
 		}
 
 		item.speedBoost = 0.6 - item.cageBuild / 16;
@@ -381,9 +382,10 @@ export default class LevelRender {
 					}
 				}
 			} else { 
-				while(this.isNear(item.coordX, item.coordY, item.wantX, item.wantY))
+				while(this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)){
 					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
 					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+				}
 			}
 		}
 
