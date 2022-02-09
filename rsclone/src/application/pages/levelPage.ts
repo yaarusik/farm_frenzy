@@ -149,7 +149,7 @@ export default class LevelPage extends Control {
       this.products.render();
       // проверка окончания уровня
       this.endGameCheck();
-      if (this.panelState.endPanelsSwitch) setTimeout(() => this.endPanel.render, 400);
+      if (this.panelState.endPanelsSwitch) this.endPanel.render();
     }
   }
 
