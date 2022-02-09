@@ -253,7 +253,8 @@ export default class LevelRender {
 			if (item.cageRemain <= 0){
 				this.animals.splice(this.animals.indexOf(item), 1);
 				return;
-			}
+			} else if (item.cageRemain <= 3 * 60)
+				item = this.nextFrame(item, isPaused);
 			item.cageRemain --;
 			return;
 		}
