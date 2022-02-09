@@ -1,9 +1,11 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
+import { Music } from "../../utils/music/music";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
    buttonEffect = new ButtonEffect();
+   music: Music;
    constructor (parentNode: HTMLElement, tagName: string, className: string) {
       super(parentNode, tagName, className);
 
