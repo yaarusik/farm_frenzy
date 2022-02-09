@@ -17,9 +17,9 @@ export default class BuildSpawn extends Common {
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
-    this.build = animationBuildOptions;
-    this.btn = buildSpawnBtn;
-    this.animImg = buildSpawnAnim;
+    this.build = JSON.parse(JSON.stringify(animationBuildOptions));
+    this.btn = JSON.parse(JSON.stringify(buildSpawnBtn));
+    this.animImg = JSON.parse(JSON.stringify(buildSpawnAnim));
     this.initialBtn = [];
     this.initialImg = [];
     this.well = new Well([...this.btn, ...this.animImg]);
@@ -28,8 +28,6 @@ export default class BuildSpawn extends Common {
       well: true,
       waterIndicator: true,
     };
-
-
 
     this.price = {
       well: 19,

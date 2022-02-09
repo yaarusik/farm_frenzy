@@ -20,20 +20,19 @@ export default class StartPanel extends Common {
     }
   };
 
-
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
     this.startImg = [];
 
-    this.startPanelImg = startPanelImg;
-    this.startPanelBtn = startPanelBtn;
-    this.startPanelStaticText = startPanelStaticText;
-    this.startPanelText = startPanelText;
+    this.startPanelImg = this.objParse(startPanelImg);
+    this.startPanelBtn = this.objParse(startPanelBtn);
+    this.startPanelStaticText = this.objParse(startPanelStaticText);
+    this.startPanelText = this.objParse(startPanelText);
     this.level = level.toString();
 
-    this.levelInitial = levelInitial;
+    this.levelInitial = JSON.parse(JSON.stringify(levelInitial));
 
     this.startPanel();
   }
@@ -56,8 +55,6 @@ export default class StartPanel extends Common {
     this.drawStaticText(this.startPanelStaticText);
 
     this.drawText([...this.startPanelText, ...this.levelInitial[this.level].text]);
-
-
   }
 
   drawStaticText(text: IText[]) {

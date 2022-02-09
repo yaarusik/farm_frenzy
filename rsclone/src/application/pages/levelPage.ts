@@ -63,7 +63,7 @@ export default class LevelPage extends Control {
     this.panelState = {
       pausePanelSwitch: false,
       startPanelSwitch: true,
-      endPanelsSwitch: false,
+      endPanelSwitch: false,
     };
 
     this.click = {
@@ -143,25 +143,25 @@ export default class LevelPage extends Control {
     else {
       this.coin.coinAnimation();
       this.timer.drawText();
-      this.buildSpawn.render();
-      this.progress.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK, this.panelState.pausePanelSwitch);
+      this.buildSpawn.render();
       this.products.render();
+      this.progress.render();
       // проверка окончания уровня
       this.endGameCheck();
-      if (this.panelState.endPanelsSwitch) this.endPanel.render();
+      if (this.panelState.endPanelSwitch) this.endPanel.render();
     }
   }
 
   private endGameCheck(): void {
-    this.panelState.endPanelsSwitch = this.progress.endGameCheck();
+    this.panelState.endPanelSwitch = this.progress.endGameCheck();
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
     this.levelRender.moveHundler(event, this.curWidthK, this.curHeightK);
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
-    else if (this.panelState.endPanelsSwitch) this.endPanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else if (this.panelState.endPanelSwitch) this.endPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
       //взаимодействие с зданиями
       this.buildSpawn.moveHundler(event, this.curWidthK, this.curHeightK);
@@ -203,6 +203,7 @@ export default class LevelPage extends Control {
   }
 
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
+    console.log(this.panelState.endPanelSwitch);
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else if (this.panelState.endPanelSwitch) this.endPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);

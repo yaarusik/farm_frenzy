@@ -1,7 +1,7 @@
 import { IPicture, IText, Coords, IButton } from './../iterfaces';
 import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
-import { Text } from 'fabric/fabric-impl';
+
 
 export default class Common {
   canvas: HTMLCanvasElement;
@@ -87,7 +87,7 @@ export default class Common {
     return mouseX >= currentX && mouseX < (currentX + currentW) && mouseY >= currentY && mouseY < currentY + currentH;
   }
 
-  public scaleCoords(btn: IButton, curWidthK: number, curHeightK: number) : Coords {
+  public scaleCoords(btn: IButton, curWidthK: number, curHeightK: number): Coords {
     return {
       currentX: btn.x / curWidthK,
       currentW: btn.width / curWidthK,
@@ -108,6 +108,10 @@ export default class Common {
     text.forEach((item) => {
       if (item.text === btn.name) item.animation = animEnable;
     });
+  }
+
+  public objParse(obj: IPicture[] | IButton[] | IText[]) {
+    return JSON.parse(JSON.stringify(obj));
   }
 
 }
