@@ -76,7 +76,7 @@ export default class LevelRender {
 			}
 		});
 
-		this.animals.forEach((item) => {
+		this.animals.forEach((item, index, animalList) => {
 			if (item.type !== 'bear')
 				return;
 			const bearCoords: Coords = {
@@ -90,12 +90,14 @@ export default class LevelRender {
 				item.cageRemain = 2 * 60;
 				if (item.cageBuild < 8)
 					item.cageBuild ++;
-				if (item.cageBuild === 8){
+				if (item.cageBuild === 8 && item.state !== 'cage'){
 					item.state = 'cage';
 					item.frame = 0;
 					item.cageRemain = 12 * 60;
+				} else if (item.cageBuild === 8){
+					clickList.push('bear-1');
+					animalList.splice(index, 1);
 				}
-
 				clickList.push('');
 			}
 		});
