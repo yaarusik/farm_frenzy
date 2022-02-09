@@ -1,7 +1,7 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { Coords, IButton, IText, IFunctions } from "./../iterfaces";
+import { Coords, IButton, IText, IFunctions, IKeyBoolean } from "./../iterfaces";
 import Coin from "../../utils/animation/coin";
 import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
@@ -13,6 +13,7 @@ import Total from "./../../utils/total/total";
 import { initialData } from './../common/initialData';
 import Products from "../../utils/store/products";
 import Progress from "./../../utils/gameProgress/progress";
+import EndPanel from "./../../utils/panels/endPanels";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -27,7 +28,7 @@ export default class LevelPage extends Control {
   click: IFunctions;
   timer: Timer;
   startPanel: StartPanel;
-  panelState: { pausePanelSwitch: boolean; startPanelSwitch: boolean; };
+  panelState: IKeyBoolean;
   levelInterface: LevelInterface;
   btn: IButton[];
   buildSpawn: BuildSpawn;
@@ -37,13 +38,10 @@ export default class LevelPage extends Control {
   level: number;
   storageProducts: string[];
   progress: Progress;
+  endPanel: EndPanel;
 
-
-
-
-
-  constructor (parentNode: HTMLElement, level: number) {
-    super(parentNode);
+  constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
+    super(parentNode, tagName, className);
     this.level = level;
 
 
@@ -65,6 +63,7 @@ export default class LevelPage extends Control {
     this.panelState = {
       pausePanelSwitch: false,
       startPanelSwitch: true,
+      endPanelsSwitch: false,
     };
 
     this.click = {
@@ -88,6 +87,7 @@ export default class LevelPage extends Control {
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
+    this.endPanel = new EndPanel(this.canvas.node, this.context);
 
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -139,7 +139,7 @@ export default class LevelPage extends Control {
     this.levelInterface.render();
     this.total.render();
 
-    if (this.panelState.startPanelSwitch) this.startPanel.render(); // upload start panel
+    if (this.panelState.startPanelSwitch) this.startPanel.render();
     else {
       this.coin.coinAnimation();
       this.timer.drawText();
@@ -147,13 +147,21 @@ export default class LevelPage extends Control {
       this.progress.render();
       this.levelRender.renderLevel(this.curWidthK, this.curHeightK, this.panelState.pausePanelSwitch);
       this.products.render();
+      // проверка окончания уровня
+      this.endGameCheck();
+      if (this.panelState.endPanelsSwitch) this.endPanel.render();
     }
+  }
+
+  private endGameCheck(): void {
+    this.panelState.endPanelsSwitch = this.progress.endGameCheck();
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
     this.levelRender.moveHundler(event, this.curWidthK, this.curHeightK);
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else if (this.panelState.endPanelsSwitch) this.endPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
       //взаимодействие с зданиями
       this.buildSpawn.moveHundler(event, this.curWidthK, this.curHeightK);
@@ -197,12 +205,11 @@ export default class LevelPage extends Control {
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
+    else if (this.panelState.endPanelSwitch) this.endPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else {
-      // убрать отсюда
       this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
 
       if (this.storageProducts.length === 0) {
-
         //взаимодействие с зданиями
         this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
         buttons.forEach(btn => {
@@ -234,7 +241,6 @@ export default class LevelPage extends Control {
                 const clickY = (event.clientY - rect.top) * this.curHeightK;
                 this.buildSpawn.waterChange(this.isGrace);
                 if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
-
                 break;
               }
               default: console.log("error");

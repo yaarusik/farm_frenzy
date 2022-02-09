@@ -1,14 +1,12 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
-import { Music } from "../../utils/music/music";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
    buttonEffect = new ButtonEffect();
-   music: Music;
-   
-   constructor(parentNode: HTMLElement){
-      super(parentNode);
+   constructor (parentNode: HTMLElement, tagName: string, className: string) {
+      super(parentNode, tagName, className);
+
 
       this.wrapper = new Control(this.node, "div", "wrapper main", "");
       this.resizeWindow();
@@ -70,7 +68,7 @@ export default class StartPage extends Control {
       throw new Error("Method not implemented.");
    }
 
-   resizeWindow = () =>{
+   resizeWindow = () => {
       this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
-   }
+   };
 }
