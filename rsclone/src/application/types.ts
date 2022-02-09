@@ -23,18 +23,18 @@ export class Animal {
   productNeed: number;
   productName: string;
 
-  constructor (type: string, name: string, id: number, state: string, image: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
+  constructor (type: string, name: string, id: number, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
     this.type = type;
     this.name = name;
     this.id = id;
-    this.state = state;
-    this.image = image;
+    this.state = 'down';
+    this.image = 'images/pets/' + this.name + '/down.png';
     this.coordX = coordX;
     this.coordY = coordY;
     this.width = width;
     this.height = height;
     this.frameNum = frameNum;
-    this.frame = Math.floor(Math.random() * 16);
+    this.frame = Math.floor(Math.random() * this.frameNum);
     this.wantX = this.coordX;
     this.wantY = this.coordY;
     this.food = food * 60;
@@ -52,17 +52,28 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, "down", "images/pets/chicken/down.png", coordX, coordY, 64, 64, 16, 15, 'egg');
+    super("pet", "chicken", id, coordX, coordY, 64, 64, 16, 15, 'egg');
   }
 }
 
 export class Pig extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "pig", id, "down", "images/pets/pig/down.png", coordX, coordY, 112, 112, 16, 15, 'meat');
+    super("pet", "pig", id, coordX, coordY, 112, 112, 16, 20, 'meat');
   }
 }
 
-export type AnimalList = Chicken | Pig; // Потом сюда надо дописывать других животных через |
+export class Bear extends Animal{
+  constructor (id: number, coordX: number, coordY: number, level: number) {
+    let width = 0, height = 0, name = '';
+    if (level === 0){
+      width = height = 100;
+      name = 'bear-panda';
+    }
+    super('bear', name, id, coordX, coordY, width, height,  16, 0, '');
+  }
+}
+
+export type AnimalList = Chicken | Pig | Bear; // Потом сюда надо дописывать других животных через |
 
 export class Grass{
   coordX : number;

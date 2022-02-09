@@ -293,6 +293,17 @@ export const levelImagesPath = [
   "images/pets/pig/shadow.png",
   "images/pets/pig/pic.png",
 
+  "images/pets/bear-panda/down.png",
+  "images/pets/bear-panda/down-left.png",
+  "images/pets/bear-panda/down-right.png",
+  "images/pets/bear-panda/up.png",
+  "images/pets/bear-panda/up-left.png",
+  "images/pets/bear-panda/up-right.png",
+  "images/pets/bear-panda/left.png",
+  "images/pets/bear-panda/right.png",
+  "images/pets/bear-panda/shadow.png",
+  "images/pets/bear-panda/pic.png",
+
   "images/products/egg/normal.png",
   "images/products/egg/hover.png",
   "images/products/egg/mask.png",

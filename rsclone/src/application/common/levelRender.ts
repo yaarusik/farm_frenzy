@@ -1,7 +1,7 @@
 
 import { levelImagesPath } from "../../utils/gameData/levelData";
 import { Coords } from "../iterfaces";
-import { Grass, AnimalList, Chicken, Product, Pig } from "../types";
+import { Grass, AnimalList, Chicken, Product, Pig, Bear, Animal } from "../types";
 import Common from "./common";
 
 
@@ -14,6 +14,10 @@ export default class LevelRender {
 	animals: AnimalList[];
 	products: Product[];
 	grass: Grass[];
+	areaX: number;
+	areaY: number;
+	areaWidth: number;
+	areaHeight: number;
 	id: number;
 	heightRatio: number;
 	gameFrame: number;
@@ -32,6 +36,10 @@ export default class LevelRender {
 		this.grass = [];
 		this.id = 0;
 
+		this.areaX = 355;
+		this.areaY = 355;
+		this.areaWidth = 765;
+		this.areaHeight = 475;
 		this.heightRatio = 1.3333333;
 
 		this.gameFrame = 0;
@@ -110,7 +118,7 @@ export default class LevelRender {
 			this.gameFrame += 1;
 	}
 
-	protected renderProduct(item: Product, curWidthK: number, curHeightK: number, isPaused: boolean){
+	private renderProduct(item: Product, curWidthK: number, curHeightK: number, isPaused: boolean){
 		if (item.name != 'egg')
 			console.log(item)
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
@@ -137,11 +145,11 @@ export default class LevelRender {
 		}
 	}
 
-	protected renderGrass(item : Grass, curWidthK: number, curHeightK: number, isPaused: boolean){
+	private renderGrass(item : Grass, curWidthK: number, curHeightK: number, isPaused: boolean){
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
 
-		const frame = item.age;
+		const frame = Math.min(item.age, item.maxAge);
 		
 		const imageFile = this.images.get("grass") as HTMLImageElement;
 		const dx = 48 * (frame % 4);
@@ -152,16 +160,21 @@ export default class LevelRender {
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, dx, dy, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 
-		if (item.age < item.maxAge && !isPaused)
-			item.age++;
+		if (!isPaused)
+			item.age ++;
+		
+		if (item.age % 180 == 0)
+			item.isUsed = false;
 	}
 
 
-	protected renderAnimal(item : AnimalList, curWidthK: number, curHeightK: number, isPaused: boolean){
-		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки
+	private renderAnimal(item : AnimalList, curWidthK: number, curHeightK: number, isPaused: boolean){
+		this.context.restore(); 
 		this.context.globalAlpha = 1;
 
 		const animName = item.name + '-' + item.state;
+		let imageFile = new Image();
+		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
 		if (item.state === 'death' && item.frame === 15 && item.opacity <= 0){
 			this.animals.splice(this.animals.indexOf(item), 1);
@@ -170,16 +183,129 @@ export default class LevelRender {
 			this.context.globalAlpha = item.opacity;
 			item.opacity -= 0.025;
 		}
-		
-		let imageFile = this.images.get(animName) as HTMLImageElement;
-		let dx = item.width * (item.frame % 4);
-		let dy = item.height * Math.floor(item.frame / 4);
-		let sWidth = item.width * 2;
-		let sHeight = item.height * 2;
 
+		imageFile = this.images.get(animName) as HTMLImageElement;
+		dx = item.width * (item.frame % 4);
+		dy = item.height * Math.floor(item.frame / 4);
+		dWidth = item.width;
+		dHeight = item.height;
+		sx = item.coordX;
+		sy = item.coordY;
+		sWidth = dWidth * 2;
+		sHeight = dHeight * 2;
+
+		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+
+		if (item.state === 'death'){
+			item = this.nextFrame(item, isPaused);
+			return;
+		}
+
+		if (item.type === 'bear')
+			this.renderBear(item, isPaused);
+		else
+			this.renderPet(item, isPaused);
+
+	}
+
+	private renderBear(item: Bear, isPaused: boolean){
+		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
+			while(Math.abs(item.coordX - item.wantX) < 400 && Math.abs(item.coordY - item.wantY) < 400)
+					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
+					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+		}
+		item.speedBoost = 1.4;
+		item = this.nextFrame(item, isPaused);
+		item.speedBoost = 0.75;
+		item = this.nextCoord(item);
+	}
+
+	private renderPet(item: AnimalList, isPaused: boolean){
+		let imageFile = new Image();
+		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
+
+		item = this.nextFrame(item, isPaused);
+
+		if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
+			this.createProduct(item.productName, item.coordX, item.coordY);
+			item.productAge = 0;
+		}
+
+		let hungryPercent = (item.food - item.lastEat) / item.food;
+
+		if (item.lastEat < item.food) {
+			imageFile = this.images.get("hungerBar") as HTMLImageElement;
+			dx = 0, dy = 0;
+			dWidth = Math.floor(40 * hungryPercent);
+			dHeight = 8;
+			sx = item.coordX + item.width - 40;
+			sy = item.coordY + item.height * 1.5 + 8;
+			sWidth = dWidth * 2;
+			sHeight = dHeight * 2;
+			
+			this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+		}
+
+		if (isPaused)
+			return;
+
+		if (hungryPercent <= 0) {
+			item.state = "death";
+			item.frame = 0;
+			return;
+		} else if (hungryPercent <= 0.38) {
+			if (!item.isWantGrass && this.grass.length > 0){
+				let grassIndex = this.findGrass(item);
+				if (grassIndex !== -1){
+					this.grass[grassIndex].isUsed = true;
+					item.isWantGrass = true;
+				}
+			}
+			item.speedBoost = 2;
+		}
+
+		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
+			if (item.isWantGrass) { // Если пришёл поесть
+				if (!item.state.includes('eat')){
+					if (item.state.includes("left"))
+						item.state = "eat-left";
+					else
+						item.state = "eat-right";
+					item.frame = 0;
+				} else if (item.frame === item.frameNum - 1){
+					item.state = item.state.slice(4, item.state.length);
+					item.lastEat -= item.food * 0.4;
+
+					let grassIndex = this.findGrass(item);
+					this.grass.splice(grassIndex, 1);
+					item.isWantGrass = false;
+					
+					hungryPercent = (item.food - item.lastEat) / item.food;
+					if (hungryPercent <= 0.95){
+						let grassIndex = this.findGrass(item);
+						if (grassIndex !== -1){
+							this.grass[grassIndex].isUsed = true;
+							item.isWantGrass = true;
+						}
+						item.speedBoost = 2;
+					}
+				}
+			} else { 
+				while(this.isNear(item.coordX, item.coordY, item.wantX, item.wantY))
+					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
+					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+			}
+		}
+
+		item = this.nextCoord(item);
+	}
+
+	private drawImage(imageFile: HTMLImageElement, dx: number, dy: number, dWidth: number, dHeight: number, sx: number, sy: number, sWidth: number, sHeight: number) : void {
 		if (imageFile instanceof HTMLImageElement)
-			this.context.drawImage(imageFile, dx, dy, item.width, item.height, item.coordX, item.coordY, sWidth, sHeight);
+			this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+	}
 
+	private nextFrame(item: AnimalList, isPaused: boolean){
 		if (!isPaused) {
 			item.productAge ++;
 			if (!item.state.includes('eat'))
@@ -195,106 +321,12 @@ export default class LevelRender {
 					item.frame = (item.frame + 1) % item.frameNum;
 			}
 		}
-
 		item.speedBoost = 1;
+		return item;
+	}
 
-		if (item.state === 'death')
-			return;
-
-		if (item.productAge >= item.productNeed && (((Math.floor(Math.random() * 100)) + 1) === 100)){
-			this.createProduct(item.productName, item.coordX, item.coordY);
-			item.productAge = 0;
-		}
-
-		let hungryPercent = (item.food - item.lastEat) / item.food;
-
-		if (item.lastEat < item.food) {
-			imageFile = this.images.get("hungerBar") as HTMLImageElement;
-			dx = dy = 0;
-			const dWidth = Math.floor(40 * hungryPercent);
-			const dHeight = 8;
-			const sx = item.coordX + item.width - 40;
-			const sy = item.coordY + item.height * 1.5 + 8;
-			sWidth = dWidth * 2;
-			sHeight = dHeight * 2;
-			if (imageFile instanceof HTMLImageElement)
-				this.context.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
-		}
-
-		if (isPaused)
-			return;
-
-		if (hungryPercent <= 0) { // Если умирает от голода
-			item.state = "death";
-			item.frame = 0;
-		} else if (hungryPercent <= 0.38) { // Если ищет еду, то увеличиваем скорость и пытаемся найти еду
-			if (!item.isWantGrass && this.grass.length > 0) { // Если желаемая точка не трава и трава на карте есть, то ищем траву
-				let now = 100000, grassIndex = -1;
-				this.grass.forEach((grass, index) => {
-					if (!grass.isUsed && (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
-						now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
-						item.wantX = grass.coordX;
-						item.wantY = grass.coordY;
-						grassIndex = index;
-					}
-				});
-				if (grassIndex !== -1){
-					this.grass[grassIndex].isUsed = true;
-					item.isWantGrass = true;
-				}
-			}
-			item.speedBoost = 2;
-		}
-
-		if (Math.abs(item.coordX - item.wantX) < 3 && Math.abs(item.coordY - item.wantY) < 3) { // Если достаточно близко к желаемой точке
-			if (item.isWantGrass) { // Если пришёл поесть
-				if (!item.state.includes('eat')){
-					if (item.state.includes("left"))
-						item.state = "eat-left";
-					else
-						item.state = "eat-right";
-					item.frame = 0;
-				} else if (item.frame === 15){
-					item.state = item.state.slice(4, item.state.length);
-
-					item.lastEat -= item.food * 0.4;
-					let now = 100000, grassIndex = 0;
-					this.grass.forEach((grass, index) => {
-						if ((grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
-							now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
-							grassIndex = index;
-						}
-					});
-					this.grass.splice(grassIndex, 1);
-					item.isWantGrass = false;
-					
-					hungryPercent = (item.food - item.lastEat) / item.food;
-					if (hungryPercent <= 0.95){
-						if (this.grass.length > 0) {
-							let now = 100000, grassIndex = -1;
-							this.grass.forEach((grass, index) => {
-								if (!grass.isUsed && (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
-									now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
-									item.wantX = grass.coordX;
-									item.wantY = grass.coordY;
-									grassIndex = index;
-								}
-							});
-							if (grassIndex !== -1){
-								this.grass[grassIndex].isUsed = true;
-								item.isWantGrass = true;
-							}
-						}
-						item.speedBoost = 2;
-					}
-				}
-			} else { // Иначе, если просто пришёл в желаемую точку прогулки
-				item.wantX = 400 + Math.floor(Math.random() * 740); // То генерируем новую
-				item.wantY = 410 + Math.floor(Math.random() * 440);
-			}
-		}
-
-		if (item.state !== "death" && !item.state.includes("eat")) {
+	private nextCoord(item: AnimalList){
+		if (!item.state.includes("eat")) {
 			let state = '';
 
 			if (item.coordY - item.wantY < -2)
@@ -340,15 +372,35 @@ export default class LevelRender {
 			if (state !== '')
 				item.state = state;
 		}
+		return item;
+	}
+
+	private isNear(x1:number, y1: number, x2: number, y2: number) : boolean {
+		return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= 10;
+	}
+
+	private findGrass(item: AnimalList){
+		let now = 100000, grassIndex = -1;
+		this.grass.forEach((grass, index) => {
+			if (!grass.isUsed && (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY) < now) {
+				now = (grass.coordX - item.coordX) * (grass.coordX - item.coordX) + (grass.coordY - item.coordY) * (grass.coordY - item.coordY);
+				item.wantX = grass.coordX;
+				item.wantY = grass.coordY;
+				grassIndex = index;
+			}
+		});
+		return grassIndex;
 	}
 
 	public createAnimal(name: string) {
 		if (!(typeof this.id !== "number"))
 			this.id = 0;
 		if (name === "chicken")
-			this.animals.push(new Chicken(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
+			this.animals.push(new Chicken(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
 		if (name === "pig")
-			this.animals.push(new Pig(this.id, 400 + Math.floor(Math.random() * 740), 430 + Math.floor(Math.random() * 420)));
+			this.animals.push(new Pig(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
+		if (name === "bear")
+			this.animals.push(new Bear(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight), 0));
 		this.id++;
 	}
 
@@ -356,30 +408,30 @@ export default class LevelRender {
 		clickX -= 24 * widthK; clickY -= 24 * heightK;
 
 		const k = 42; //отступ между травами
-		if (clickX - k * 2 >= 400)
+		if (clickX - k * 2 >= this.areaX)
 			this.grass.push(new Grass(clickX - k * 2, clickY, Math.floor(Math.random() * 5) + 3));
-		if (clickX - k >= 400 && clickY + k <= 850)
+		if (clickX - k >= this.areaX && clickY + k <= this.areaY + this.areaHeight)
 			this.grass.push(new Grass(clickX - k, clickY + k, Math.floor(Math.random() * 5) + 3));
-		if (clickY + k * 2 <= 850)
+		if (clickY + k * 2 <= this.areaY + this.areaHeight)
 			this.grass.push(new Grass(clickX, clickY + k * 2, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140 && clickY + k <= 850)
+		if (clickX + k <= this.areaX + this.areaWidth && clickY + k <= this.areaY + this.areaHeight)
 			this.grass.push(new Grass(clickX + k, clickY + k, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140)
+		if (clickX + k <= this.areaX + this.areaWidth)
 			this.grass.push(new Grass(clickX + k * 2, clickY, Math.floor(Math.random() * 5) + 3));
-		if (clickX - k >= 400 && clickY - k >= 430)
+		if (clickX - k >= this.areaX && clickY - k >= this.areaX)
 			this.grass.push(new Grass(clickX - k, clickY - k, Math.floor(Math.random() * 5) + 3));
-		if (clickY - k * 2 >= 430)
+		if (clickY - k * 2 >= this.areaY)
 			this.grass.push(new Grass(clickX, clickY - k * 2, Math.floor(Math.random() * 5) + 3));
-		if (clickX + k <= 1140 && clickY - k >= 430)
+		if (clickX + k <= this.areaX + this.areaWidth && clickY - k >= this.areaX)
 			this.grass.push(new Grass(clickX + k, clickY - k, Math.floor(Math.random() * 5) + 3));
 
-		if (clickX - k >= 400)
+		if (clickX - k >= this.areaX)
 			this.grass.push(new Grass(clickX - k, clickY, Math.floor(Math.random() * 5) + 7));
-		if (clickY + k <= 850)
+		if (clickY + k <= this.areaY + this.areaHeight)
 			this.grass.push(new Grass(clickX, clickY + k, Math.floor(Math.random() * 5) + 7));
-		if (clickX + k <= 1140)
+		if (clickX + k <= this.areaX + this.areaWidth)
 			this.grass.push(new Grass(clickX + k, clickY, Math.floor(Math.random() * 5) + 7));
-		if (clickY + k <= 850)
+		if (clickY + k <= this.areaY + this.areaHeight)
 			this.grass.push(new Grass(clickX, clickY - k, Math.floor(Math.random() * 5) + 7));
 
 		this.grass.push(new Grass(clickX, clickY, Math.floor(Math.random() * 4) + 12));
@@ -395,6 +447,7 @@ export default class LevelRender {
 		let animalsK : {[key: string]: number} = {
 			'chicken': 1,
 			'pig': 0.1,
+			'bear-panda': 0.1,
 		};
 		if (a instanceof Grass)
 			aY -= 48 * grassK;
