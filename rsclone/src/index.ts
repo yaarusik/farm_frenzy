@@ -8,4 +8,4 @@ import "./scss/author.scss";
 import "./scss/shop.scss";
 import "./scss/level.scss";
 
-const app = new Application(document.body);
+const app = new Application(document.body, 'div', 'farm');
