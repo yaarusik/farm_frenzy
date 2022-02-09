@@ -93,7 +93,7 @@ export default class LevelRender {
 				if (item.cageBuild === 8){
 					item.state = 'cage';
 					item.frame = 0;
-					item.cageRemain = 100000 * 60; // Костыль, потом заменить
+					item.cageRemain = 12 * 60;
 				}
 
 				clickList.push('');
@@ -251,8 +251,8 @@ export default class LevelRender {
 
 		if (item.state === 'cage'){
 			if (item.cageRemain <= 0){
-				item.cageBuild --;
-				item.cageRemain = 2 * 60;
+				this.animals.splice(this.animals.indexOf(item), 1);
+				return;
 			}
 			item.cageRemain --;
 			return;
