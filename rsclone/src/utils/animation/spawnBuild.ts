@@ -1,7 +1,7 @@
 import Common from "../../application/common/common";
 import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
-import { buildSpawnBtn, buildSpawnAnim } from "./../gameData/spawnData";
+import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
 
@@ -11,25 +11,21 @@ export default class BuildSpawn extends Common {
   initialBtn: HTMLImageElement[];
   well: Well;
   animState: IKeyBoolean;
-  animImg: IButton[];
   initialImg: HTMLImageElement[];
   price: IKeyNumber;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
-    this.build = animationBuildOptions;
-    this.btn = buildSpawnBtn;
-    this.animImg = buildSpawnAnim;
+    this.build = this.objParse(animationBuildOptions);
+    this.btn = this.objParse(buildSpawnBtn);
     this.initialBtn = [];
     this.initialImg = [];
-    this.well = new Well([...this.btn, ...this.animImg]);
+    this.well = new Well(this.btn);
 
     this.animState = {
       well: true,
       waterIndicator: true,
     };
-
-
 
     this.price = {
       well: 19,
@@ -40,15 +36,12 @@ export default class BuildSpawn extends Common {
   }
 
   private async startPanel() {
-    const loadImage = this.animImg.map(image => this.loadImage(image.image));
     const loadBtn = this.btn.map(image => this.loadImage(image.image));
     this.initialBtn = await this.renderImages(loadBtn);
-    this.initialImg = await this.renderImages(loadImage);
   }
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
-    this.drawImage(this.initialImg, this.animImg);
     this.buildSpawn();
   }
 

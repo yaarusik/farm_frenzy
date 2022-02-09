@@ -17,10 +17,10 @@ export default class EndPanel extends Common {
     this.initialBtn = [];
     this.startImg = [];
 
-    this.endPanelImg = endImg;
-    this.endPanelStaticText = endStaticText;
-    this.endPanelBtn = endBtn;
-    this.endPanelText = endText;
+    this.endPanelImg = this.objParse(endImg);
+    this.endPanelStaticText = this.objParse(endStaticText);
+    this.endPanelBtn = this.objParse(endBtn);
+    this.endPanelText = this.objParse(endText);
 
     this.startPanel();
   }
@@ -30,7 +30,6 @@ export default class EndPanel extends Common {
     const loadBtn = this.endPanelBtn.map(btn => this.loadImage(btn.image));
     this.initialImage = await this.renderImages(loadImage);
     this.initialBtn = await this.renderImages(loadBtn);
-
   }
 
   public render() {
@@ -53,14 +52,13 @@ export default class EndPanel extends Common {
       }
       this.context.shadowOffsetX = 4;
       this.context.shadowOffsetY = 4;
-      if (item.text === 'Лучшее время :') {
-        this.context.shadowBlur = 0;
-        this.context.shadowOffsetX = 0;
-        this.context.shadowOffsetY = 0;
-        this.context.shadowColor = '';
-      }
+
       this.context.strokeText(item.text, item.x, item.y);
       this.context.fillText(item.text, item.x, item.y);
+      this.context.shadowBlur = 0;
+      this.context.shadowOffsetX = 0;
+      this.context.shadowOffsetY = 0;
+      this.context.shadowColor = '';
     });
   }
 
@@ -83,6 +81,7 @@ export default class EndPanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
+            console.log('finish');
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.onMap(), 200);
             break;

@@ -1,7 +1,7 @@
 
 import Common from "./../../application/common/common";
 import { IPicture, IText } from "../../application/iterfaces";
-import { levelSmallInitial, done } from './progressData';
+import { levelSmallInitial, done, x } from './progressData';
 
 
 export default class Progress extends Common {
@@ -28,7 +28,7 @@ export default class Progress extends Common {
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
 
-    this.levelInitial = levelSmallInitial;
+    this.levelInitial = JSON.parse(JSON.stringify(levelSmallInitial));
     this.startImg = [];
     this.startDone = [];
     this.done = done;
@@ -39,7 +39,6 @@ export default class Progress extends Common {
     });
 
     this.goals = Object.getOwnPropertyNames(this.productsScore).length;
-
     this.goalsDone = new Set();
 
     this.startProgress();
