@@ -8,6 +8,8 @@ export class Animal {
   coordY: number;
   width: number;
   height: number;
+  shadowWidth: number;
+  shadowHeight: number;
   frameNum: number;
   frame: number;
   wantX: number;
@@ -22,22 +24,25 @@ export class Animal {
   productAge: number;
   productNeed: number;
   productName: string;
+  fallY: number;
 
   // Только для медведей, надо потом разобраться и вынести нормально в класс Bear
   cageBuild: number;
   cageRemain: number;
   isEscape: boolean;
 
-  constructor (type: string, name: string, id: number, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string) {
+  constructor (type: string, name: string, id: number, state: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string, shadowWidth: number, shadowHeight: number) {
     this.type = type;
     this.name = name;
     this.id = id;
-    this.state = 'down';
+    this.state = state;
     this.image = 'images/pets/' + this.name + '/down.png';
     this.coordX = coordX;
     this.coordY = coordY;
     this.width = width;
     this.height = height;
+    this.shadowWidth = shadowWidth;
+    this.shadowHeight = shadowHeight;
     this.frameNum = frameNum;
     this.frame = Math.floor(Math.random() * this.frameNum);
     this.wantX = this.coordX;
@@ -46,12 +51,16 @@ export class Animal {
     this.lastEat = 0;
     this.speedBoost = 1;
     this.opacity = 1;
+    this.opacity = 0.5;
     this.isWantGrass = false;
     this.isEating = false;
     this.eatTime = -1;
     this.productAge = 0;
     this.productNeed = 20 * 60;
     this.productName = productName;
+    this.fallY = this.coordY;
+    if (this.state === 'shadow')
+      this.coordY = -500;
 
     this.cageBuild = 0;
     this.cageRemain = 0;
@@ -61,13 +70,13 @@ export class Animal {
 
 export class Chicken extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "chicken", id, coordX, coordY, 64, 64, 16, 15, 'egg');
+    super("pet", "chicken", id, "shadow", coordX, coordY, 64, 64, 16, 15, 'egg', 44, 24);
   }
 }
 
 export class Pig extends Animal {
   constructor (id: number, coordX: number, coordY: number) {
-    super("pet", "pig", id, coordX, coordY, 112, 112, 16, 20, 'meat');
+    super("pet", "pig", id, "shadow", coordX, coordY, 112, 112, 16, 20, 'meat', 60, 20);
   }
 }
 
@@ -78,11 +87,11 @@ export class Bear extends Animal{
       width = height = 100;
       name = 'bear-panda';
     }
-    super('bear', name, id, coordX, coordY, width, height,  16, 0, '');
+    super('bear', name, id, "shadow", coordX, coordY, width, height,  16, 0, '', 60, 28);
   }
 }
 
-export type AnimalList = Chicken | Pig | Bear; // Потом сюда надо дописывать других животных через |
+export type AnimalList = Chicken | Pig | Bear;
 
 export class Grass{
   coordX : number;

@@ -198,7 +198,7 @@ export default class LevelRender {
 		this.context.restore();
 		this.context.globalAlpha = 1;
 
-		const animName = item.name + '-' + item.state;
+		let animName = item.name + '-' + item.state;
 		let imageFile = new Image();
 		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
@@ -210,6 +210,23 @@ export default class LevelRender {
 			item.opacity -= 0.025;
 		}
 
+		if (item.state === 'shadow'){
+			imageFile = this.images.get(animName) as HTMLImageElement;
+			dx = 0;
+			dy = 0;
+			dWidth = item.shadowWidth;
+			dHeight = item.shadowHeight;
+			sx = item.coordX + item.width - item.shadowWidth;
+			sy = item.fallY + item.height * 1.5 - item.shadowHeight;
+			sWidth = dWidth * 2;
+			sHeight = dHeight * 2;
+			this.context.globalAlpha = item.opacity;
+			this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+
+			animName = item.name + '-' + 'down';
+			this.context.restore();
+			this.context.globalAlpha = 1;
+		}
 		imageFile = this.images.get(animName) as HTMLImageElement;
 		dx = item.width * (item.frame % 4);
 		dy = item.height * Math.floor(item.frame / 4);
@@ -219,8 +236,22 @@ export default class LevelRender {
 		sy = item.coordY;
 		sWidth = dWidth * 2;
 		sHeight = dHeight * 2;
-
+		
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+
+		if (item.state === 'shadow'){
+			if (item.type === 'bear'){
+				if (item.coordY % 10 === 0)
+					item.coordY = -15001;
+				item.opacity += 0.005;
+				item.opacity = Math.min(item.opacity, 1);
+			} else 
+				item.opacity += 0.025;
+			item.coordY += 50;
+			if (item.coordY - item.fallY >= 0)
+				item.state = 'down';
+			return;
+		}
 
 		if (item.state === 'death') {
 			item = this.nextFrame(item, isPaused);
@@ -238,16 +269,18 @@ export default class LevelRender {
 		let imageFile = new Image();
 		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
+
 		if (item.isEscape) {
-			item.speedBoost = 3;
-			item = this.nextFrame(item, isPaused);
-			item.speedBoost = 7;
-			item = this.nextCoord(item);
+			if (!isPaused){
+				item.speedBoost = 3;
+				item = this.nextFrame(item, isPaused);
+				item.speedBoost = 7;
+				item = this.nextCoord(item);
+			}
 			if (item.coordX < -100 || item.coordX > 1600)
 				this.animals.splice(this.animals.indexOf(item), 1);
 			return;
 		}
-
 
 		imageFile = this.images.get("build-1") as HTMLImageElement;
 		dx = 160 * (item.cageBuild % 3);
@@ -260,6 +293,10 @@ export default class LevelRender {
 		sHeight = dHeight * 1.5;
 
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+
+		if (isPaused)
+			return;
+
 
 		if (item.state === 'cage') {
 			if (item.cageRemain <= 0) {
@@ -292,17 +329,16 @@ export default class LevelRender {
 		item = this.nextFrame(item, isPaused);
 
 		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
-			while (Math.abs(item.coordX - item.wantX) < 400 && Math.abs(item.coordY - item.wantY) < 400)
+			while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 100)){
 				item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
-			item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+				item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+			}
 		}
 
 		item.speedBoost = 0.6 - item.cageBuild / 16;
 		item = this.nextCoord(item);
-
-
 		this.animals.forEach((pet) => {
-			if (pet.type !== "pet")
+			if (pet.type !== "pet" || pet.state === 'shadow')
 				return;
 			const bearCollision = 50;
 			if (this.isBearNear(pet.coordX, pet.coordY, pet.width, pet.height, item.coordX, item.coordY, item.width, item.height, bearCollision) <= 0)
@@ -381,9 +417,10 @@ export default class LevelRender {
 					}
 				}
 			} else {
-				while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY))
+				while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 50)){
 					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
-				item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
+				}
 			}
 		}
 
