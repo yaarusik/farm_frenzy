@@ -216,8 +216,34 @@ export default class LevelRender {
 		}
 		item.speedBoost = 1.4;
 		item = this.nextFrame(item, isPaused);
-		item.speedBoost = 0.75;
+		item.speedBoost = 0.6;
 		item = this.nextCoord(item);
+
+		this.animals.forEach((pet) => {
+			if (pet.type !== "pet")
+				return;
+			let bearCollision = 15;
+			if (this.isNear(pet.coordX, pet.coordY, item.coordX, item.coordY, bearCollision) ||
+					this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX, item.coordY, bearCollision) ||
+					this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX, item.coordY, bearCollision) || 
+					this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX, item.coordY, bearCollision) ||
+
+					this.isNear(pet.coordX, pet.coordY, item.coordX + item.width, item.coordY, bearCollision) ||
+					this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX + item.width, item.coordY, bearCollision) ||
+					this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX + item.width, item.coordY, bearCollision) || 
+					this.isNear(pet.coordX + pet.width, pet.coordY + pet.height + item.width, item.coordX, item.coordY, bearCollision) ||
+
+					this.isNear(pet.coordX, pet.coordY, item.coordX, item.coordY + item.height, bearCollision) ||
+					this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX, item.coordY + item.height, bearCollision) ||
+					this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX, item.coordY + item.height, bearCollision) || 
+					this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX, item.coordY + item.height, bearCollision) ||
+
+					this.isNear(pet.coordX, pet.coordY, item.coordX + item.width, item.coordY + item.height, bearCollision) ||
+					this.isNear(pet.coordX + pet.width, pet.coordY, item.coordX + item.width, item.coordY + item.height, bearCollision) ||
+					this.isNear(pet.coordX, pet.coordY + pet.height, item.coordX + item.width, item.coordY + item.height, bearCollision) || 
+					this.isNear(pet.coordX + pet.width, pet.coordY + pet.height, item.coordX + item.width, item.coordY + item.height, bearCollision))
+				this.petAway(pet);
+		});
 	}
 
 	private renderPet(item: AnimalList, isPaused: boolean){
@@ -375,8 +401,8 @@ export default class LevelRender {
 		return item;
 	}
 
-	private isNear(x1:number, y1: number, x2: number, y2: number) : boolean {
-		return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= 10;
+	private isNear(x1:number, y1: number, x2: number, y2: number, collision = 10) : boolean {
+		return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= collision;
 	}
 
 	private findGrass(item: AnimalList){
@@ -390,6 +416,11 @@ export default class LevelRender {
 			}
 		});
 		return grassIndex;
+	}
+
+	private petAway(item: AnimalList){
+		console.log(item);
+		this.animals.splice(this.animals.indexOf(item), 1);
 	}
 
 	public createAnimal(name: string) {
