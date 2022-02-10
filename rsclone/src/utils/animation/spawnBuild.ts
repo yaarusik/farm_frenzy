@@ -13,14 +13,16 @@ export default class BuildSpawn extends Common {
   animState: IKeyBoolean;
   initialImg: HTMLImageElement[];
   price: IKeyNumber;
+  panelState: IKeyBoolean;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean) {
     super(canvas, context);
     this.build = this.objParse(animationBuildOptions);
     this.btn = this.objParse(buildSpawnBtn);
     this.initialBtn = [];
     this.initialImg = [];
     this.well = new Well(this.btn);
+    this.panelState = panelState;
 
     this.animState = {
       well: true,
@@ -72,6 +74,7 @@ export default class BuildSpawn extends Common {
             break;
           }
           case "storage": {
+            this.panelState.storagePanelSwitch = true;
             break;
           }
           default: {
@@ -96,10 +99,19 @@ export default class BuildSpawn extends Common {
           case 'well': {
             break;
           }
+          case 'storage': {
+            this.buttonsHover(button, button.stepY, button.hover);
+            break;
+          }
         }
-        // this.buttonsHover(btn, btn.stepY, btn.hover);
       } else {
-        // this.buttonsHover(button, 0, 0);
+        switch (button.name) {
+          case 'storage': {
+            this.buttonsHover(button, 0, 0);
+            break;
+          }
+        }
+
       }
     });
   }

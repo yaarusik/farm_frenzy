@@ -11,9 +11,10 @@ import LevelInterface from "./../../utils/interface/levelInterface";
 import BuildSpawn from "../../utils/animation/spawnBuild";
 import Total from "./../../utils/total/total";
 import { initialData } from './../common/initialData';
-import Products from "../../utils/store/products";
+import Products from "../../utils/storage/products";
 import Progress from "./../../utils/gameProgress/progress";
 import EndPanel from "./../../utils/panels/endPanels";
+import StoragePanel from "../../utils/storage/storagePanel";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -39,6 +40,7 @@ export default class LevelPage extends Control {
   storageProducts: string[];
   progress: Progress;
   endPanel: EndPanel;
+  storage: StoragePanel;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -64,6 +66,7 @@ export default class LevelPage extends Control {
       pausePanelSwitch: false,
       startPanelSwitch: true,
       endPanelSwitch: false,
+      storagePanelSwitch: false,
     };
 
     this.click = {
@@ -84,10 +87,12 @@ export default class LevelPage extends Control {
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
     this.endPanel = new EndPanel(this.canvas.node, this.context);
+    this.storage = new StoragePanel(this.canvas.node, this.context);
+
 
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -147,9 +152,12 @@ export default class LevelPage extends Control {
       this.buildSpawn.render();
       this.products.render();
       this.progress.render();
-      // проверка окончания уровня
-      this.endGameCheck();
-      if (this.panelState.endPanelSwitch) this.endPanel.render();
+      if (this.panelState.storagePanelSwitch) this.storage.render();
+      else {
+        // проверка окончания уровня
+        this.endGameCheck();
+        if (this.panelState.endPanelSwitch) this.endPanel.render();
+      }
     }
   }
 
@@ -162,6 +170,7 @@ export default class LevelPage extends Control {
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.endPanelSwitch) this.endPanel.moveHundler(event, this.curWidthK, this.curHeightK);
+    else if (this.panelState.storagePanelSwitch) this.storage.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
       //взаимодействие с зданиями
       this.buildSpawn.moveHundler(event, this.curWidthK, this.curHeightK);
@@ -207,6 +216,7 @@ export default class LevelPage extends Control {
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else if (this.panelState.endPanelSwitch) this.endPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
+    else if (this.panelState.storagePanelSwitch) this.storage.clickHundler(event, this.curWidthK, this.curHeightK, this.panelState);
     else {
       this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
 

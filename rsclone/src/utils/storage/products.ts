@@ -1,6 +1,6 @@
 import { IPicture, IKeyNumber } from "../../application/iterfaces";
 import Progress from "../gameProgress/progress";
-import Common from "./../../application/common/common";
+import Common from "../../application/common/common";
 
 export default class Products extends Common {
   product: IPicture[];

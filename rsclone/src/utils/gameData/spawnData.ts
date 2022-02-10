@@ -6,7 +6,7 @@ export const buildSpawnBtn = [
     image: "images/level/builds/storage/storage_1.png",
     x: 530,
     y: -300,
-    stepY: 0,
+    stepY: 132,
     stepX: 0,
     hover: 1,
     click: 2,
