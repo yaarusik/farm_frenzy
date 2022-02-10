@@ -25,6 +25,7 @@ export class Animal {
   productNeed: number;
   productName: string;
   fallY: number;
+  rotate: number;
 
   // Только для медведей, надо потом разобраться и вынести нормально в класс Bear
   cageBuild: number;
@@ -61,6 +62,7 @@ export class Animal {
     this.fallY = this.coordY;
     if (this.state === 'shadow')
       this.coordY = -500;
+    this.rotate = 0;
 
     this.cageBuild = 0;
     this.cageRemain = 0;

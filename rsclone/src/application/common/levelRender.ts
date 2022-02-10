@@ -87,7 +87,7 @@ export default class LevelRender {
 			};
 
 			if (this.commonFunction.determineCoords(event, bearCoords)) {
-				item.cageRemain = 2 * 60;
+				item.cageRemain = 0.5 * 60;
 				if (item.cageBuild < 8)
 					item.cageBuild++;
 				if (item.cageBuild === 8 && item.state !== 'cage') {
@@ -197,6 +197,7 @@ export default class LevelRender {
 	private renderAnimal(item: AnimalList, curWidthK: number, curHeightK: number, isPaused: boolean) {
 		this.context.restore();
 		this.context.globalAlpha = 1;
+		
 
 		let animName = item.name + '-' + item.state;
 		let imageFile = new Image();
@@ -227,6 +228,7 @@ export default class LevelRender {
 			this.context.restore();
 			this.context.globalAlpha = 1;
 		}
+
 		imageFile = this.images.get(animName) as HTMLImageElement;
 		dx = item.width * (item.frame % 4);
 		dy = item.height * Math.floor(item.frame / 4);
@@ -236,8 +238,40 @@ export default class LevelRender {
 		sy = item.coordY;
 		sWidth = dWidth * 2;
 		sHeight = dHeight * 2;
+
+		const rotateK = 0.6;
+		if (item.state === 'pic'){
+			dx = dy = 0;
+			sWidth -= rotateK * 2 * item.frame;
+			sHeight -= rotateK * 2 * item.frame;
+		}
 		
+		
+		if (item.state === 'pic'){
+			console.log(imageFile, item);
+			this.context.save();
+			this.context.translate(item.coordX + (item.width - rotateK * item.frame), item.coordY + (item.height - rotateK * item.frame));
+			this.context.rotate(item.rotate * Math.PI / 180);
+			this.context.translate(-(item.coordX + (item.width - rotateK * item.frame)), -(item.coordY + (item.height - rotateK * item.frame)));
+		}
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
+		this.context.restore();
+	
+		if (item.state === 'pic'){
+			item.frame += 3;
+			item.rotate += 24;
+			item.rotate %= 360
+			item.speedBoost = 10;
+			if (item.wantX === 0)
+				item.coordX -= item.speedBoost;
+			else
+				item.coordX += item.speedBoost;
+			item.coordY -= item.speedBoost;
+			item.state = 'pic';
+			if (item.frame * rotateK - Math.min(item.width, item.height) > -5)
+				this.animals.splice(this.animals.indexOf(item), 1);
+			return;
+		}
 
 		if (item.state === 'shadow'){
 			if (item.type === 'bear'){
@@ -340,7 +374,7 @@ export default class LevelRender {
 		this.animals.forEach((pet) => {
 			if (pet.type !== "pet" || pet.state === 'shadow')
 				return;
-			const bearCollision = 50;
+			const bearCollision = 60;
 			if (this.isBearNear(pet.coordX, pet.coordY, pet.width, pet.height, item.coordX, item.coordY, item.width, item.height, bearCollision) <= 0)
 				this.petAway(pet);
 		});
@@ -544,8 +578,12 @@ export default class LevelRender {
 	}
 
 	private petAway(item: AnimalList) {
-		console.log(item);
-		this.animals.splice(this.animals.indexOf(item), 1);
+		item.state = 'pic';
+		if (item.coordX + item.width / 2 < 800)
+			item.wantX = 0;
+		else
+			item.wantX = 1600;
+		item.frame = 0;
 	}
 
 	public createAnimal(name: string) {
