@@ -6,7 +6,7 @@ export default class AuthorsPage extends Control {
   wrapper: Control<HTMLElement>;
   buttonEffect = new ButtonEffect();
 
-  constructor(parentNode: HTMLElement){
+  constructor (parentNode: HTMLElement) {
     super(parentNode);
 
     this.wrapper = new Control(this.node, "div", "wrapper author", "");
@@ -37,7 +37,7 @@ export default class AuthorsPage extends Control {
     throw new Error("Method not implemented.");
   }
 
-  resizeWindow = () =>{
+  resizeWindow = () => {
     this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
   }
 }

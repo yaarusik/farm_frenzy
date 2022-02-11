@@ -1,7 +1,7 @@
 
 import Common from "./../../application/common/common";
 import { IPicture, IText } from "../../application/iterfaces";
-import { levelSmallInitial, done, x } from './progressData';
+import { levelSmallInitial, done } from './progressData';
 
 
 export default class Progress extends Common {
@@ -17,7 +17,7 @@ export default class Progress extends Common {
   level: string;
   productsScore: {
     [key: string]: {
-      current: number,
+      current: number, //[egg {current: 3}]
       max: number
     };
   };
@@ -31,7 +31,7 @@ export default class Progress extends Common {
     this.levelInitial = JSON.parse(JSON.stringify(levelSmallInitial));
     this.startImg = [];
     this.startDone = [];
-    this.done = done;
+    this.done = JSON.parse(JSON.stringify(done));
     this.level = level.toString();
     this.productsScore = {};
     this.levelInitial[this.level].text.forEach(product => {
