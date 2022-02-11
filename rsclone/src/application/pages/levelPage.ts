@@ -76,6 +76,7 @@ export default class LevelPage extends Control {
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
+      addStorage: (product: string, count: number) => this.storage.addStorage(product, count),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -159,6 +160,8 @@ export default class LevelPage extends Control {
         if (this.panelState.endPanelSwitch) this.endPanel.render();
       }
     }
+    // if (!this.panelState.storagePanelSwitch) this.storage.render();
+
   }
 
   private endGameCheck(): void {
@@ -212,7 +215,6 @@ export default class LevelPage extends Control {
   }
 
   private canvasClickHundler(event: MouseEvent, buttons: IButton[]) {
-    console.log(this.panelState.endPanelSwitch);
     if (this.panelState.pausePanelSwitch) this.pausePanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click, this.animation);
     else if (this.panelState.startPanelSwitch) this.startPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
     else if (this.panelState.endPanelSwitch) this.endPanel.clickHundler(event, this.curWidthK, this.curHeightK, this.click);
@@ -262,7 +264,7 @@ export default class LevelPage extends Control {
           }
         });
       } else {
-        this.products.add(this.storageProducts);
+        this.products.add(this.storageProducts, this.click);
       }
     }
   }

@@ -27,6 +27,8 @@ export const storagePanelImg = [
   },
 ];
 
+
+
 export const storagePanelBtn = [
   {
     type: "button",
