@@ -64,6 +64,8 @@ export default class LevelRender {
 	public clickHundler(event: MouseEvent, widthK: number, heightK: number): string[] {
 		const clickList: string[] = [];
 		this.products.forEach((item, index, productList) => {
+			if (item.state !== 'earth')
+				return;
 			const productCoords: Coords = {
 				currentX: item.coordX / widthK,
 				currentY: item.coordY / heightK,
@@ -72,7 +74,9 @@ export default class LevelRender {
 			};
 			if (this.commonFunction.determineCoords(event, productCoords)) {
 				clickList.push(item.name);
-				productList.splice(index, 1);
+				item.state = 'fly';
+				item.age = 0;
+				// productList.splice(index, 1);
 			}
 		});
 
@@ -145,8 +149,6 @@ export default class LevelRender {
 	}
 
 	private renderProduct(item: Product, curWidthK: number, curHeightK: number, isPaused: boolean) {
-		if (item.name != 'egg')
-			console.log(item);
 		this.context.restore(); // Перед каждой отрисовкой возращаем канвасу стандартные настройки прозрачности
 		this.context.globalAlpha = 1;
 		let animName = item.name;
@@ -155,12 +157,23 @@ export default class LevelRender {
 		else
 			animName += '-normal';
 		const imageFile = this.images.get(animName) as HTMLImageElement;
-		const sWidth = 48 * 2;
-		const sHeight = 48 * 2;
+		let sWidth = 48 * 2;
+		let sHeight = 48 * 2;
+		if (item.state === 'fly')
+			sWidth = sHeight = 48 * (2 - item.age / 15);
 		if (item.isBlinking && (this.gameFrame % 40) < 20)
 			this.context.globalAlpha = 0.5;
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, 0, 0, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
+
+		if (item.state === 'fly'){
+			item.age ++;
+			if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 100))
+				this.products.splice(this.products.indexOf(item), 1);
+			item.coordX += item.speedX;
+			item.coordY += item.speedY;
+			return;
+		}
 
 		if (!isPaused) {
 			item.age++;
@@ -273,7 +286,7 @@ export default class LevelRender {
 			return;
 		}
 
-		if (item.state === 'shadow'){
+		if (item.state === 'shadow' && !isPaused){
 			if (item.type === 'bear'){
 				if (item.coordY % 10 === 0)
 					item.coordY = -15001;
@@ -285,7 +298,8 @@ export default class LevelRender {
 			if (item.coordY - item.fallY >= 0)
 				item.state = 'down';
 			return;
-		}
+		} else if (item.state === 'shadow')
+			return;
 
 		if (item.state === 'death') {
 			item = this.nextFrame(item, isPaused);

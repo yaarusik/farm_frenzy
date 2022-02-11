@@ -57,7 +57,7 @@ export class Animal {
     this.isEating = false;
     this.eatTime = -1;
     this.productAge = 0;
-    this.productNeed = 20 * 60;
+    this.productNeed = 2 * 60;
     this.productName = productName;
     this.fallY = this.coordY;
     if (this.state === 'shadow')
@@ -113,6 +113,7 @@ export class Grass{
 
 export class Product{
   name: string;
+  state: string;
   coordX: number;
   coordY: number;
   age: number;
@@ -121,8 +122,14 @@ export class Product{
   isBlinking: boolean;
   isHover: boolean;
 
+  wantX: number;
+  wantY: number;
+  speedX: number;
+  speedY: number;
+
   constructor(name: string, coordX : number, coordY: number){
     this.name = name;
+    this.state = "earth";
     this.age = 0;
     this.blinkAge = 8 * 60;
     this.maxAge = 11 * 60;
@@ -130,5 +137,11 @@ export class Product{
     this.coordY = coordY;
     this.isBlinking = false;
     this.isHover = false;
+
+    this.wantX = 660;
+    this.wantY = 925;
+
+    this.speedX = (this.wantX - this.coordX) / (0.2 * 60);
+    this.speedY = (this.wantY - this.coordY) / (0.2 * 60);
   }
 }
