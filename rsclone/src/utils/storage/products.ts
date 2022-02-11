@@ -88,6 +88,7 @@ export default class Products extends Common {
         swidth: 0,
         sheight: 0
       },
+
     ];
   }
 

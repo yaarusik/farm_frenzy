@@ -21,7 +21,15 @@ export default class StoragePanel extends Common {
 
   stepY: number;
   startY: number;
-  iconsText: { text: string; fontSize: string; color: string; x: number; y: number; };
+  iconsText: {
+    [key: string]: IText
+  };
+  price: IKeyNumber;
+  iconsPrice: {
+    [key: string]: IText
+  };
+  textY: number;
+  priceX: number;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
@@ -29,6 +37,8 @@ export default class StoragePanel extends Common {
     this.initialBtn = [];
     this.startImg = [];
     this.initialIcon = [];
+    this.iconsText = {};
+    this.iconsPrice = {};
 
     this.storageImg = this.objParse(storagePanelImg);
     this.storageStaticText = this.objParse(storagePanelStaticText);
@@ -37,13 +47,15 @@ export default class StoragePanel extends Common {
 
     this.stepY = 62;
     this.startY = 210;
+    this.textY = 46; //смещение текста
+    this.priceX = 120; // смещение цены
 
     this.icons = {
       'egg': {
         type: "picture",
         name: "egg",
         image: "images/level/builds/storage/egg.png",
-        x: 95,
+        x: 60,
         // +62
         y: 0,
         width: 65,
@@ -57,7 +69,7 @@ export default class StoragePanel extends Common {
         type: "picture",
         name: "bear-1",
         image: "images/level/builds/storage/bear-1.png",
-        x: 95,
+        x: 60,
         y: 0,
         width: 65,
         height: 65,
@@ -66,19 +78,30 @@ export default class StoragePanel extends Common {
         swidth: 0,
         sheight: 0
       },
+      'icon': {
+        type: "picture",
+        name: "coin",
+        image: "images/level/builds/storage/coin.png",
+        x: 300,
+        y: this.startY,
+        width: 65,
+        height: 65,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+
+      }
     };
 
-    this.iconsText = {
-      text: '',
-      fontSize: '32px Vag_Rounded-Bold CY',
-      color: '#fff',
-      x: 0,
-      y: 0,
-    },
+    this.price = {
+      'egg': 10,
+      'bear-1': 50,
+      'chicken': 25,
+    };
 
 
-
-      this.iconImg = new Set();
+    this.iconImg = new Set();
     this.iconData = {};
 
     this.startPanel();
@@ -100,6 +123,8 @@ export default class StoragePanel extends Common {
     this.drawText(this.storageText);
 
     this.drawImage([...this.iconImg], Object.values(this.iconData));
+    this.drawText(Object.values(this.iconsText));
+    this.drawText(Object.values(this.iconsPrice));
 
   }
 
@@ -170,32 +195,57 @@ export default class StoragePanel extends Common {
   public addStorage(product: string, count: number): void {
     console.log('products', product, 'count ', count);
     if (count === 1) {
-      let imgName = '';
-      const img = this.initialIcon.find(img => {
-        const imgUrl = img.src;
-        const iconName = imgUrl.substring(img.src.lastIndexOf('/') + 1, imgUrl.lastIndexOf('.'));
-        imgName = iconName;
-        return iconName === product;
-      });
+      const { name, img } = this.getImg(product);
       if (img) {
         // смещаем позицию товара на складе
-        this.icons[imgName].y = this.startY;
+        this.icons[name].y = this.startY;
         // добавляем данные картинки
-        this.iconData[imgName] = this.icons[imgName];
+        this.iconData[name] = this.icons[name];
         // добавляем саму картинку
         this.iconImg.add(img);
         // смещаем координату
         this.changeCoordsUp();
+        // рисуем количество элементов
+        this.addText(this.iconsText, product, count, 'x', 0, this.textY);
+        // рисуем цену
+        this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
+        // рисуем монетку
 
-        console.log(this.iconImg, ' 1');
-        console.log(this.iconData, ' 2');
+
       }
+    } else if (count > 1) {
+      this.iconsText[product].text = `x ${count}`;
     }
 
   }
+
   // сделать смещение правильное
-  public changeCoordsUp(): void {
+  private changeCoordsUp(): void {
     this.startY += this.stepY;
   }
+
+  private addText(container: { [key: string]: IText }, product: string, count: number, isX: string, x: number, y: number) {
+    container[product] = {
+      text: `${isX} ${count}`,
+      fontSize: '32px Vag_Rounded-Bold CY',
+      color: '#fff',
+      x: 146 + x,
+      y: this.icons[product].y + y,
+      animation: false,
+    };
+  }
+
+  private getImg(product: string) {
+    let imgName = '';
+    const img = this.initialIcon.find(img => {
+      const imgUrl = img.src;
+      const iconName = imgUrl.substring(img.src.lastIndexOf('/') + 1, imgUrl.lastIndexOf('.'));
+      imgName = iconName;
+      return iconName === product;
+    });
+    return { name: imgName, img: img };
+  }
+
+
 }
 
