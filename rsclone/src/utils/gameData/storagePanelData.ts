@@ -15,7 +15,7 @@ export const storagePanelImg = [
   {
     type: "picture",
     name: "depotBack",
-    image: "images/level/builds/storage/depot_coin.png",
+    image: "images/level/builds/storage/coin.png",
     x: 1170,
     y: 990,
     width: 48,
