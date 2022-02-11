@@ -1,6 +1,6 @@
 import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
-import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText } from './../gameData/storagePanelData';
+import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
 
 export default class StoragePanel extends Common {
   storageImg: IPicture[];
@@ -31,6 +31,13 @@ export default class StoragePanel extends Common {
   textY: number;
   priceX: number;
 
+  coinImg: {
+    [key: string]: HTMLImageElement
+  };
+  coinData: {
+    [key: string]: IPicture
+  };
+
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
     this.initialImage = [];
@@ -39,6 +46,7 @@ export default class StoragePanel extends Common {
     this.initialIcon = [];
     this.iconsText = {};
     this.iconsPrice = {};
+    this.coinImg = {};
 
     this.storageImg = this.objParse(storagePanelImg);
     this.storageStaticText = this.objParse(storagePanelStaticText);
@@ -50,49 +58,7 @@ export default class StoragePanel extends Common {
     this.textY = 46; //смещение текста
     this.priceX = 120; // смещение цены
 
-    this.icons = {
-      'egg': {
-        type: "picture",
-        name: "egg",
-        image: "images/level/builds/storage/egg.png",
-        x: 60,
-        // +62
-        y: 0,
-        width: 65,
-        height: 65,
-        sx: 0,
-        sy: 0,
-        swidth: 0,
-        sheight: 0
-      },
-      "bear-1": {
-        type: "picture",
-        name: "bear-1",
-        image: "images/level/builds/storage/bear-1.png",
-        x: 60,
-        y: 0,
-        width: 65,
-        height: 65,
-        sx: 0,
-        sy: 0,
-        swidth: 0,
-        sheight: 0
-      },
-      'icon': {
-        type: "picture",
-        name: "coin",
-        image: "images/level/builds/storage/coin.png",
-        x: 300,
-        y: this.startY,
-        width: 65,
-        height: 65,
-        sx: 0,
-        sy: 0,
-        swidth: 0,
-        sheight: 0
-
-      }
-    };
+    this.icons = JSON.parse(JSON.stringify(icons));
 
     this.price = {
       'egg': 10,
@@ -103,6 +69,8 @@ export default class StoragePanel extends Common {
 
     this.iconImg = new Set();
     this.iconData = {};
+
+    this.coinData = {};
 
     this.startPanel();
   }
@@ -125,7 +93,7 @@ export default class StoragePanel extends Common {
     this.drawImage([...this.iconImg], Object.values(this.iconData));
     this.drawText(Object.values(this.iconsText));
     this.drawText(Object.values(this.iconsPrice));
-
+    this.drawImage(Object.values(this.coinImg), Object.values(this.coinData));
   }
 
   drawStaticText(text: IText[]) {
@@ -203,20 +171,18 @@ export default class StoragePanel extends Common {
         this.iconData[name] = this.icons[name];
         // добавляем саму картинку
         this.iconImg.add(img);
-        // смещаем координату
-        this.changeCoordsUp();
         // рисуем количество элементов
         this.addText(this.iconsText, product, count, 'x', 0, this.textY);
         // рисуем цену
         this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
         // рисуем монетку
-
-
+        this.drawCoin(product);
+        // смещаем координату
+        this.changeCoordsUp();
       }
     } else if (count > 1) {
       this.iconsText[product].text = `x ${count}`;
     }
-
   }
 
   // сделать смещение правильное
@@ -229,7 +195,7 @@ export default class StoragePanel extends Common {
       text: `${isX} ${count}`,
       fontSize: '32px Vag_Rounded-Bold CY',
       color: '#fff',
-      x: 146 + x,
+      x: 132 + x,
       y: this.icons[product].y + y,
       animation: false,
     };
@@ -244,6 +210,29 @@ export default class StoragePanel extends Common {
       return iconName === product;
     });
     return { name: imgName, img: img };
+  }
+
+  private drawCoin(product: string) {
+    const { name, img } = this.getImg('coin');
+    this.coinData[product] =
+    {
+      type: "picture",
+      name: "coin",
+      image: "images/level/builds/storage/coin.png",
+      x: 300,
+      y: this.icons[product].y + 17,
+      width: 40,
+      height: 40,
+      sx: 0,
+      sy: 0,
+      swidth: 0,
+      sheight: 0
+    };
+    console.log(img);
+    if (img) this.coinImg[product] = img;
+    else {
+      throw new Error('coin img not found');
+    }
   }
 
 

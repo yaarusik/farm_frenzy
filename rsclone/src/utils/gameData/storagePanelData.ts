@@ -66,6 +66,47 @@ export const storagePanelBtn = [
   },
 ];
 
+export const icons = {
+  'egg': {
+    type: "picture",
+    name: "egg",
+    image: "images/level/builds/storage/egg.png",
+    x: 60,
+    y: 0,
+    width: 65,
+    height: 65,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  "bear-1": {
+    type: "picture",
+    name: "bear-1",
+    image: "images/level/builds/storage/bear-1.png",
+    x: 60,
+    y: 0,
+    width: 65,
+    height: 65,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  'coin': {
+    type: "picture",
+    name: "coin",
+    image: "images/level/builds/storage/coin.png",
+    x: 300,
+    y: 0,
+    width: 40,
+    height: 40,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  }
+};
 
 export const storagePanelStaticText = [
   {
