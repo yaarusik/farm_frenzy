@@ -31,6 +31,8 @@ export class Animal {
   cageBuild: number;
   cageRemain: number;
   isEscape: boolean;
+  speedX: number;
+  speedY: number;
 
   constructor (type: string, name: string, id: number, state: string, coordX: number, coordY: number, width: number, height: number, frameNum: number, food: number, productName: string, shadowWidth: number, shadowHeight: number) {
     this.type = type;
@@ -57,7 +59,7 @@ export class Animal {
     this.isEating = false;
     this.eatTime = -1;
     this.productAge = 0;
-    this.productNeed = 2 * 60;
+    this.productNeed = 20 * 60;
     this.productName = productName;
     this.fallY = this.coordY;
     if (this.state === 'shadow')
@@ -67,6 +69,7 @@ export class Animal {
     this.cageBuild = 0;
     this.cageRemain = 0;
     this.isEscape = false;
+    this.speedX = this.speedY = 0;
   }
 }
 

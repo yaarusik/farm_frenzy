@@ -76,7 +76,6 @@ export default class LevelRender {
 				clickList.push(item.name);
 				item.state = 'fly';
 				item.age = 0;
-				// productList.splice(index, 1);
 			}
 		});
 
@@ -100,7 +99,13 @@ export default class LevelRender {
 					item.cageRemain = 12 * 60;
 				} else if (item.cageBuild === 8) {
 					clickList.push('bear-1');
-					animalList.splice(index, 1);
+					item.state = 'fly';
+					item.productAge = 0;
+
+					item.wantX = 660;
+    			item.wantY = 945;
+					item.speedX = (item.wantX - item.coordX) / (0.2 * 60);
+    			item.speedY = (item.wantY - item.coordY) / (0.2 * 60);
 				}
 				clickList.push('');
 			}
@@ -242,6 +247,8 @@ export default class LevelRender {
 			this.context.globalAlpha = 1;
 		}
 
+		if (item.state === 'fly')
+			animName = item.name + '-cage';
 		imageFile = this.images.get(animName) as HTMLImageElement;
 		dx = item.width * (item.frame % 4);
 		dy = item.height * Math.floor(item.frame / 4);
@@ -251,6 +258,10 @@ export default class LevelRender {
 		sy = item.coordY;
 		sWidth = dWidth * 2;
 		sHeight = dHeight * 2;
+		if (item.state === 'fly'){
+			sWidth = dWidth * Math.max((2 - item.productAge / 12), 0.1);
+			sHeight = dHeight * Math.max((2 - item.productAge / 12), 0.1);
+		}
 
 		const rotateK = 0.6;
 		if (item.state === 'pic'){
@@ -261,7 +272,6 @@ export default class LevelRender {
 		
 		
 		if (item.state === 'pic'){
-			console.log(imageFile, item);
 			this.context.save();
 			this.context.translate(item.coordX + (item.width - rotateK * item.frame), item.coordY + (item.height - rotateK * item.frame));
 			this.context.rotate(item.rotate * Math.PI / 180);
@@ -339,12 +349,24 @@ export default class LevelRender {
 		sy = item.coordY - 160 / 5;
 		sWidth = dWidth * 1.5;
 		sHeight = dHeight * 1.5;
+		if (item.state === 'fly'){
+			sWidth = dWidth * Math.max((1.5 - item.productAge / 12), 0.1);
+			sHeight = dHeight * Math.max((1.5 - item.productAge / 12), 0.1);;
+		}
 
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 
 		if (isPaused)
 			return;
 
+		if (item.state === 'fly'){
+			item.productAge ++;
+			if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 250))
+				this.animals.splice(this.animals.indexOf(item), 1);
+			item.coordX += item.speedX;
+			item.coordY += item.speedY;
+			return;
+		}
 
 		if (item.state === 'cage') {
 			if (item.cageRemain <= 0) {
