@@ -354,6 +354,12 @@ export default class LevelRender {
 			sHeight = dHeight * Math.max((1.5 - item.productAge / 12), 0.1);;
 		}
 
+		if (item.state === 'cage' && item.cageRemain <= 3 * 60){
+			dx = 160 * (item.frame % 3);
+		dy = 160 * Math.floor(item.frame / 3);
+			imageFile = this.images.get("break-1") as HTMLImageElement;
+		}
+
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 
 		if (isPaused)
@@ -372,7 +378,7 @@ export default class LevelRender {
 			if (item.cageRemain <= 0) {
 				item.isEscape = true;
 				item.wantY = item.coordY;
-				if (item.coordX < 800) {
+				if (item.coordX + item.width / 2 < 800) {
 					item.state = 'left';
 					item.wantX = -200;
 				} else {
