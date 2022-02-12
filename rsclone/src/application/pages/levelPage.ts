@@ -92,7 +92,6 @@ export default class LevelPage extends Control {
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
-    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
     this.storage = new StoragePanel(this.canvas.node, this.context);
 
 
