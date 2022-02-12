@@ -1,4 +1,5 @@
 import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
+import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
 
@@ -14,7 +15,7 @@ export default class StoragePanel extends Common {
     [key: string]: IPicture | IButton
   };
   initialIcon: HTMLImageElement[];
-  iconImg: Set<HTMLImageElement>;
+  iconImg: Map<string, HTMLImageElement>;
   iconData: {
     [key: string]: IPicture
   };
@@ -57,8 +58,15 @@ export default class StoragePanel extends Common {
     [key: string]: HTMLImageElement
   };
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  productCounter: IKeyNumber;
+  checkProduct: {
+    [key: string]: boolean;
+  };
+  productClass: Products;
+
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products) {
     super(canvas, context);
+    this.productClass = productClass;
     this.initialImage = [];
     this.initialBtn = [];
     this.startImg = [];
@@ -67,6 +75,9 @@ export default class StoragePanel extends Common {
     this.iconsPrice = {};
     this.iconsBtnText = {};
 
+    this.productCounter = {};
+
+    this.checkProduct = {};
 
     this.storageImg = this.objParse(storagePanelImg);
     this.storageStaticText = this.objParse(storagePanelStaticText);
@@ -87,7 +98,7 @@ export default class StoragePanel extends Common {
       'chicken': 25,
     };
 
-    this.iconImg = new Set();
+    this.iconImg = new Map();
     this.iconData = {};
     this.coinData = {};
     this.coinImg = {};
@@ -96,6 +107,7 @@ export default class StoragePanel extends Common {
     this.btnData = {};
     this.btnAllImg = {};
     this.btnAllData = {};
+
     this.startPanel();
   }
 
@@ -114,7 +126,7 @@ export default class StoragePanel extends Common {
     this.drawStaticText(this.storageStaticText);
     this.drawText(this.storageText);
 
-    this.drawImage([...this.iconImg], Object.values(this.iconData));
+    this.drawImage([...this.iconImg.values()], Object.values(this.iconData));
     this.drawText(Object.values(this.iconsText));
     this.drawText(Object.values(this.iconsPrice));
     this.drawImage(Object.values(this.coinImg), Object.values(this.coinData));
@@ -144,9 +156,10 @@ export default class StoragePanel extends Common {
 
 
 
-  public addStorage(product: string, count: number): void {
-    console.log('products', product, 'count ', count);
-    if (count === 1) {
+  public addStorage(product: string, count: number, productCounter: IKeyNumber): void {
+    this.productCounter = productCounter;
+    console.log('products', product, 'count ', count, 'productCounter ', this.productCounter);
+    if (count === 1 && this.checkProduct[product] === undefined) {
       const { name, img } = this.getImg(product);
       if (img) {
         // смещаем позицию товара на складе
@@ -154,7 +167,7 @@ export default class StoragePanel extends Common {
         // добавляем данные картинки
         this.iconData[name] = this.icons[name];
         // добавляем саму картинку
-        this.iconImg.add(img);
+        this.iconImg.set(name, img);
         // рисуем количество элементов
         this.addText(this.iconsText, product, count, 'x', 0, this.textY);
         // рисуем цену
@@ -164,9 +177,11 @@ export default class StoragePanel extends Common {
         // рисуем кнопки
         this.drawBtn(product);
         // рисуем текст для кнопок
-        this.addText(this.iconsBtnText, product, 1, '', 320, this.textY);
+        this.addText(this.iconsBtnText, product, 1, '', 250, this.textY);
         // смещаем координату
         this.changeCoordsUp();
+        // знаем что продукт уже есть
+        this.checkProduct[product] = true;
       }
     } else if (count > 1) {
       this.iconsText[product].text = `x ${count}`;
@@ -188,8 +203,6 @@ export default class StoragePanel extends Common {
       animation: false,
     };
   }
-
-
 
   private getImg(product: string) {
     let imgName = '';
@@ -270,6 +283,29 @@ export default class StoragePanel extends Common {
     }
   }
 
+  private drawIcon(product: string) {
+    const { name, img } = this.getImg('coin');
+    this.coinData[product] =
+    {
+      type: "picture",
+      name: "coin",
+      image: "images/level/builds/storage/coin.png",
+      x: 300,
+      y: this.icons[product].y + this.coinX,
+      width: 40,
+      height: 40,
+      sx: 0,
+      sy: 0,
+      swidth: 0,
+      sheight: 0
+    };
+    console.log(img);
+    if (img) this.coinImg[product] = img;
+    else {
+      throw new Error('coin img not found');
+    }
+  }
+
   public clickHundler(event: MouseEvent, widthK: number, heightK: number, isState: IKeyBoolean): void {
     this.storageBtn.forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
@@ -277,6 +313,9 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "Ок": {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.productClass.reRenderStorage();
+            setTimeout(() => isState.storagePanelSwitch = false, 200);
+            this.changeTotal('egg', 0);
             break;
           }
           case "Отмена": {
@@ -297,7 +336,8 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "1": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            console.log(key);
+            this.productSubstraction(key);
+            this.changeTotal(key, 1);
             break;
           }
         }
@@ -314,7 +354,9 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "All": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            console.log(key);
+            this.changeTotal(key, this.productCounter[key]);
+            this.productCounter[key] = 0;
+            this.deleteRow(key);
             break;
           }
         }
@@ -364,7 +406,69 @@ export default class StoragePanel extends Common {
     });
   }
 
+  private productSubstraction(product: string) {
 
+    const count = this.productCounter[product] -= 1;
+    console.log(this.productCounter);
+    if (count > 0) {
+      this.iconsText[product].text = `x ${count}`;
+    } else if (count === 0) {
+      this.deleteRow(product);
+    }
+  }
+
+  private deleteRow(product: string) {
+    delete this.iconsText[product];
+    delete this.iconsPrice[product];
+    delete this.iconsBtnText[product];
+    // данные монетки
+    delete this.coinData[product];
+    delete this.coinImg[product];
+    // данные кнопки
+    delete this.btnData[product];
+    delete this.btnImg[product];
+    // данные кнопки
+    delete this.btnAllImg[product];
+    delete this.btnAllData[product];
+    // данные иконки
+    this.iconImg.delete(product);
+    delete this.iconData[product];
+    delete this.checkProduct[product];
+  }
+
+  private changeTotal(product: string, num: number): void {
+    this.storageText.forEach(item => {
+      if (item.name === 'total') {
+        console.log(item.text, ' text');
+        if (num === 0) {
+          item.text = `${num}`;
+        } else {
+          const currentSum = +item.text + (this.price[product] * num);
+          item.text = `${currentSum}`;
+        }
+      }
+    });
+  }
+
+  // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
+  private saveState() {
+    const iconsText = JSON.parse(JSON.stringify(this.iconsText));
+    const iconsPrice = JSON.parse(JSON.stringify(this.iconsPrice));
+    const iconsBtnText = JSON.parse(JSON.stringify(this.iconsBtnText));
+    // данные монетки
+    const coinData = JSON.parse(JSON.stringify(this.coinData));
+    const coinImg = JSON.parse(JSON.stringify(this.coinImg));
+    // данные кнопки
+    const btnData = JSON.parse(JSON.stringify(this.btnData));
+    const btnImg = JSON.parse(JSON.stringify(this.btnImg));
+    // данные кнопки
+    const btnAllImg = JSON.parse(JSON.stringify(this.btnAllImg));
+    const btnAllData = JSON.parse(JSON.stringify(this.btnAllData));
+    // данные иконки
+    const iconImg = JSON.parse(JSON.stringify(this.iconImg));
+    const iconData = JSON.parse(JSON.stringify(this.iconData));
+    const checkProduct = JSON.parse(JSON.stringify(this.checkProduct));
+  }
 
 
 }

@@ -112,7 +112,6 @@ export default class Products extends Common {
 
   public add(product: string[], func: IFunctions) {
     if (this.columnCount < this.maxColumn) {
-      // console.log(this.columnCount);
       this.goods = product; // ['egg']
       this.goods.forEach(product => {
         this.product.forEach(img => {
@@ -123,7 +122,7 @@ export default class Products extends Common {
             // сохранение количества продуктов
             this.productsCounter[product]++;
             // здесь вызываем функцию, которая изменяет содержимое склада
-            func.addStorage(product, this.productsCounter[product]);
+            func.addStorage(product, this.productsCounter[product], this.productsCounter);
             // отображение прогресса игры
             this.progress.scoreCheck(product);
           }
@@ -134,10 +133,29 @@ export default class Products extends Common {
       // всплывающее сообщение
       alert("склад переполнен");
     }
-    // console.log(this.productsCounter.egg);
+
   }
 
+  public reRenderStorage() {
+    this.productRender = [];
+    this.initialProducts = [];
+    this.startX = 615;
+    this.startY = 1090;
+    this.changeColumn = 1;
+    this.columnCount = 0;
+    this.updateProduct();
 
-
-
+    Object.entries(this.productsCounter).forEach(item => {
+      const [product, count] = item;
+      for (let i = 0; i < count; i++) {
+        this.product.forEach(img => {
+          if (img.name === product) {
+            this.productRender.push(img);
+            this.changeCoords();
+            this.updateProduct();
+          }
+        });
+      }
+    });
+  }
 }

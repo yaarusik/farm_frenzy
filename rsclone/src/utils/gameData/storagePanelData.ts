@@ -14,7 +14,7 @@ export const storagePanelImg = [
   },
   {
     type: "picture",
-    name: "depotBack",
+    name: "coin",
     image: "images/level/builds/storage/coin.png",
     x: 1170,
     y: 990,
@@ -24,6 +24,19 @@ export const storagePanelImg = [
     sy: 0,
     swidth: 28,
     sheight: 28
+  },
+  {
+    type: "picture",
+    name: "car-1",
+    image: "images/level/builds/storage/car-1.png",
+    x: 1060,
+    y: 505,
+    width: 500,
+    height: 450,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
   },
 ];
 
@@ -224,6 +237,15 @@ export const storagePanelText = [
     color: '#fff',
     x: 570,
     y: 1125,
+    animation: false,
+  },
+  {
+    text: '0',
+    name: 'total',
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1320,
+    y: 1025,
     animation: false,
   },
 ];

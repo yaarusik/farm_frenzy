@@ -76,7 +76,7 @@ export default class LevelPage extends Control {
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
-      addStorage: (product: string, count: number) => this.storage.addStorage(product, count),
+      addStorage: (product: string, count: number, productCounter) => this.storage.addStorage(product, count, productCounter),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -92,7 +92,7 @@ export default class LevelPage extends Control {
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
     this.endPanel = new EndPanel(this.canvas.node, this.context);
-    this.storage = new StoragePanel(this.canvas.node, this.context);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products);
 
 
 
