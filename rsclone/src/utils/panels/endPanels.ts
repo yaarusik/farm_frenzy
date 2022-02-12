@@ -1,6 +1,7 @@
 import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
+import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
-import { endBtn, endImg, endStaticText, endText } from './../gameData/endPanelData';
+import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
 
 export default class EndPanel extends Common {
   endPanelImg: IPicture[];
@@ -10,8 +11,10 @@ export default class EndPanel extends Common {
   startImg: HTMLImageElement[];
   endPanelBtn: IButton[];
   endPanelText: IText[];
+  timer: Timer;
+  dataText: IText[];
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
@@ -21,6 +24,8 @@ export default class EndPanel extends Common {
     this.endPanelStaticText = endStaticText;
     this.endPanelBtn = endBtn;
     this.endPanelText = endText;
+    this.dataText = endTextData;
+    this.timer = timer;
 
     this.startPanel();
   }
@@ -30,14 +35,17 @@ export default class EndPanel extends Common {
     const loadBtn = this.endPanelBtn.map(btn => this.loadImage(btn.image));
     this.initialImage = await this.renderImages(loadImage);
     this.initialBtn = await this.renderImages(loadBtn);
-
   }
 
   public render() {
+    this.timer.isRunning = false;
+    this.timer.endPanelView();
     this.drawImage(this.initialImage, this.endPanelImg);
     this.drawImage(this.initialBtn, this.endPanelBtn);
     this.drawStaticText(this.endPanelStaticText);
     this.drawText(this.endPanelText);
+    this.drawText(this.dataText);
+    this.timer.checkZeroTime();
   }
 
   drawStaticText(text: IText[]) {
