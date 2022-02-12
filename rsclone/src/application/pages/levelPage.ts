@@ -91,13 +91,10 @@ export default class LevelPage extends Control {
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
-<<<<<<< HEAD
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
-=======
-    this.endPanel = new EndPanel(this.canvas.node, this.context);
+    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
     this.storage = new StoragePanel(this.canvas.node, this.context);
 
->>>>>>> develop
 
 
     const { btn, anim, text } = this.levelInterface.getData();

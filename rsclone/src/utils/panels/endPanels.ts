@@ -20,19 +20,16 @@ export default class EndPanel extends Common {
     this.initialBtn = [];
     this.startImg = [];
 
-<<<<<<< HEAD
     this.endPanelImg = endImg;
     this.endPanelStaticText = endStaticText;
     this.endPanelBtn = endBtn;
     this.endPanelText = endText;
     this.dataText = endTextData;
     this.timer = timer;
-=======
     this.endPanelImg = this.objParse(endImg);
     this.endPanelStaticText = this.objParse(endStaticText);
     this.endPanelBtn = this.objParse(endBtn);
     this.endPanelText = this.objParse(endText);
->>>>>>> develop
 
     this.startPanel();
   }
