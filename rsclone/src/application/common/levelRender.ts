@@ -103,9 +103,9 @@ export default class LevelRender {
 					item.productAge = 0;
 
 					item.wantX = 660;
-    			item.wantY = 945;
+					item.wantY = 945;
 					item.speedX = (item.wantX - item.coordX) / (0.2 * 60);
-    			item.speedY = (item.wantY - item.coordY) / (0.2 * 60);
+					item.speedY = (item.wantY - item.coordY) / (0.2 * 60);
 				}
 				clickList.push('');
 			}
@@ -171,8 +171,8 @@ export default class LevelRender {
 		if (imageFile instanceof HTMLImageElement)
 			this.context.drawImage(imageFile, 0, 0, 48, 48, item.coordX, item.coordY, sWidth, sHeight);
 
-		if (item.state === 'fly'){
-			item.age ++;
+		if (item.state === 'fly') {
+			item.age++;
 			if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 100))
 				this.products.splice(this.products.indexOf(item), 1);
 			item.coordX += item.speedX;
@@ -215,7 +215,7 @@ export default class LevelRender {
 	private renderAnimal(item: AnimalList, curWidthK: number, curHeightK: number, isPaused: boolean) {
 		this.context.restore();
 		this.context.globalAlpha = 1;
-		
+
 
 		let animName = item.name + '-' + item.state;
 		let imageFile = new Image();
@@ -229,7 +229,7 @@ export default class LevelRender {
 			item.opacity -= 0.025;
 		}
 
-		if (item.state === 'shadow'){
+		if (item.state === 'shadow') {
 			imageFile = this.images.get(animName) as HTMLImageElement;
 			dx = 0;
 			dy = 0;
@@ -258,20 +258,20 @@ export default class LevelRender {
 		sy = item.coordY;
 		sWidth = dWidth * 2;
 		sHeight = dHeight * 2;
-		if (item.state === 'fly'){
+		if (item.state === 'fly') {
 			sWidth = dWidth * Math.max((2 - item.productAge / 12), 0.1);
 			sHeight = dHeight * Math.max((2 - item.productAge / 12), 0.1);
 		}
 
 		const rotateK = 0.6;
-		if (item.state === 'pic'){
+		if (item.state === 'pic') {
 			dx = dy = 0;
 			sWidth -= rotateK * 2 * item.frame;
 			sHeight -= rotateK * 2 * item.frame;
 		}
-		
-		
-		if (item.state === 'pic'){
+
+
+		if (item.state === 'pic') {
 			this.context.save();
 			this.context.translate(item.coordX + (item.width - rotateK * item.frame), item.coordY + (item.height - rotateK * item.frame));
 			this.context.rotate(item.rotate * Math.PI / 180);
@@ -279,11 +279,11 @@ export default class LevelRender {
 		}
 		this.drawImage(imageFile, dx, dy, dWidth, dHeight, sx, sy, sWidth, sHeight);
 		this.context.restore();
-	
-		if (item.state === 'pic'){
+
+		if (item.state === 'pic') {
 			item.frame += 3;
 			item.rotate += 24;
-			item.rotate %= 360
+			item.rotate %= 360;
 			item.speedBoost = 10;
 			if (item.wantX === 0)
 				item.coordX -= item.speedBoost;
@@ -296,13 +296,13 @@ export default class LevelRender {
 			return;
 		}
 
-		if (item.state === 'shadow' && !isPaused){
-			if (item.type === 'bear'){
+		if (item.state === 'shadow' && !isPaused) {
+			if (item.type === 'bear') {
 				if (item.coordY % 10 === 0)
 					item.coordY = -15001;
 				item.opacity += 0.005;
 				item.opacity = Math.min(item.opacity, 1);
-			} else 
+			} else
 				item.opacity += 0.025;
 			item.coordY += 50;
 			if (item.coordY - item.fallY >= 0)
@@ -329,7 +329,7 @@ export default class LevelRender {
 
 
 		if (item.isEscape) {
-			if (!isPaused){
+			if (!isPaused) {
 				item.speedBoost = 3;
 				item = this.nextFrame(item, isPaused);
 				item.speedBoost = 7;
@@ -349,14 +349,14 @@ export default class LevelRender {
 		sy = item.coordY - 160 / 5;
 		sWidth = dWidth * 1.5;
 		sHeight = dHeight * 1.5;
-		if (item.state === 'fly'){
+		if (item.state === 'fly') {
 			sWidth = dWidth * Math.max((1.5 - item.productAge / 12), 0.1);
-			sHeight = dHeight * Math.max((1.5 - item.productAge / 12), 0.1);;
+			sHeight = dHeight * Math.max((1.5 - item.productAge / 12), 0.1);
 		}
 
-		if (item.state === 'cage' && item.cageRemain <= 3 * 60){
+		if (item.state === 'cage' && item.cageRemain <= 3 * 60) {
 			dx = 160 * (item.frame % 3);
-		dy = 160 * Math.floor(item.frame / 3);
+			dy = 160 * Math.floor(item.frame / 3);
 			imageFile = this.images.get("break-1") as HTMLImageElement;
 		}
 
@@ -365,8 +365,8 @@ export default class LevelRender {
 		if (isPaused)
 			return;
 
-		if (item.state === 'fly'){
-			item.productAge ++;
+		if (item.state === 'fly') {
+			item.productAge++;
 			if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 250))
 				this.animals.splice(this.animals.indexOf(item), 1);
 			item.coordX += item.speedX;
@@ -405,7 +405,7 @@ export default class LevelRender {
 		item = this.nextFrame(item, isPaused);
 
 		if (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY)) {
-			while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 100)){
+			while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 100)) {
 				item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
 				item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
 			}
@@ -493,7 +493,7 @@ export default class LevelRender {
 					}
 				}
 			} else {
-				while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 50)){
+				while (this.isNear(item.coordX, item.coordY, item.wantX, item.wantY, 50)) {
 					item.wantX = this.areaX + Math.floor(Math.random() * this.areaWidth);
 					item.wantY = this.areaY + Math.floor(Math.random() * this.areaHeight);
 				}

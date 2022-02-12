@@ -11,7 +11,7 @@ export default class StoragePanel extends Common {
   storageBtn: IButton[];
   storageText: IText[];
   icons: {
-    [key: string]: IPicture
+    [key: string]: IPicture | IButton
   };
   initialIcon: HTMLImageElement[];
   iconImg: Set<HTMLImageElement>;
@@ -22,6 +22,9 @@ export default class StoragePanel extends Common {
   stepY: number;
   startY: number;
   iconsText: {
+    [key: string]: IText
+  };
+  iconsBtnText: {
     [key: string]: IText
   };
   price: IKeyNumber;
@@ -37,6 +40,22 @@ export default class StoragePanel extends Common {
   coinData: {
     [key: string]: IPicture
   };
+  coinX: number;
+  btnData: {
+    [key: string]: IButton
+  };
+
+  btnImg: {
+    [key: string]: HTMLImageElement
+  };
+
+  btnAllData: {
+    [key: string]: IButton
+  };
+
+  btnAllImg: {
+    [key: string]: HTMLImageElement
+  };
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
@@ -46,7 +65,8 @@ export default class StoragePanel extends Common {
     this.initialIcon = [];
     this.iconsText = {};
     this.iconsPrice = {};
-    this.coinImg = {};
+    this.iconsBtnText = {};
+
 
     this.storageImg = this.objParse(storagePanelImg);
     this.storageStaticText = this.objParse(storagePanelStaticText);
@@ -57,6 +77,7 @@ export default class StoragePanel extends Common {
     this.startY = 210;
     this.textY = 46; //смещение текста
     this.priceX = 120; // смещение цены
+    this.coinX = 17; //смещение денюжки
 
     this.icons = JSON.parse(JSON.stringify(icons));
 
@@ -66,12 +87,15 @@ export default class StoragePanel extends Common {
       'chicken': 25,
     };
 
-
     this.iconImg = new Set();
     this.iconData = {};
-
     this.coinData = {};
+    this.coinImg = {};
 
+    this.btnImg = {};
+    this.btnData = {};
+    this.btnAllImg = {};
+    this.btnAllData = {};
     this.startPanel();
   }
 
@@ -94,6 +118,9 @@ export default class StoragePanel extends Common {
     this.drawText(Object.values(this.iconsText));
     this.drawText(Object.values(this.iconsPrice));
     this.drawImage(Object.values(this.coinImg), Object.values(this.coinData));
+    this.drawImage(Object.values(this.btnImg), Object.values(this.btnData));
+    this.drawImage(Object.values(this.btnAllImg), Object.values(this.btnAllData));
+    this.drawText(Object.values(this.iconsBtnText));
   }
 
   drawStaticText(text: IText[]) {
@@ -112,6 +139,188 @@ export default class StoragePanel extends Common {
       this.context.shadowBlur = 0;
       this.context.shadowOffsetX = 0;
       this.context.shadowOffsetY = 0;
+    });
+  }
+
+
+
+  public addStorage(product: string, count: number): void {
+    console.log('products', product, 'count ', count);
+    if (count === 1) {
+      const { name, img } = this.getImg(product);
+      if (img) {
+        // смещаем позицию товара на складе
+        this.icons[name].y = this.startY;
+        // добавляем данные картинки
+        this.iconData[name] = this.icons[name];
+        // добавляем саму картинку
+        this.iconImg.add(img);
+        // рисуем количество элементов
+        this.addText(this.iconsText, product, count, 'x', 0, this.textY);
+        // рисуем цену
+        this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
+        // рисуем монетку
+        this.drawCoin(product);
+        // рисуем кнопки
+        this.drawBtn(product);
+        // рисуем текст для кнопок
+        this.addText(this.iconsBtnText, product, 1, '', 320, this.textY);
+        // смещаем координату
+        this.changeCoordsUp();
+      }
+    } else if (count > 1) {
+      this.iconsText[product].text = `x ${count}`;
+    }
+  }
+
+  // сделать смещение правильное
+  private changeCoordsUp(): void {
+    this.startY += this.stepY;
+  }
+
+  private addText(container: { [key: string]: IText }, product: string, count: number | string, isX: string, x: number, y: number) {
+    container[product] = {
+      text: `${isX} ${count}`,
+      fontSize: '32px Vag_Rounded-Bold CY',
+      color: '#fff',
+      x: 132 + x,
+      y: this.icons[product].y + y,
+      animation: false,
+    };
+  }
+
+
+
+  private getImg(product: string) {
+    let imgName = '';
+    const img = this.initialIcon.find(img => {
+      const imgUrl = img.src;
+      const iconName = imgUrl.substring(img.src.lastIndexOf('/') + 1, imgUrl.lastIndexOf('.'));
+      imgName = iconName;
+      return iconName === product;
+    });
+    return { name: imgName, img: img };
+  }
+
+  private drawCoin(product: string) {
+    const { name, img } = this.getImg('coin');
+    this.coinData[product] =
+    {
+      type: "picture",
+      name: "coin",
+      image: "images/level/builds/storage/coin.png",
+      x: 300,
+      y: this.icons[product].y + this.coinX,
+      width: 40,
+      height: 40,
+      sx: 0,
+      sy: 0,
+      swidth: 0,
+      sheight: 0
+    };
+    console.log(img);
+    if (img) this.coinImg[product] = img;
+    else {
+      throw new Error('coin img not found');
+    }
+  }
+
+  private drawBtn(product: string) {
+    const { name, img } = this.getImg('btn');
+    this.btnData[product] = {
+      type: "button",
+      name: "1",
+      image: "images/level/builds/storage/btn.png",
+      stepY: 28,
+      stepX: 0,
+      hover: 1,
+      click: 2,
+      x: 360,
+      y: this.icons[product].y + 12,
+      width: 70,
+      height: 50,
+      sx: 0,
+      sy: 0,
+      swidth: 40,
+      sheight: 28
+    };
+    this.btnAllData[product] = {
+      type: "button",
+      name: "All",
+      image: "images/level/builds/storage/btn.png",
+      stepY: 28,
+      stepX: 0,
+      hover: 1,
+      click: 2,
+      x: 360 + 75,
+      y: this.icons[product].y + 12,
+      width: 70,
+      height: 50,
+      sx: 0,
+      sy: 0,
+      swidth: 40,
+      sheight: 28
+    };
+    if (img) {
+      this.btnImg[product] = img;
+      this.btnAllImg[product] = img;
+    }
+    else {
+      throw new Error('coin img not found');
+    }
+  }
+
+  public clickHundler(event: MouseEvent, widthK: number, heightK: number, isState: IKeyBoolean): void {
+    this.storageBtn.forEach(btn => {
+      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (btn.name) {
+          case "Ок": {
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            break;
+          }
+          case "Отмена": {
+            setTimeout(() => isState.storagePanelSwitch = false, 200);
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            break;
+          }
+        }
+      } else {
+        this.buttonsClick(btn, 0, 0);
+      }
+    });
+
+    Object.entries(this.btnData).forEach(btnObj => {
+      const [key, btn] = btnObj;
+      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (btn.name) {
+          case "1": {
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            console.log(key);
+            break;
+          }
+        }
+      } else {
+        this.buttonsClick(btn, 0, 0);
+      }
+    });
+
+
+    Object.entries(this.btnAllData).forEach(btnObj => {
+      const [key, btn] = btnObj;
+      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (btn.name) {
+          case "All": {
+            this.buttonsClick(btn, btn.stepY, btn.click);
+            console.log(key);
+            break;
+          }
+        }
+      } else {
+        this.buttonsClick(btn, 0, 0);
+      }
     });
   }
 
@@ -137,20 +346,15 @@ export default class StoragePanel extends Common {
         this.changeAnimation(btn, false, this.storageText);
       }
     });
-  }
 
-  public clickHundler(event: MouseEvent, widthK: number, heightK: number, isState: IKeyBoolean): void {
-    this.storageBtn.forEach(btn => {
+    Object.entries(this.btnData).forEach(btnObj => {
+      const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
-          case "Ок": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            break;
-          }
-          case "Отмена": {
-            setTimeout(() => isState.storagePanelSwitch = false, 200);
-            this.buttonsClick(btn, btn.stepY, btn.click);
+          case "1": {
+            this.buttonsHover(btn, btn.stepY, btn.hover);
+            this.changeAnimation(btn, true, [this.iconsBtnText[key]]);
             break;
           }
         }
@@ -160,80 +364,7 @@ export default class StoragePanel extends Common {
     });
   }
 
-  public addStorage(product: string, count: number): void {
-    console.log('products', product, 'count ', count);
-    if (count === 1) {
-      const { name, img } = this.getImg(product);
-      if (img) {
-        // смещаем позицию товара на складе
-        this.icons[name].y = this.startY;
-        // добавляем данные картинки
-        this.iconData[name] = this.icons[name];
-        // добавляем саму картинку
-        this.iconImg.add(img);
-        // рисуем количество элементов
-        this.addText(this.iconsText, product, count, 'x', 0, this.textY);
-        // рисуем цену
-        this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
-        // рисуем монетку
-        this.drawCoin(product);
-        // смещаем координату
-        this.changeCoordsUp();
-      }
-    } else if (count > 1) {
-      this.iconsText[product].text = `x ${count}`;
-    }
-  }
 
-  // сделать смещение правильное
-  private changeCoordsUp(): void {
-    this.startY += this.stepY;
-  }
-
-  private addText(container: { [key: string]: IText }, product: string, count: number, isX: string, x: number, y: number) {
-    container[product] = {
-      text: `${isX} ${count}`,
-      fontSize: '32px Vag_Rounded-Bold CY',
-      color: '#fff',
-      x: 132 + x,
-      y: this.icons[product].y + y,
-      animation: false,
-    };
-  }
-
-  private getImg(product: string) {
-    let imgName = '';
-    const img = this.initialIcon.find(img => {
-      const imgUrl = img.src;
-      const iconName = imgUrl.substring(img.src.lastIndexOf('/') + 1, imgUrl.lastIndexOf('.'));
-      imgName = iconName;
-      return iconName === product;
-    });
-    return { name: imgName, img: img };
-  }
-
-  private drawCoin(product: string) {
-    const { name, img } = this.getImg('coin');
-    this.coinData[product] =
-    {
-      type: "picture",
-      name: "coin",
-      image: "images/level/builds/storage/coin.png",
-      x: 300,
-      y: this.icons[product].y + 17,
-      width: 40,
-      height: 40,
-      sx: 0,
-      sy: 0,
-      swidth: 0,
-      sheight: 0
-    };
-    console.log(img);
-    if (img) this.coinImg[product] = img;
-    else {
-      throw new Error('coin img not found');
-    }
-  }
 
 
 }

@@ -105,6 +105,23 @@ export const icons = {
     sy: 0,
     swidth: 0,
     sheight: 0
+  },
+  'btn': {
+    type: "button",
+    name: "Ок",
+    image: "images/level/builds/storage/btn.png",
+    stepY: 48,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    x: 300,
+    y: 0,
+    width: 60,
+    height: 43,
+    sx: 0,
+    sy: 0,
+    swidth: 40,
+    sheight: 28
   }
 };
 
