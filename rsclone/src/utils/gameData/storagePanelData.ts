@@ -56,7 +56,7 @@ export const storagePanelBtn = [
     width: 200,
     height: 77,
     sx: 0,
-    sy: 0,
+    sy: 144,
     swidth: 128,
     sheight: 48
   },

@@ -74,7 +74,7 @@ export default class BuildSpawn extends Common {
             break;
           }
           case "storage": {
-            this.panelState.storagePanelSwitch = true;
+            if (!this.panelState.carAnimationOn) this.panelState.storagePanelSwitch = true;
             break;
           }
           default: {

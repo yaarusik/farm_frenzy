@@ -62,6 +62,7 @@ export interface IFunctions {
   onSettings: () => void;
   isStart: () => void;
   addStorage: (product: string, count: number, productCounter: IKeyNumber) => void;
+  addStorageTotal: (total: string) => void;
 }
 
 export interface IKeyBoolean {

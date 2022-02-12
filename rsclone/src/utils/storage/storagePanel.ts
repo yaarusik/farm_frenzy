@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
@@ -63,9 +63,18 @@ export default class StoragePanel extends Common {
     [key: string]: boolean;
   };
   productClass: Products;
+  isState: IKeyBoolean;
+  func: IFunctions;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products) {
+  buttonCondition: {
+    [key: string]: boolean;
+  };
+
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions) {
     super(canvas, context);
+    this.isState = isState;
+    this.func = func;
+
     this.productClass = productClass;
     this.initialImage = [];
     this.initialBtn = [];
@@ -108,6 +117,9 @@ export default class StoragePanel extends Common {
     this.btnAllImg = {};
     this.btnAllData = {};
 
+    this.buttonCondition = {
+      'ok': false,
+    };
     this.startPanel();
   }
 
@@ -283,28 +295,6 @@ export default class StoragePanel extends Common {
     }
   }
 
-  private drawIcon(product: string) {
-    const { name, img } = this.getImg('coin');
-    this.coinData[product] =
-    {
-      type: "picture",
-      name: "coin",
-      image: "images/level/builds/storage/coin.png",
-      x: 300,
-      y: this.icons[product].y + this.coinX,
-      width: 40,
-      height: 40,
-      sx: 0,
-      sy: 0,
-      swidth: 0,
-      sheight: 0
-    };
-    console.log(img);
-    if (img) this.coinImg[product] = img;
-    else {
-      throw new Error('coin img not found');
-    }
-  }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number, isState: IKeyBoolean): void {
     this.storageBtn.forEach(btn => {
@@ -312,20 +302,25 @@ export default class StoragePanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.productClass.reRenderStorage();
-            setTimeout(() => isState.storagePanelSwitch = false, 200);
-            this.changeTotal('egg', 0);
+            if (this.buttonCondition.ok) {
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.productClass.reRenderStorage(); //перерисовка склада
+              setTimeout(() => isState.storagePanelSwitch = false, 200);
+              this.changeTotal('egg', 0); // обнуление счетчика склада
+              this.isState.carAnimationOn = true; // запуск анимации машины
+              btn.sy = btn.stepY * 3; // дизейблим кнопку
+              this.buttonCondition.ok = false;
+
+            }
             break;
           }
           case "Отмена": {
             setTimeout(() => isState.storagePanelSwitch = false, 200);
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.buttonCondition.ok = false;
             break;
           }
         }
-      } else {
-        this.buttonsClick(btn, 0, 0);
       }
     });
 
@@ -338,11 +333,10 @@ export default class StoragePanel extends Common {
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.productSubstraction(key);
             this.changeTotal(key, 1);
+            this.buttonCondition.ok = true;
             break;
           }
         }
-      } else {
-        this.buttonsClick(btn, 0, 0);
       }
     });
 
@@ -357,11 +351,10 @@ export default class StoragePanel extends Common {
             this.changeTotal(key, this.productCounter[key]);
             this.productCounter[key] = 0;
             this.deleteRow(key);
+            this.buttonCondition.ok = true;
             break;
           }
         }
-      } else {
-        this.buttonsClick(btn, 0, 0);
       }
     });
   }
@@ -372,8 +365,10 @@ export default class StoragePanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
-            this.buttonsHover(btn, btn.stepY, btn.hover);
-            this.changeAnimation(btn, true, this.storageText);
+            if (this.buttonCondition.ok) {
+              this.buttonsHover(btn, btn.stepY, btn.hover);
+              this.changeAnimation(btn, true, this.storageText);
+            }
             break;
           }
           case "Отмена": {
@@ -384,8 +379,20 @@ export default class StoragePanel extends Common {
         }
 
       } else {
-        this.buttonsHover(btn, 0, 0);
-        this.changeAnimation(btn, false, this.storageText);
+        switch (btn.name) {
+          case "Ок": {
+            if (this.buttonCondition.ok) {
+              this.buttonsHover(btn, btn.stepY, 0);
+              this.changeAnimation(btn, false, this.storageText);
+            }
+            break;
+          }
+          default: {
+            this.buttonsHover(btn, 0, 0);
+            this.changeAnimation(btn, false, this.storageText);
+          }
+        }
+
       }
     });
 
@@ -409,7 +416,7 @@ export default class StoragePanel extends Common {
   private productSubstraction(product: string) {
 
     const count = this.productCounter[product] -= 1;
-    console.log(this.productCounter);
+
     if (count > 0) {
       this.iconsText[product].text = `x ${count}`;
     } else if (count === 0) {
@@ -441,7 +448,10 @@ export default class StoragePanel extends Common {
       if (item.name === 'total') {
         console.log(item.text, ' text');
         if (num === 0) {
+          this.func.addStorageTotal(item.text);
           item.text = `${num}`;
+          // отправляем сумму в машину
+
         } else {
           const currentSum = +item.text + (this.price[product] * num);
           item.text = `${currentSum}`;

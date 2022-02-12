@@ -15,6 +15,7 @@ import Products from "../../utils/storage/products";
 import Progress from "./../../utils/gameProgress/progress";
 import EndPanel from "./../../utils/panels/endPanels";
 import StoragePanel from "../../utils/storage/storagePanel";
+import Car from "../../utils/animation/car";
 
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
@@ -41,6 +42,7 @@ export default class LevelPage extends Control {
   progress: Progress;
   endPanel: EndPanel;
   storage: StoragePanel;
+  car: Car;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -67,6 +69,7 @@ export default class LevelPage extends Control {
       startPanelSwitch: true,
       endPanelSwitch: false,
       storagePanelSwitch: false,
+      carAnimationOn: false,
     };
 
     this.click = {
@@ -77,6 +80,7 @@ export default class LevelPage extends Control {
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
       addStorage: (product: string, count: number, productCounter) => this.storage.addStorage(product, count, productCounter),
+      addStorageTotal: (total: string) => this.car.addStorageTotal(total),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -92,7 +96,8 @@ export default class LevelPage extends Control {
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress);
     this.endPanel = new EndPanel(this.canvas.node, this.context);
-    this.storage = new StoragePanel(this.canvas.node, this.context, this.products);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click);
+    this.car = new Car(this.canvas.node, this.context, this.panelState);
 
 
 
@@ -153,6 +158,7 @@ export default class LevelPage extends Control {
       this.buildSpawn.render();
       this.products.render();
       this.progress.render();
+      if (this.panelState.carAnimationOn) this.car.render();
       if (this.panelState.storagePanelSwitch) this.storage.render();
       else {
         // проверка окончания уровня
@@ -160,8 +166,6 @@ export default class LevelPage extends Control {
         if (this.panelState.endPanelSwitch) this.endPanel.render();
       }
     }
-    // if (!this.panelState.storagePanelSwitch) this.storage.render();
-
   }
 
   private endGameCheck(): void {
