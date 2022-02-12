@@ -1,4 +1,3 @@
-import { initialData } from "../../application/common/initialData";
 import { IButton } from "../../application/iterfaces";
 export default class Well {
 

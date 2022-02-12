@@ -35,9 +35,7 @@ export const done = [
     name: "two",
     image: "images/level/panels/goal_done.png",
     x: 1416,
-    // 1354
     y: 1106,
-    // 40, 29
     width: 0,
     height: 0,
     sx: 0,
@@ -50,7 +48,6 @@ export const done = [
     name: "free",
     image: "images/level/panels/goal_done.png",
     x: 1478,
-    // 1354
     y: 1106,
     width: 0,
     height: 0,
@@ -64,7 +61,6 @@ export const done = [
     name: "four",
     image: "images/level/panels/goal_done.png",
     x: 1540,
-    // 1354
     y: 1106,
     width: 0,
     height: 0,
@@ -98,3 +94,5 @@ export const levelSmallInitial = {
   //   text: textTwo,
   // }
 };
+
+export const x = 3;

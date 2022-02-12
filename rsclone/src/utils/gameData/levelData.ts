@@ -247,7 +247,13 @@ export const animationBuildOptions = [
     maxX: 0,
     maxY: 146,
     speed: 25
-  }
+  },
+  {
+    name: 'waterIndicator',
+    maxX: 0,
+    maxY: 200,
+    speed: 25
+  },
 ];
 
 

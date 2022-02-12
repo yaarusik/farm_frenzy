@@ -17,7 +17,7 @@ export default class Progress extends Common {
   level: string;
   productsScore: {
     [key: string]: {
-      current: number,
+      current: number, //[egg {current: 3}]
       max: number
     };
   };
@@ -28,10 +28,10 @@ export default class Progress extends Common {
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
 
-    this.levelInitial = levelSmallInitial;
+    this.levelInitial = JSON.parse(JSON.stringify(levelSmallInitial));
     this.startImg = [];
     this.startDone = [];
-    this.done = done;
+    this.done = JSON.parse(JSON.stringify(done));
     this.level = level.toString();
     this.productsScore = {};
     this.levelInitial[this.level].text.forEach(product => {
@@ -39,7 +39,6 @@ export default class Progress extends Common {
     });
 
     this.goals = Object.getOwnPropertyNames(this.productsScore).length;
-
     this.goalsDone = new Set();
 
     this.startProgress();

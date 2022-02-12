@@ -16,15 +16,15 @@ export default class PausePanel extends Common {
   canvasContainer: Control<HTMLElement>;
   music: Music;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer, 
-  node: HTMLElement, canvasContainer: Control<HTMLElement>) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer,
+    node: HTMLElement, canvasContainer: Control<HTMLElement>) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
 
-    this.pausePanelImg = pausePanelImg;
-    this.pausePanelBtn = pausePanelBtn;
-    this.pausePanelText = pausePanelText;
+    this.pausePanelImg = this.objParse(pausePanelImg);
+    this.pausePanelBtn = this.objParse(pausePanelBtn);
+    this.pausePanelText = this.objParse(pausePanelText);
     this.timer = timer;
     this.node = node;
     this.canvasContainer = canvasContainer;

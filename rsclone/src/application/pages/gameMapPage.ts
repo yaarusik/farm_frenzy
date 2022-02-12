@@ -26,8 +26,8 @@ export default class GameMapPage extends Control {
 
 		this.music = new Music();
 
-		this.textOptions = textOptions;
-		this.imagesOptions = imagesOptions;
+		this.textOptions = JSON.parse(JSON.stringify(textOptions));
+		this.imagesOptions = JSON.parse(JSON.stringify(imagesOptions));
 		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButton[];
 		// коэффициенты масштаба
 		this.curWidthK = 1;

@@ -20,10 +20,10 @@ export default class LevelInterface extends Common {
     this.initialAnim = [];
 
     this.lvlInterface = {
-      btn: lvlInterfaceBtn,
-      anim: lvlInterfaceAnim,
-      text: levelTextOptions,
-      img: lvlInterfaceImg,
+      btn: JSON.parse(JSON.stringify(lvlInterfaceBtn)),
+      anim: JSON.parse(JSON.stringify(lvlInterfaceAnim)),
+      text: JSON.parse(JSON.stringify(levelTextOptions)),
+      img: JSON.parse(JSON.stringify(lvlInterfaceImg)),
     };
 
     this.startPanel();
