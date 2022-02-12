@@ -62,8 +62,6 @@ export default class SettingsPage extends Control {
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
 
-    console.log(this.node.childElementCount);
-
     mainBackBtn.node.onclick = () => {
       if (this.node.children[0].className.includes("map")) {
         (<HTMLElement>this.node.parentElement?.children[0]).style.display = "block";

@@ -137,7 +137,6 @@ export default class GameMapPage extends Control {
 							this.startLevel(1);
 						}, 250);
 						cancelAnimationFrame(this.animation);
-						this.music.onMain();
 						break;
 					}
 					case "2": {
@@ -146,7 +145,6 @@ export default class GameMapPage extends Control {
 							this.startLevel(2);
 						}, 250);
 						cancelAnimationFrame(this.animation);
-						this.music.onMain();
 						break;
 					}
 					default: console.log("error");

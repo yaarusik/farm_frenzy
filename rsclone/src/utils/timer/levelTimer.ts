@@ -1,5 +1,8 @@
 import Picture from "../classes/canvasBtn";
-import { timerData } from "./levelTimerData";
+import { endTextData } from "../gameData/endPanelData";
+import { timerData, goldCup, silvCup, silvCupText, goldCupText } from "./levelTimerData";
+import { initialData } from "../../application/common/initialData";
+import { IText } from "../../application/iterfaces";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -21,6 +24,9 @@ export default class Timer {
     level: number;
     clock: { src: string; x: number; y: number; width: number; height: number; };
     clockImg: HTMLImageElement;
+    bonus: string;
+    goldCup: HTMLImageElement;
+    silvCup: HTMLImageElement;
 
     constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
@@ -30,6 +36,7 @@ export default class Timer {
         this.y = 1183;
         this.min = 0;
         this.sec = 0;
+        this.bonus = "";
         this.isRunning = true;
         this.goldMin = timerData[this.level - 1].goldMin;
         this.goldSec = timerData[this.level - 1].goldSec;
@@ -60,10 +67,16 @@ export default class Timer {
 
         this.clockImg = new Image();
         this.clockImg.src = this.clock.src;
+
+        this.goldCup = new Image();
+        this.goldCup.src = goldCup.image;
+
+        this.silvCup = new Image();
+        this.silvCup.src = silvCup.image;
     }
 
     private content(min: number, sec: number) {
-        return (min <= 9 ? `0${min}` : min) + ":" + (sec <= 10 ? `0${Math.trunc(sec)}` : Math.trunc(sec));
+        return (min <= 9 ? `0${min}` : min) + ":" + (Math.trunc(sec) <= 9 ? `0${Math.trunc(sec)}` : Math.trunc(sec));
     }
 
     public drawText() {
@@ -86,11 +99,13 @@ export default class Timer {
     }
 
     public drawStrip() {
-        const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
-        image.draw(this.context);
-
         const clockImage = new Picture(this.clockImg, this.clock.x, this.clock.y, this.clock.width, this.clock.height);
         clockImage.draw(this.context);
+
+        if (this.min > this.silvMin || (this.min >= this.silvMin && this.sec >= this.silvSec)) return;
+
+        const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
+        image.draw(this.context);
         
         if (this.min >= this.goldMin && this.sec >= this.goldSec) {
             this.context.fillStyle = "#f7f9f7";
@@ -98,6 +113,77 @@ export default class Timer {
         } else {
             this.context.fillStyle = "yellow";
             this.context.fillText(this.content(this.goldMin, this.goldSec), this.textX, this.textY);
+        }
+    }
+
+    countBonus() {
+        const tmData = timerData[this.level - 1];
+        if (this.min > this.silvMin || (this.min >= this.silvMin && this.sec >= this.silvSec)) {
+            this.bonus = "default";
+            return `${tmData.deafultStar}`;
+        }
+        else if (this.min >= this.goldMin && this.sec >= this.goldSec) {
+            this.bonus = "silver";
+            return `${tmData.deafultStar + tmData.silverStar}`;
+        }
+
+        this.bonus = "gold";
+        return `${tmData.deafultStar + tmData.goldStar}`;
+    }
+
+    showCup() {
+        let cupImg;
+        if (this.bonus === "default") return;
+
+        if (this.bonus === "silver") {
+            endTextData.push(silvCupText);
+            cupImg = new Picture(this.silvCup, silvCup.x, silvCup.y, silvCup.width, silvCup.height);
+            cupImg.draw(this.context);
+        } else if (this.bonus === "gold") {
+            endTextData.push(goldCupText);
+            cupImg = new Picture(this.goldCup, goldCup.x, goldCup.y, goldCup.width, goldCup.height);
+            cupImg.draw(this.context);
+        }
+    }
+
+    endPanelView() {
+        endTextData.forEach(el => {
+            if (el.text === 'Время') {
+              el.text = this.content(this.min, this.sec);
+              this.timeAnimation(el);
+            }
+            if (el.text === 'Монеты')
+              el.text = initialData.totalText.text;
+            if (el.text === 'Бонус')
+              el.text = this.countBonus();
+        });
+    }
+
+    timeAnimation(el: IText) {
+        let interval: NodeJS.Timer;
+        setTimeout(() => {
+            interval = setInterval(() => {
+                this.countEndTime(el, interval);
+            }, 12);
+        }, 1000);
+    }
+
+    countEndTime(el: IText, interval: NodeJS.Timer) {
+        if (this.sec > 0) {
+            this.sec -= 1;
+        } else if (this.min > 0) {
+            this.sec = 59;
+            this.min -= 1;
+        } else {
+            clearInterval(interval);
+        }
+
+        el.text = this.content(this.min, this.sec);
+    }
+
+    public checkZeroTime() {
+        if (this.min === 0 && Math.trunc(this.sec) === 0) {
+            this.showCup();
         }
     }
 }
