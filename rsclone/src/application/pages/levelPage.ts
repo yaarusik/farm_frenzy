@@ -16,7 +16,6 @@ import Progress from "./../../utils/gameProgress/progress";
 import EndPanel from "./../../utils/panels/endPanels";
 import StoragePanel from "../../utils/storage/storagePanel";
 import Car from "../../utils/animation/car";
-import CarTrunc from "../../utils/storage/carTrunc";
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -86,7 +85,7 @@ export default class LevelPage extends Control {
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
-      renderStorage: () => this.storage.renderStorage(this.productsCounter),
+      renderStorage: () => this.storage.renderStorage(),
       addStorageTotal: (total: string) => this.car.addStorageTotal(total),
     };
 
@@ -103,11 +102,8 @@ export default class LevelPage extends Control {
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
-    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
-
-
-
 
     const { btn, anim, text } = this.levelInterface.getData();
     this.btn = btn;

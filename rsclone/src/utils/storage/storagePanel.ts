@@ -76,13 +76,15 @@ export default class StoragePanel extends Common {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
   };
+  currentStateCheck: boolean;
 
 
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productCounter: IKeyNumber) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
+    this.productCounter = productCounter;
 
     this.click = {
       changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
@@ -100,8 +102,6 @@ export default class StoragePanel extends Common {
     this.iconsText = {};
     this.iconsPrice = {};
     this.iconsBtnText = {};
-
-    this.productCounter = {};
 
     this.checkProduct = {};
 
@@ -139,6 +139,7 @@ export default class StoragePanel extends Common {
     };
     // сохраняем текущее состояние склада
     this.currentState = {};
+    this.currentStateCheck = true;
 
 
     this.startPanel();
@@ -189,8 +190,8 @@ export default class StoragePanel extends Common {
     });
   }
 
-  public renderStorage(productCounter: IKeyNumber) {
-    this.productCounter = productCounter;
+  public renderStorage() {
+    if (this.currentStateCheck) this.saveState(this.productCounter);
     Object.entries(this.productCounter).forEach(item => {
       const [product, count] = item;
       for (let i = 1; i <= count; i++) {
@@ -267,7 +268,6 @@ export default class StoragePanel extends Common {
       swidth: 0,
       sheight: 0
     };
-    console.log(img);
     if (img) this.coinImg[product] = img;
     else {
       throw new Error('coin img not found');
@@ -335,7 +335,8 @@ export default class StoragePanel extends Common {
               this.buttonDisable();              // дизейблим кнопку
               this.buttonCondition.ok = false;
               this.carTruncClear();
-
+              // для возврата исходного сотояния
+              this.currentStateCheck = true;
             }
             break;
           }
@@ -345,6 +346,10 @@ export default class StoragePanel extends Common {
             this.buttonCondition.ok = false;
             this.buttonDisable();
             this.changeTotal('', 0);
+            // для возврата исходного сотояния
+            this.currentStateCheck = true;
+            this.productCounter = this.currentState;
+            this.carTruncClear();
             break;
           }
         }
@@ -475,7 +480,7 @@ export default class StoragePanel extends Common {
     this.iconImg = new Map();
     this.iconData = {};
     this.checkProduct = {};
-    this.renderStorage(this.productCounter);
+    this.renderStorage();
   }
 
   private changeTotal(product: string, num: number): void {
@@ -515,13 +520,12 @@ export default class StoragePanel extends Common {
   // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
   private saveState(productCounter: IKeyNumber) {
     this.currentState = JSON.parse(JSON.stringify(productCounter));
+    this.currentStateCheck = false;
   }
 
   public changeCountBoxProduct(boxCount: { [key: string]: number }, product: string) {
     this.productCounter[product] += boxCount[product];
-    console.log(this.productCounter, 'productC');
-    console.log(boxCount, 'productB');
-    this.renderStorage(this.productCounter);
+    this.renderStorage();
   }
 
   private carTruncClear() {
