@@ -51,46 +51,7 @@ export const endImg = [
     sy: 0,
     swidth: 40,
     sheight: 36
-  },
-  {
-    type: "animation",
-    name: "bank",
-    image: "images/level/uiLevel/gold_coin.png",
-    x: 443,
-    y: 678,
-    width: 35,
-    height: 35,
-    sx: 0,
-    sy: 128,
-    swidth: 32,
-    sheight: 32
-  },
-  {
-    type: "animation",
-    name: "bank",
-    image: "images/level/uiLevel/gold_coin.png",
-    x: 430,
-    y: 700,
-    width: 35,
-    height: 35,
-    sx: 0,
-    sy: 128,
-    swidth: 32,
-    sheight: 32
-  },
-  {
-    type: "animation",
-    name: "bank",
-    image: "images/level/uiLevel/gold_coin.png",
-    x: 455,
-    y: 700,
-    width: 35,
-    height: 35,
-    sx: 0,
-    sy: 128,
-    swidth: 32,
-    sheight: 32
-  },
+  }
 ];
 
 export const endStaticText = [
@@ -125,15 +86,7 @@ export const endStaticText = [
     x: 510,
     y: 600,
     animation: false,
-  },
-  {
-    text: 'Банк:',
-    fontSize: '50px Vag_Rounded-Bold CY',
-    color: '#fff',
-    x: 510,
-    y: 726,
-    animation: false,
-  },
+  }
 ];
 
 export const endBtn = [
@@ -165,4 +118,31 @@ export const endText = [
     y: 944,
     animation: false,
   },
+];
+
+export const endTextData = [
+  {
+    text: 'Монеты',
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 710,
+    y: 340,
+    animation: false,
+  },
+  {
+    text: 'Время',
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 710,
+    y: 478,
+    animation: false,
+  },
+  {
+    text: 'Бонус',
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 710,
+    y: 600,
+    animation: false,
+  }
 ];

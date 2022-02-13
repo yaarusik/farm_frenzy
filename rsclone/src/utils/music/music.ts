@@ -5,11 +5,11 @@ export function changeVal(val: string) {
     musicVal = val;
 }
 
-const musicStart = new Audio("audio/start.mp3");
-musicStart.volume = 0.5;
+const musicStart = new Audio("audio/front_music/start.mp3");
+musicStart.volume = 0; // Change on 0.5
 
-const musicMain = new Audio("audio/main.mp3");
-musicMain.volume = 0.5;
+const musicMain = new Audio("audio/front_music/main.mp3");
+musicMain.volume = 0; // Change on 0.5
 
 export class Music {
     constructor() {

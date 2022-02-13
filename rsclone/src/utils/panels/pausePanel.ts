@@ -68,7 +68,6 @@ export default class PausePanel extends Common {
             this.buttonsClick(btn, btn.stepY, btn.click);
             setTimeout(() => func.isPaused(), 200);
             this.timer.isRunning = true;
-            console.log(this.timer.isRunning);
             break;
           }
           case "Главное Меню": {
