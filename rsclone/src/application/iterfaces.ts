@@ -61,7 +61,8 @@ export interface IFunctions {
   onMap: () => void;
   onSettings: () => void;
   isStart: () => void;
-  addStorage: (product: string, count: number) => void;
+  renderStorage: () => void;
+  addStorageTotal: (total: string) => void;
 }
 
 export interface IKeyBoolean {

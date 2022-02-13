@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
@@ -14,9 +14,11 @@ export default class BuildSpawn extends Common {
   initialImg: HTMLImageElement[];
   price: IKeyNumber;
   panelState: IKeyBoolean;
+  func: IFunctions;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions) {
     super(canvas, context);
+    this.func = func;
     this.build = this.objParse(animationBuildOptions);
     this.btn = this.objParse(buildSpawnBtn);
     this.initialBtn = [];
@@ -68,13 +70,16 @@ export default class BuildSpawn extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (button.name) {
           case "well": {
-            initialData.changeTotal(button.name);
+            initialData.changeTotalMinus(button.name);
             if (this.animState.well) this.well.wellAnimation(button, this.animState);
             if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
             break;
           }
           case "storage": {
-            this.panelState.storagePanelSwitch = true;
+            if (!this.panelState.carAnimationOn) {
+              this.func.renderStorage();
+              this.panelState.storagePanelSwitch = true;
+            }
             break;
           }
           default: {
@@ -118,3 +123,6 @@ export default class BuildSpawn extends Common {
 }
 
 
+// смещение товара
+// сохранение состояния
+// перемещение в машину и обратно ***

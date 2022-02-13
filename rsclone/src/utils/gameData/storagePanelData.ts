@@ -14,7 +14,7 @@ export const storagePanelImg = [
   },
   {
     type: "picture",
-    name: "depotBack",
+    name: "coin",
     image: "images/level/builds/storage/coin.png",
     x: 1170,
     y: 990,
@@ -24,6 +24,19 @@ export const storagePanelImg = [
     sy: 0,
     swidth: 28,
     sheight: 28
+  },
+  {
+    type: "picture",
+    name: "car-1",
+    image: "images/level/builds/storage/car-1.png",
+    x: 1060,
+    y: 505,
+    width: 500,
+    height: 450,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
   },
 ];
 
@@ -43,7 +56,7 @@ export const storagePanelBtn = [
     width: 200,
     height: 77,
     sx: 0,
-    sy: 0,
+    sy: 144,
     swidth: 128,
     sheight: 48
   },
@@ -66,6 +79,64 @@ export const storagePanelBtn = [
   },
 ];
 
+export const icons = {
+  'egg': {
+    type: "picture",
+    name: "egg",
+    image: "images/level/builds/storage/egg.png",
+    x: 60,
+    y: 0,
+    width: 65,
+    height: 65,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  "bear-1": {
+    type: "picture",
+    name: "bear-1",
+    image: "images/level/builds/storage/bear-1.png",
+    x: 60,
+    y: 0,
+    width: 65,
+    height: 65,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  'coin': {
+    type: "picture",
+    name: "coin",
+    image: "images/level/builds/storage/coin.png",
+    x: 300,
+    y: 0,
+    width: 40,
+    height: 40,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
+  'btn': {
+    type: "button",
+    name: "Ок",
+    image: "images/level/builds/storage/btn.png",
+    stepY: 48,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    x: 300,
+    y: 0,
+    width: 60,
+    height: 43,
+    sx: 0,
+    sy: 0,
+    swidth: 40,
+    sheight: 28
+  }
+};
 
 export const storagePanelStaticText = [
   {
@@ -166,6 +237,15 @@ export const storagePanelText = [
     color: '#fff',
     x: 570,
     y: 1125,
+    animation: false,
+  },
+  {
+    text: '0',
+    name: 'total',
+    fontSize: '40px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1320,
+    y: 1025,
     animation: false,
   },
 ];

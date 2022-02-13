@@ -2,7 +2,7 @@ export const imagesOptions = [
   {
     type: "picture",
     name: "карта",
-    image: "images/map/gameMapStart.jpg",
+    image: "images/map/gameMapComplete.jpg",
     x: 0,
     y: 0,
     width: 1600,
@@ -98,51 +98,8 @@ export const imagesOptions = [
     swidth: 76,
     sheight: 76,
   },
-  {
-    type: "button",
-    name: "4",
-    image: "images/map/new__level.png",
-    id: 4,
-    x: 805,
-    y: 1014,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  },
-  {
-    type: "button",
-    name: "5",
-    image: "images/map/new__level.png",
-    id: 5,
-    x: 898,
-    y: 945,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  },
-  {
-    type: "button",
-    name: "6",
-    image: "images/map/new__level.png",
-    id: 6,
-    x: 995,
-    y: 877,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  }
+
+
 ];
 
 export const textOptions = [

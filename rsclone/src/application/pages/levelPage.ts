@@ -1,7 +1,7 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { Coords, IButton, IText, IFunctions, IKeyBoolean } from "./../iterfaces";
+import { Coords, IButton, IText, IFunctions, IKeyBoolean, IKeyNumber } from "./../iterfaces";
 import Coin from "../../utils/animation/coin";
 import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
@@ -15,7 +15,8 @@ import Products from "../../utils/storage/products";
 import Progress from "./../../utils/gameProgress/progress";
 import EndPanel from "./../../utils/panels/endPanels";
 import StoragePanel from "../../utils/storage/storagePanel";
-
+import Car from "../../utils/animation/car";
+import CarTrunc from "../../utils/storage/carTrunc";
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -41,6 +42,8 @@ export default class LevelPage extends Control {
   progress: Progress;
   endPanel: EndPanel;
   storage: StoragePanel;
+  car: Car;
+  productsCounter: IKeyNumber;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -67,6 +70,13 @@ export default class LevelPage extends Control {
       startPanelSwitch: true,
       endPanelSwitch: false,
       storagePanelSwitch: false,
+      carAnimationOn: false,
+    };
+
+    this.productsCounter = {
+      'egg': 0,
+      'chicken': 0,
+      'bear-1': 0
     };
 
     this.click = {
@@ -76,7 +86,8 @@ export default class LevelPage extends Control {
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
-      addStorage: (product: string, count: number) => this.storage.addStorage(product, count),
+      renderStorage: () => this.storage.renderStorage(this.productsCounter),
+      addStorageTotal: (total: string) => this.car.addStorageTotal(total),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
@@ -88,11 +99,13 @@ export default class LevelPage extends Control {
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
-    this.products = new Products(this.canvas.node, this.context, this.progress);
+    this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
-    this.storage = new StoragePanel(this.canvas.node, this.context);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click);
+    this.car = new Car(this.canvas.node, this.context, this.panelState);
+
 
 
 
@@ -132,7 +145,6 @@ export default class LevelPage extends Control {
     this.context.globalAlpha = 1;
     this.render();
 
-    // upload pause panel
     if (this.panelState.pausePanelSwitch === true) this.pausePanel.render();
 
     this.animation = requestAnimationFrame(() => {
@@ -153,6 +165,8 @@ export default class LevelPage extends Control {
       this.buildSpawn.render();
       this.products.render();
       this.progress.render();
+
+      if (this.panelState.carAnimationOn) this.car.render();
       if (this.panelState.storagePanelSwitch) this.storage.render();
       else {
         // проверка окончания уровня
@@ -160,8 +174,6 @@ export default class LevelPage extends Control {
         if (this.panelState.endPanelSwitch) this.endPanel.render();
       }
     }
-    // if (!this.panelState.storagePanelSwitch) this.storage.render();
-
   }
 
   private endGameCheck(): void {
@@ -237,14 +249,14 @@ export default class LevelPage extends Control {
               }
               case 'chicken': {
                 this.levelRender.createAnimal("chicken");
-                initialData.changeTotal(btn.name);
+                initialData.changeTotalMinus(btn.name);
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 break;
               }
               case 'pig': {
                 // this.levelRender.createAnimal("pig"); Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
                 this.levelRender.createAnimal("bear");
-                initialData.changeTotal(btn.name);
+                initialData.changeTotalMinus(btn.name);
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 break;
               }
@@ -264,7 +276,7 @@ export default class LevelPage extends Control {
           }
         });
       } else {
-        this.products.add(this.storageProducts, this.click);
+        this.products.add(this.storageProducts);
       }
     }
   }
