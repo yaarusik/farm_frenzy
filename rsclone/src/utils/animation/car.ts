@@ -1,5 +1,6 @@
 import Common from "../../application/common/common";
 import { IKeyBoolean, IPicture, IText } from "../../application/iterfaces";
+import { initialData } from "../../application/common/initialData";
 
 
 export default class Car extends Common {
@@ -18,6 +19,7 @@ export default class Car extends Common {
   isState: IKeyBoolean;
   text: IText;
   textRight: number;
+  total: number;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, isState: IKeyBoolean) {
@@ -25,7 +27,7 @@ export default class Car extends Common {
 
     this.isState = isState;
 
-
+    this.total = 0;
     this.initialL = [];
     this.initialR = [];
     this.initialM = [];
@@ -141,11 +143,14 @@ export default class Car extends Common {
       this.carCondition = false;
       this.isState.carAnimationOn = false;
       // тут можно добавить общему тоталу 
+      initialData.changeTotalPlus(this.total);
+
     }
   }
 
   public addStorageTotal(total: string): void {
     this.text.text = total;
+    this.total = +total;
   }
 
 

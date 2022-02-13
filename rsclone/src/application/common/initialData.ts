@@ -8,10 +8,6 @@ class InitialData {
   levelShop: IKeyNumber = {
     'chicken': 100,
     'pig': 1000,
-    'cow': 10000,
-    'ostrich': 70000,
-    'dog': 2600,
-    'cat': 2500,
     'well': 19
   };
 
@@ -30,6 +26,10 @@ class InitialData {
   };
 
   // общий объект для dizable кнопок и менять их состояние
+  btnDisable = {
+    'chicken': false,
+    'pig': false,
+  };
 
   wellDisable = false;
 
@@ -46,14 +46,23 @@ class InitialData {
   }
 
   public checkTotal(price: number) {
-    return +this.totalText.text > price;
+    return +this.totalText.text >= price;
   }
 
-  public changeTotal(btnName: string) {
+  public changeTotalMinus(btnName: string) {
     const isTotal = this.checkTotal(this.levelShop[btnName]);
     if (isTotal) {
       this.totalText.text = +this.totalText.text - this.levelShop[btnName] + '';
     }
+  }
+
+  // public checkDisable() {
+
+  // }
+
+
+  public changeTotalPlus(sum: number) {
+    this.totalText.text = +this.totalText.text + sum + '';
   }
 
 

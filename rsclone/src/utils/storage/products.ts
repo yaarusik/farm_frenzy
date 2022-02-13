@@ -1,4 +1,4 @@
-import { IPicture, IKeyNumber, IFunctions } from "../../application/iterfaces";
+import { IPicture, IKeyNumber } from "../../application/iterfaces";
 import Progress from "../gameProgress/progress";
 import Common from "../../application/common/common";
 
@@ -18,8 +18,9 @@ export default class Products extends Common {
   columnCount: number;
   progress: Progress;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, progress: Progress) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, progress: Progress, productsCounter: IKeyNumber) {
     super(canvas, context);
+    this.productsCounter = productsCounter;
     this.initialProducts = [];
     // товар, который приходит
     this.goods = [];
@@ -36,11 +37,7 @@ export default class Products extends Common {
     this.sizeUp = 23;
     this.sizeRight = 23;
 
-    this.productsCounter = {
-      'egg': 0,
-      'chicken': 0,
-      'bear-1': 0
-    };
+
     // исходные данные для отрисовки
     this.startX = 615;
     this.startY = 1090;
@@ -88,7 +85,6 @@ export default class Products extends Common {
         swidth: 0,
         sheight: 0
       },
-
     ];
   }
 
@@ -110,7 +106,7 @@ export default class Products extends Common {
     }
   }
 
-  public add(product: string[], func: IFunctions) {
+  public add(product: string[]) {
     if (this.columnCount < this.maxColumn) {
       this.goods = product; // ['egg']
       this.goods.forEach(product => {
@@ -121,8 +117,6 @@ export default class Products extends Common {
             this.updateProduct();
             // сохранение количества продуктов
             this.productsCounter[product]++;
-            // здесь вызываем функцию, которая изменяет содержимое склада
-            func.addStorage(product, this.productsCounter[product], this.productsCounter);
             // отображение прогресса игры
             this.progress.scoreCheck(product);
           }
@@ -157,5 +151,6 @@ export default class Products extends Common {
         });
       }
     });
+    this.startStorage();
   }
 }

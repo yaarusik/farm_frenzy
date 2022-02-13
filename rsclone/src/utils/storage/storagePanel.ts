@@ -2,6 +2,7 @@ import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions }
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
+import CarTrunc from "./carTrunc";
 
 export default class StoragePanel extends Common {
   storageImg: IPicture[];
@@ -59,6 +60,7 @@ export default class StoragePanel extends Common {
   };
 
   productCounter: IKeyNumber;
+  currentState: IKeyNumber;
   checkProduct: {
     [key: string]: boolean;
   };
@@ -69,11 +71,26 @@ export default class StoragePanel extends Common {
   buttonCondition: {
     [key: string]: boolean;
   };
+  carTrunc: CarTrunc;
+  click: {
+    changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
+    totalSubstraction: (product: string, number: number) => void;
+  };
+
+
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
+
+    this.click = {
+      changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
+      totalSubstraction: (product: string, number: number) => { this.totalSubstraction(product, number); }
+    };
+
+    this.carTrunc = new CarTrunc(canvas, context, this.click);
+
 
     this.productClass = productClass;
     this.initialImage = [];
@@ -120,6 +137,10 @@ export default class StoragePanel extends Common {
     this.buttonCondition = {
       'ok': false,
     };
+    // сохраняем текущее состояние склада
+    this.currentState = {};
+
+
     this.startPanel();
   }
 
@@ -145,6 +166,8 @@ export default class StoragePanel extends Common {
     this.drawImage(Object.values(this.btnImg), Object.values(this.btnData));
     this.drawImage(Object.values(this.btnAllImg), Object.values(this.btnAllData));
     this.drawText(Object.values(this.iconsBtnText));
+
+    this.carTrunc.render();
   }
 
   drawStaticText(text: IText[]) {
@@ -166,41 +189,42 @@ export default class StoragePanel extends Common {
     });
   }
 
-
-
-  public addStorage(product: string, count: number, productCounter: IKeyNumber): void {
+  public renderStorage(productCounter: IKeyNumber) {
     this.productCounter = productCounter;
-    console.log('products', product, 'count ', count, 'productCounter ', this.productCounter);
-    if (count === 1 && this.checkProduct[product] === undefined) {
-      const { name, img } = this.getImg(product);
-      if (img) {
-        // смещаем позицию товара на складе
-        this.icons[name].y = this.startY;
-        // добавляем данные картинки
-        this.iconData[name] = this.icons[name];
-        // добавляем саму картинку
-        this.iconImg.set(name, img);
-        // рисуем количество элементов
-        this.addText(this.iconsText, product, count, 'x', 0, this.textY);
-        // рисуем цену
-        this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
-        // рисуем монетку
-        this.drawCoin(product);
-        // рисуем кнопки
-        this.drawBtn(product);
-        // рисуем текст для кнопок
-        this.addText(this.iconsBtnText, product, 1, '', 250, this.textY);
-        // смещаем координату
-        this.changeCoordsUp();
-        // знаем что продукт уже есть
-        this.checkProduct[product] = true;
+    Object.entries(this.productCounter).forEach(item => {
+      const [product, count] = item;
+      for (let i = 1; i <= count; i++) {
+        if (i === 1 && this.checkProduct[product] === undefined) {
+          const { name, img } = this.getImg(product);
+          if (img) {
+            // смещаем позицию товара на складе
+            this.icons[name].y = this.startY;
+            // добавляем данные картинки
+            this.iconData[name] = this.icons[name];
+            // добавляем саму картинку
+            this.iconImg.set(name, img);
+            // рисуем количество элементов
+            this.addText(this.iconsText, product, i, 'x', 0, this.textY);
+            // рисуем цену
+            this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
+            // рисуем монетку
+            this.drawCoin(product);
+            // рисуем кнопки
+            this.drawBtn(product);
+            // рисуем текст для кнопок
+            this.addText(this.iconsBtnText, product, 1, '', 250, this.textY);
+            // смещаем координату
+            this.changeCoordsUp();
+            // знаем что продукт уже есть
+            this.checkProduct[product] = true;
+          }
+        } else if (i > 1) {
+          this.iconsText[product].text = `x ${i}`;
+        }
       }
-    } else if (count > 1) {
-      this.iconsText[product].text = `x ${count}`;
-    }
+    });
   }
 
-  // сделать смещение правильное
   private changeCoordsUp(): void {
     this.startY += this.stepY;
   }
@@ -306,10 +330,11 @@ export default class StoragePanel extends Common {
               this.buttonsClick(btn, btn.stepY, btn.click);
               this.productClass.reRenderStorage(); //перерисовка склада
               setTimeout(() => isState.storagePanelSwitch = false, 200);
-              this.changeTotal('egg', 0); // обнуление счетчика склада
+              this.changeTotal('', 0); // обнуление счетчика склада
               this.isState.carAnimationOn = true; // запуск анимации машины
-              btn.sy = btn.stepY * 3; // дизейблим кнопку
+              this.buttonDisable();              // дизейблим кнопку
               this.buttonCondition.ok = false;
+              this.carTruncClear();
 
             }
             break;
@@ -318,6 +343,8 @@ export default class StoragePanel extends Common {
             setTimeout(() => isState.storagePanelSwitch = false, 200);
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.buttonCondition.ok = false;
+            this.buttonDisable();
+            this.changeTotal('', 0);
             break;
           }
         }
@@ -331,9 +358,11 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "1": {
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.carTrunc.drawBox(key, 1);
             this.productSubstraction(key);
             this.changeTotal(key, 1);
             this.buttonCondition.ok = true;
+
             break;
           }
         }
@@ -349,14 +378,18 @@ export default class StoragePanel extends Common {
           case "All": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.changeTotal(key, this.productCounter[key]);
+            this.carTrunc.drawBox(key, this.productCounter[key]);
             this.productCounter[key] = 0;
-            this.deleteRow(key);
+            this.deleteRow();
             this.buttonCondition.ok = true;
+
             break;
           }
         }
       }
     });
+
+    this.carTrunc.clickHundler(event, widthK, heightK);
   }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
@@ -420,38 +453,38 @@ export default class StoragePanel extends Common {
     if (count > 0) {
       this.iconsText[product].text = `x ${count}`;
     } else if (count === 0) {
-      this.deleteRow(product);
+      this.deleteRow();
     }
   }
 
-  private deleteRow(product: string) {
-    delete this.iconsText[product];
-    delete this.iconsPrice[product];
-    delete this.iconsBtnText[product];
+  private deleteRow() {
+    this.startY = 210;
+    this.iconsText = {};
+    this.iconsPrice = {};
+    this.iconsBtnText = {};
     // данные монетки
-    delete this.coinData[product];
-    delete this.coinImg[product];
+    this.coinData = {};
+    this.coinImg = {};
     // данные кнопки
-    delete this.btnData[product];
-    delete this.btnImg[product];
+    this.btnData = {};
+    this.btnImg = {};
     // данные кнопки
-    delete this.btnAllImg[product];
-    delete this.btnAllData[product];
+    this.btnAllImg = {};
+    this.btnAllData = {};
     // данные иконки
-    this.iconImg.delete(product);
-    delete this.iconData[product];
-    delete this.checkProduct[product];
+    this.iconImg = new Map();
+    this.iconData = {};
+    this.checkProduct = {};
+    this.renderStorage(this.productCounter);
   }
 
   private changeTotal(product: string, num: number): void {
     this.storageText.forEach(item => {
       if (item.name === 'total') {
-        console.log(item.text, ' text');
         if (num === 0) {
           this.func.addStorageTotal(item.text);
           item.text = `${num}`;
           // отправляем сумму в машину
-
         } else {
           const currentSum = +item.text + (this.price[product] * num);
           item.text = `${currentSum}`;
@@ -460,26 +493,44 @@ export default class StoragePanel extends Common {
     });
   }
 
-  // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
-  private saveState() {
-    const iconsText = JSON.parse(JSON.stringify(this.iconsText));
-    const iconsPrice = JSON.parse(JSON.stringify(this.iconsPrice));
-    const iconsBtnText = JSON.parse(JSON.stringify(this.iconsBtnText));
-    // данные монетки
-    const coinData = JSON.parse(JSON.stringify(this.coinData));
-    const coinImg = JSON.parse(JSON.stringify(this.coinImg));
-    // данные кнопки
-    const btnData = JSON.parse(JSON.stringify(this.btnData));
-    const btnImg = JSON.parse(JSON.stringify(this.btnImg));
-    // данные кнопки
-    const btnAllImg = JSON.parse(JSON.stringify(this.btnAllImg));
-    const btnAllData = JSON.parse(JSON.stringify(this.btnAllData));
-    // данные иконки
-    const iconImg = JSON.parse(JSON.stringify(this.iconImg));
-    const iconData = JSON.parse(JSON.stringify(this.iconData));
-    const checkProduct = JSON.parse(JSON.stringify(this.checkProduct));
+  public totalSubstraction(product: string, num: number) {
+    this.storageText.forEach(item => {
+      if (item.name === 'total') {
+        const currentSum = +item.text - (this.price[product] * num);
+        item.text = `${currentSum}`;
+        if (currentSum === 0) {
+          this.buttonCondition.ok = false;
+          this.buttonDisable();
+        }
+      }
+    });
   }
 
+  private buttonDisable() {
+    this.storageBtn.forEach(btn => {
+      if (btn.name === 'Ок') btn.sy = btn.stepY * 3;
+    });
+  }
 
+  // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
+  private saveState(productCounter: IKeyNumber) {
+    this.currentState = JSON.parse(JSON.stringify(productCounter));
+  }
+
+  public changeCountBoxProduct(boxCount: { [key: string]: number }, product: string) {
+    this.productCounter[product] += boxCount[product];
+    console.log(this.productCounter, 'productC');
+    console.log(boxCount, 'productB');
+    this.renderStorage(this.productCounter);
+  }
+
+  private carTruncClear() {
+    this.carTrunc.boxCounter = {
+      'egg': 0,
+      'bear-1': 0,
+      'chicken': 0
+    };
+    this.carTrunc.box = {};
+    this.carTrunc.boxData = {};
+  }
 }
-
