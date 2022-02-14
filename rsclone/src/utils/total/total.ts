@@ -1,24 +1,29 @@
 
 import Common from "./../../application/common/common";
 import { initialData } from "../../application/common/initialData";
+import { IKeyString } from "../../application/iterfaces";
 
 export default class Total extends Common {
 
-  level: { one: string; };
+  levelTotal: IKeyString;
+  level: string;
 
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
 
-    this.level = {
-      one: '100',
+    this.level = level.toString();
+
+    this.levelTotal = {
+      '1': '100',
+      '2': '90',
     };
 
     this.startTotal();
   }
 
   private startTotal() {
-    initialData.totalText.text = this.level.one;
+    initialData.totalText.text = this.levelTotal[this.level];
   }
 
   public render() {

@@ -16,7 +16,7 @@ export default class Application extends Control {
 
 		// this.mainCycle();
 		// this.gameMapCycle();
-		this.levelCycle(1);
+		this.levelCycle(2);
 
 		this.music = new Music();
 		this.music.start();
