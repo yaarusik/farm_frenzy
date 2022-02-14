@@ -1,3 +1,4 @@
+import { initialData } from "../../application/common/initialData";
 import { IButton } from "../../application/iterfaces";
 export default class Well {
 
@@ -9,11 +10,10 @@ export default class Well {
     this.waterCount = 0;
     this.maxCount = 5;
   }
-  public wellAnimation(btn: IButton, animState: { [key: string]: boolean; }) {
+  public wellAnimation(btn: IButton) {
     // если в индикаторе есть вода, то блокируем нажатие на колодец
     if (this.waterCount >= this.maxCount) {
       // во время анимации блокируем колодец
-      animState.well = false;
       let frameY = 0;
       const timer = setInterval(() => {
         if (btn.frameY) {
@@ -29,7 +29,6 @@ export default class Well {
       // останавливать в зависимости от индикатора
       setTimeout(() => {
         clearInterval(timer);
-        animState.well = true;
         btn.sy = 0;
         // обнуляем счетчик
         this.waterCount = 0;
@@ -52,16 +51,15 @@ export default class Well {
       this.waterCount++;
     } else {
       // индикатор травы
+      initialData.wellDisable = true;
       grace.grace = false;
     }
   }
 
 
   // пополнение воды
-  public fullWaterIndicator(animState: { [key: string]: boolean; }) {
+  public fullWaterIndicator() {
     if (this.waterCount >= this.maxCount) {
-      // во время анимации блокируем индикатор
-      animState.waterIndicator = false;
       const water = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
       let frameY = 0;
       const timer = setInterval(() => {
@@ -77,7 +75,6 @@ export default class Well {
       }, 100);
       setTimeout(() => {
         clearInterval(timer);
-        animState.waterIndicator = true;
         water.sy = 0;
       }, 2400);
     }

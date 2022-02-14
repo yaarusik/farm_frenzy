@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity } from "../../application/iterfaces";
 import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
 import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
@@ -13,6 +13,7 @@ export default class EndPanel extends Common {
   endPanelText: IText[];
   timer: Timer;
   dataText: IText[];
+  opacityState: IOpacity;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer) {
     super(canvas, context);
@@ -31,10 +32,18 @@ export default class EndPanel extends Common {
     this.endPanelBtn = this.objParse(endBtn);
     this.endPanelText = this.objParse(endText);
 
+    this.opacityState = {
+      show: false,
+      disable: false,
+      opacity: 0
+    };
+
     this.startPanel();
   }
 
   private async startPanel() {
+    if (this.opacityState.show) this.opacityShow(this.opacityState);
+    if (this.opacityState.disable) this.opacityDisable(this.opacityState);
     const loadImage = this.endPanelImg.map(image => this.loadImage(image.image));
     const loadBtn = this.endPanelBtn.map(btn => this.loadImage(btn.image));
     this.initialImage = await this.renderImages(loadImage);
@@ -94,13 +103,10 @@ export default class EndPanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
-            console.log('finish');
+            this.opacityState.disable = true;
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.onMap(), 200);
+            setTimeout(() => func.onMap(), 300);
             break;
-          }
-          default: {
-            console.log("it's startPanel");
           }
         }
       } else {

@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
@@ -10,13 +10,14 @@ export default class BuildSpawn extends Common {
   btn: IButton[];
   initialBtn: HTMLImageElement[];
   well: Well;
-  animState: IKeyBoolean;
   initialImg: HTMLImageElement[];
   price: IKeyNumber;
   panelState: IKeyBoolean;
   func: IFunctions;
+  products: IKeyNumber;
+  opacityState: IOpacity;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
@@ -25,11 +26,9 @@ export default class BuildSpawn extends Common {
     this.initialImg = [];
     this.well = new Well(this.btn);
     this.panelState = panelState;
+    this.products = productsCounter;
+    this.opacityState = opacityState;
 
-    this.animState = {
-      well: true,
-      waterIndicator: true,
-    };
 
     this.price = {
       well: 19,
@@ -70,24 +69,24 @@ export default class BuildSpawn extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (button.name) {
           case "well": {
-            initialData.changeTotalMinus(button.name);
-            if (this.animState.well) this.well.wellAnimation(button, this.animState);
-            if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
+            if (initialData.wellDisable && initialData.btnDisable.well) {
+              initialData.changeTotalMinus(button.name);
+              this.well.wellAnimation(button);
+              this.well.fullWaterIndicator();
+              initialData.wellDisable = false;
+            }
             break;
           }
           case "storage": {
             if (!this.panelState.carAnimationOn) {
-              this.func.renderStorage();
+              this.opacityState.show = true;
+              this.opacityState.disable = false;
+              setTimeout(() => this.func.renderStorage(this.products), 300);
               this.panelState.storagePanelSwitch = true;
             }
             break;
           }
-          default: {
-            console.log("it's pausePanel");
-          }
         }
-      } else {
-        // this.buttonsClick(button, 0, 0);
       }
     });
   }
@@ -121,8 +120,3 @@ export default class BuildSpawn extends Common {
     });
   }
 }
-
-
-// смещение товара
-// сохранение состояния
-// перемещение в машину и обратно ***

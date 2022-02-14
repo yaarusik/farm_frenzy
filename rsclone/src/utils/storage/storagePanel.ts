@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText } from "../../application/iterfaces";
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
@@ -23,16 +23,10 @@ export default class StoragePanel extends Common {
 
   stepY: number;
   startY: number;
-  iconsText: {
-    [key: string]: IText
-  };
-  iconsBtnText: {
-    [key: string]: IText
-  };
+  iconsText: IKeyText;
+  iconsBtnText: IKeyText;
   price: IKeyNumber;
-  iconsPrice: {
-    [key: string]: IText
-  };
+  iconsPrice: IKeyText;
   textY: number;
   priceX: number;
 
@@ -59,30 +53,27 @@ export default class StoragePanel extends Common {
     [key: string]: HTMLImageElement
   };
 
-  productCounter: IKeyNumber;
+  productsCounter: IKeyNumber;
   currentState: IKeyNumber;
-  checkProduct: {
-    [key: string]: boolean;
-  };
+  checkProduct: IKeyBoolean;
   productClass: Products;
   isState: IKeyBoolean;
   func: IFunctions;
-
-  buttonCondition: {
-    [key: string]: boolean;
-  };
+  buttonCondition: IKeyBoolean;
   carTrunc: CarTrunc;
   click: {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
   };
+  currentStateCheck: boolean;
+  opacityState: IOpacity;
 
 
-
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
+    this.productsCounter = productsCounter;
 
     this.click = {
       changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
@@ -100,8 +91,6 @@ export default class StoragePanel extends Common {
     this.iconsText = {};
     this.iconsPrice = {};
     this.iconsBtnText = {};
-
-    this.productCounter = {};
 
     this.checkProduct = {};
 
@@ -139,7 +128,10 @@ export default class StoragePanel extends Common {
     };
     // сохраняем текущее состояние склада
     this.currentState = {};
+    this.currentStateCheck = true;
 
+
+    this.opacityState = opacityState;
 
     this.startPanel();
   }
@@ -154,6 +146,8 @@ export default class StoragePanel extends Common {
   }
 
   public render() {
+    if (this.opacityState.show) this.opacityShow(this.opacityState);
+    if (this.opacityState.disable) this.opacityDisable(this.opacityState);
     this.drawImage(this.initialImage, this.storageImg);
     this.drawImage(this.initialBtn, this.storageBtn);
     this.drawStaticText(this.storageStaticText);
@@ -189,9 +183,12 @@ export default class StoragePanel extends Common {
     });
   }
 
-  public renderStorage(productCounter: IKeyNumber) {
-    this.productCounter = productCounter;
-    Object.entries(this.productCounter).forEach(item => {
+  public renderStorage(products: IKeyNumber) {
+
+    if (this.currentStateCheck) this.saveState(products);
+    this.productsCounter = products;
+
+    Object.entries(products).forEach(item => {
       const [product, count] = item;
       for (let i = 1; i <= count; i++) {
         if (i === 1 && this.checkProduct[product] === undefined) {
@@ -267,7 +264,6 @@ export default class StoragePanel extends Common {
       swidth: 0,
       sheight: 0
     };
-    console.log(img);
     if (img) this.coinImg[product] = img;
     else {
       throw new Error('coin img not found');
@@ -328,28 +324,37 @@ export default class StoragePanel extends Common {
           case "Ок": {
             if (this.buttonCondition.ok) {
               this.buttonsClick(btn, btn.stepY, btn.click);
+              this.opacityState.disable = true;
               this.productClass.reRenderStorage(); //перерисовка склада
-              setTimeout(() => isState.storagePanelSwitch = false, 200);
+              setTimeout(() => isState.storagePanelSwitch = false, 300);
               this.changeTotal('', 0); // обнуление счетчика склада
               this.isState.carAnimationOn = true; // запуск анимации машины
               this.buttonDisable();              // дизейблим кнопку
               this.buttonCondition.ok = false;
               this.carTruncClear();
-
+              // для возврата исходного сотояния
+              this.currentStateCheck = true;
             }
             break;
           }
           case "Отмена": {
-            setTimeout(() => isState.storagePanelSwitch = false, 200);
+            setTimeout(() => isState.storagePanelSwitch = false, 300);
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.opacityState.disable = true;
             this.buttonCondition.ok = false;
             this.buttonDisable();
             this.changeTotal('', 0);
+            // для возврата исходного соcтояния
+            this.currentStateCheck = true;
+            this.saveProducts();
+            this.carTruncClear();
             break;
           }
         }
       }
     });
+
+
 
     Object.entries(this.btnData).forEach(btnObj => {
       const [key, btn] = btnObj;
@@ -362,7 +367,6 @@ export default class StoragePanel extends Common {
             this.productSubstraction(key);
             this.changeTotal(key, 1);
             this.buttonCondition.ok = true;
-
             break;
           }
         }
@@ -377,9 +381,9 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "All": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            this.changeTotal(key, this.productCounter[key]);
-            this.carTrunc.drawBox(key, this.productCounter[key]);
-            this.productCounter[key] = 0;
+            this.changeTotal(key, this.productsCounter[key]);
+            this.carTrunc.drawBox(key, this.productsCounter[key]);
+            this.productsCounter[key] = 0;
             this.deleteRow();
             this.buttonCondition.ok = true;
 
@@ -391,6 +395,8 @@ export default class StoragePanel extends Common {
 
     this.carTrunc.clickHundler(event, widthK, heightK);
   }
+
+
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
     this.storageBtn.forEach(btn => {
@@ -447,8 +453,7 @@ export default class StoragePanel extends Common {
   }
 
   private productSubstraction(product: string) {
-
-    const count = this.productCounter[product] -= 1;
+    const count = this.productsCounter[product] -= 1;
 
     if (count > 0) {
       this.iconsText[product].text = `x ${count}`;
@@ -475,7 +480,8 @@ export default class StoragePanel extends Common {
     this.iconImg = new Map();
     this.iconData = {};
     this.checkProduct = {};
-    this.renderStorage(this.productCounter);
+
+    this.renderStorage(this.productsCounter);
   }
 
   private changeTotal(product: string, num: number): void {
@@ -506,22 +512,28 @@ export default class StoragePanel extends Common {
     });
   }
 
-  private buttonDisable() {
+  public buttonDisable() {
     this.storageBtn.forEach(btn => {
       if (btn.name === 'Ок') btn.sy = btn.stepY * 3;
     });
   }
 
   // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
-  private saveState(productCounter: IKeyNumber) {
-    this.currentState = JSON.parse(JSON.stringify(productCounter));
+  private saveState(products: IKeyNumber) {
+    this.currentState = JSON.parse(JSON.stringify(products));
+    this.currentStateCheck = false;
+  }
+
+  public saveProducts() {
+    for (const key in this.productsCounter) {
+      this.productsCounter[key] = this.currentState[key];
+    }
   }
 
   public changeCountBoxProduct(boxCount: { [key: string]: number }, product: string) {
-    this.productCounter[product] += boxCount[product];
-    console.log(this.productCounter, 'productC');
-    console.log(boxCount, 'productB');
-    this.renderStorage(this.productCounter);
+    this.productsCounter[product] += boxCount[product];
+    this.currentStateCheck = false;
+    this.renderStorage(this.productsCounter);
   }
 
   private carTruncClear() {
@@ -532,5 +544,7 @@ export default class StoragePanel extends Common {
     };
     this.carTrunc.box = {};
     this.carTrunc.boxData = {};
+    this.carTrunc.counter = 0;
+    this.carTrunc.startX = 1208;
   }
 }

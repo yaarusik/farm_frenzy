@@ -153,4 +153,8 @@ export default class Products extends Common {
     });
     this.startStorage();
   }
+
+  public saveproductsCounter(product: IKeyNumber) {
+    this.productsCounter = product;
+  }
 }

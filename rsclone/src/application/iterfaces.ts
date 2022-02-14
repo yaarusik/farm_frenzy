@@ -61,7 +61,7 @@ export interface IFunctions {
   onMap: () => void;
   onSettings: () => void;
   isStart: () => void;
-  renderStorage: () => void;
+  renderStorage: (productsCounter: IKeyNumber) => void;
   addStorageTotal: (total: string) => void;
 }
 
@@ -71,6 +71,16 @@ export interface IKeyBoolean {
 
 export interface IKeyNumber {
   [key: string]: number;
+}
+
+export interface IKeyText {
+  [key: string]: IText;
+}
+
+export interface IOpacity {
+  opacity: number,
+  show: boolean,
+  disable: boolean
 }
 
 // LEVELSECTION =======================
