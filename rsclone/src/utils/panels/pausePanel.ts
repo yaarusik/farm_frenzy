@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { pausePanelImg, pausePanelBtn, pausePanelText } from "./../gameData/pausePanelData";
 import Timer from "../timer/levelTimer";
@@ -16,8 +16,10 @@ export default class PausePanel extends Common {
   canvasContainer: Control<HTMLElement>;
   music: Music;
 
+  opacityState: IOpacity;
+
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer,
-    node: HTMLElement, canvasContainer: Control<HTMLElement>) {
+    node: HTMLElement, canvasContainer: Control<HTMLElement>, opacityState: IOpacity) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
@@ -30,6 +32,10 @@ export default class PausePanel extends Common {
     this.canvasContainer = canvasContainer;
     this.music = new Music();
 
+    this.opacityState = opacityState;
+
+
+
     this.startPanel();
   }
 
@@ -41,6 +47,8 @@ export default class PausePanel extends Common {
   }
 
   public render() {
+    if (this.opacityState.show) this.opacityShow(this.opacityState);
+    if (this.opacityState.disable) this.opacityDisable(this.opacityState);
     this.drawImage(this.initialImage, this.pausePanelImg);
     this.drawImage(this.initialBtn, this.pausePanelBtn);
     this.drawText(this.pausePanelText);
@@ -66,50 +74,54 @@ export default class PausePanel extends Common {
         switch (btn.name) {
           case "Продолжить": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.isPaused(), 200);
+
+            this.opacityState.disable = true;
+            setTimeout(() => func.isPaused(), 400);
             this.timer.isRunning = true;
             break;
           }
           case "Главное Меню": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.onMain(), 200);
-            setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.opacityState.disable = true;
+            setTimeout(() => func.onMain(), 300);
+            setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             this.music.onStart();
             break;
           }
           case "Перезапустить": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.onRestart(), 200);
-            setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.opacityState.disable = true;
+            setTimeout(() => func.onRestart(), 300);
+            setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             this.music.onMain();
             break;
           }
           case "Карта": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.onMap(), 200);
-            setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            this.opacityState.disable = true;
+            setTimeout(() => func.onMap(), 300);
+            setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             this.music.onMain();
             break;
           }
           case "Настройки": {
             let settings;
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.opacityState.disable = true;
             this.canvasContainer.node.style.display = "none";
             if (this.node.childElementCount < 2) {
               settings = new SettingsPage(this.node);
               (<HTMLElement>settings.node.children[0]).classList.add("map");
             }
             // setTimeout(() => func.onSettings(), 200);
-            setTimeout(() => cancelAnimationFrame(cancelAnim), 200);
+            setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             break;
           }
           case "Помощь": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => alert("будем делать эту страничку?"), 200);
+            this.opacityState.disable = true;
+            setTimeout(() => alert("будем делать эту страничку?"), 300);
             break;
-          }
-          default: {
-            console.log("it's pausePanel");
           }
         }
       } else {

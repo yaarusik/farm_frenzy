@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText } from "../../application/iterfaces";
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
@@ -23,16 +23,10 @@ export default class StoragePanel extends Common {
 
   stepY: number;
   startY: number;
-  iconsText: {
-    [key: string]: IText
-  };
-  iconsBtnText: {
-    [key: string]: IText
-  };
+  iconsText: IKeyText;
+  iconsBtnText: IKeyText;
   price: IKeyNumber;
-  iconsPrice: {
-    [key: string]: IText
-  };
+  iconsPrice: IKeyText;
   textY: number;
   priceX: number;
 
@@ -61,26 +55,21 @@ export default class StoragePanel extends Common {
 
   productsCounter: IKeyNumber;
   currentState: IKeyNumber;
-  checkProduct: {
-    [key: string]: boolean;
-  };
+  checkProduct: IKeyBoolean;
   productClass: Products;
   isState: IKeyBoolean;
   func: IFunctions;
-
-  buttonCondition: {
-    [key: string]: boolean;
-  };
+  buttonCondition: IKeyBoolean;
   carTrunc: CarTrunc;
   click: {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
   };
   currentStateCheck: boolean;
+  opacityState: IOpacity;
 
 
-
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
@@ -142,6 +131,8 @@ export default class StoragePanel extends Common {
     this.currentStateCheck = true;
 
 
+    this.opacityState = opacityState;
+
     this.startPanel();
   }
 
@@ -155,6 +146,8 @@ export default class StoragePanel extends Common {
   }
 
   public render() {
+    if (this.opacityState.show) this.opacityShow(this.opacityState);
+    if (this.opacityState.disable) this.opacityDisable(this.opacityState);
     this.drawImage(this.initialImage, this.storageImg);
     this.drawImage(this.initialBtn, this.storageBtn);
     this.drawStaticText(this.storageStaticText);
@@ -331,8 +324,9 @@ export default class StoragePanel extends Common {
           case "Ок": {
             if (this.buttonCondition.ok) {
               this.buttonsClick(btn, btn.stepY, btn.click);
+              this.opacityState.disable = true;
               this.productClass.reRenderStorage(); //перерисовка склада
-              setTimeout(() => isState.storagePanelSwitch = false, 200);
+              setTimeout(() => isState.storagePanelSwitch = false, 300);
               this.changeTotal('', 0); // обнуление счетчика склада
               this.isState.carAnimationOn = true; // запуск анимации машины
               this.buttonDisable();              // дизейблим кнопку
@@ -344,8 +338,9 @@ export default class StoragePanel extends Common {
             break;
           }
           case "Отмена": {
-            setTimeout(() => isState.storagePanelSwitch = false, 200);
+            setTimeout(() => isState.storagePanelSwitch = false, 300);
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.opacityState.disable = true;
             this.buttonCondition.ok = false;
             this.buttonDisable();
             this.changeTotal('', 0);

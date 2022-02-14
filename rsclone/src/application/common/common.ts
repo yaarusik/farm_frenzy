@@ -1,4 +1,4 @@
-import { IPicture, IText, Coords, IButton, IAnimBuild } from './../iterfaces';
+import { IPicture, IText, Coords, IButton, IAnimBuild, IOpacity } from './../iterfaces';
 import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
 
@@ -120,6 +120,21 @@ export default class Common {
 
   public objParse(obj: IPicture[] | IButton[] | IText[] | IAnimBuild[]) {
     return JSON.parse(JSON.stringify(obj));
+  }
+
+  public opacityShow(opacityState: IOpacity) {
+    if (opacityState.opacity <= 1) opacityState.opacity += 0.04;
+    else opacityState.show = false;
+    this.context.globalAlpha = opacityState.opacity;
+  }
+
+  public opacityDisable(opacityState: IOpacity) {
+    if (opacityState.opacity >= 0) opacityState.opacity -= 0.04;
+    // else {
+    //   opacityState.disable = false;
+    //   opacityState.show = true;
+    // }
+    this.context.globalAlpha = opacityState.opacity;
   }
 
 }

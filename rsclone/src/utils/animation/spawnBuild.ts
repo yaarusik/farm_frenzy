@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
@@ -15,8 +15,9 @@ export default class BuildSpawn extends Common {
   panelState: IKeyBoolean;
   func: IFunctions;
   products: IKeyNumber;
+  opacityState: IOpacity;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
@@ -26,6 +27,7 @@ export default class BuildSpawn extends Common {
     this.well = new Well(this.btn);
     this.panelState = panelState;
     this.products = productsCounter;
+    this.opacityState = opacityState;
 
 
     this.price = {
@@ -77,13 +79,12 @@ export default class BuildSpawn extends Common {
           }
           case "storage": {
             if (!this.panelState.carAnimationOn) {
-              this.func.renderStorage(this.products);
+              this.opacityState.show = true;
+              this.opacityState.disable = false;
+              setTimeout(() => this.func.renderStorage(this.products), 300);
               this.panelState.storagePanelSwitch = true;
             }
             break;
-          }
-          default: {
-            console.log("it's pausePanel");
           }
         }
       }

@@ -73,4 +73,14 @@ export interface IKeyNumber {
   [key: string]: number;
 }
 
+export interface IKeyText {
+  [key: string]: IText;
+}
+
+export interface IOpacity {
+  opacity: number,
+  show: boolean,
+  disable: boolean
+}
+
 // LEVELSECTION =======================

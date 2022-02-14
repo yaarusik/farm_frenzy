@@ -1,7 +1,7 @@
 
 import Control from "../../builder/controller";
 import Common from "./../common/common";
-import { Coords, IButton, IText, IFunctions, IKeyBoolean, IKeyNumber } from "./../iterfaces";
+import { Coords, IButton, IText, IFunctions, IKeyBoolean, IKeyNumber, IOpacity } from "./../iterfaces";
 import Coin from "../../utils/animation/coin";
 import Timer from "../../utils/timer/levelTimer";
 import LevelRender from "../common/levelRender";
@@ -43,6 +43,7 @@ export default class LevelPage extends Control {
   storage: StoragePanel;
   car: Car;
   productsCounter: IKeyNumber;
+  opacityState: IOpacity;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -78,6 +79,12 @@ export default class LevelPage extends Control {
       'bear-1': 0
     };
 
+    this.opacityState = {
+      show: false,
+      disable: false,
+      opacity: 0
+    };
+
     this.click = {
       isPaused: () => this.panelState.pausePanelSwitch = false,
       onMain: () => this.onMain(),
@@ -97,12 +104,12 @@ export default class LevelPage extends Control {
     this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
-    this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter);
+    this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer, this.opacityState);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
-    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
 
     const { btn, anim, text } = this.levelInterface.getData();
@@ -248,9 +255,11 @@ export default class LevelPage extends Control {
             switch (btn.name) {
               case "Меню": {
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                this.opacityState.show = true;
+                this.opacityState.disable = false;
                 this.panelState.pausePanelSwitch = true;
                 this.timer.isRunning = false;
-                setTimeout(() => this.startBtn(btn), 200);
+                setTimeout(() => this.startBtn(btn), 300);
                 break;
               }
               case 'chicken': {

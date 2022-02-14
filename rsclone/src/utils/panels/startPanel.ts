@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IKeyBoolean, IOpacity } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
 import { levelInitial } from "../gameData/startLevelData";
@@ -20,6 +20,8 @@ export default class StartPanel extends Common {
     }
   };
 
+  opacityState: IOpacity;
+
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
     this.initialImage = [];
@@ -33,6 +35,16 @@ export default class StartPanel extends Common {
     this.level = level.toString();
 
     this.levelInitial = JSON.parse(JSON.stringify(levelInitial));
+
+
+    // не работает из-за того что рендериться сразу
+    this.opacityState = {
+      show: true,
+      disable: false,
+      opacity: 0
+    };
+
+
 
     this.startPanel();
   }
@@ -49,6 +61,8 @@ export default class StartPanel extends Common {
   }
 
   public render() {
+    if (this.opacityState.show) this.opacityShow(this.opacityState);
+    if (this.opacityState.disable) this.opacityDisable(this.opacityState);
     this.drawImage(this.initialImage, this.startPanelImg);
     this.drawImage(this.initialBtn, this.startPanelBtn);
     this.drawImage(this.startImg, this.levelInitial[this.level].img);
@@ -101,11 +115,9 @@ export default class StartPanel extends Common {
         switch (btn.name) {
           case "Ок": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            setTimeout(() => func.isStart(), 200);
+            this.opacityState.disable = true;
+            setTimeout(() => func.isStart(), 300);
             break;
-          }
-          default: {
-            console.log("it's startPanel");
           }
         }
       } else {
@@ -113,6 +125,7 @@ export default class StartPanel extends Common {
       }
     });
   }
+
 
 
 
