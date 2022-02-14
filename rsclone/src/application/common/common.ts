@@ -104,6 +104,14 @@ export default class Common {
     btn.sy = yStep * count;
   }
 
+  public btnDisable(btn: IButton, yStep: number) {
+    btn.sy = yStep * 3;
+  }
+
+  public btnActive(btn: IButton, yStep: number) {
+    btn.sy = 0;
+  }
+
   public changeAnimation(btn: IPicture, animEnable: boolean, text: IText[]) {
     text.forEach((item) => {
       if (item.text === btn.name) item.animation = animEnable;

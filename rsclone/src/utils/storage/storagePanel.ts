@@ -59,7 +59,7 @@ export default class StoragePanel extends Common {
     [key: string]: HTMLImageElement
   };
 
-  productCounter: IKeyNumber;
+  productsCounter: IKeyNumber;
   currentState: IKeyNumber;
   checkProduct: {
     [key: string]: boolean;
@@ -80,11 +80,11 @@ export default class StoragePanel extends Common {
 
 
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productCounter: IKeyNumber) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
-    this.productCounter = productCounter;
+    this.productsCounter = productsCounter;
 
     this.click = {
       changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
@@ -190,9 +190,12 @@ export default class StoragePanel extends Common {
     });
   }
 
-  public renderStorage() {
-    if (this.currentStateCheck) this.saveState(this.productCounter);
-    Object.entries(this.productCounter).forEach(item => {
+  public renderStorage(products: IKeyNumber) {
+
+    if (this.currentStateCheck) this.saveState(products);
+    this.productsCounter = products;
+
+    Object.entries(products).forEach(item => {
       const [product, count] = item;
       for (let i = 1; i <= count; i++) {
         if (i === 1 && this.checkProduct[product] === undefined) {
@@ -346,15 +349,17 @@ export default class StoragePanel extends Common {
             this.buttonCondition.ok = false;
             this.buttonDisable();
             this.changeTotal('', 0);
-            // для возврата исходного сотояния
+            // для возврата исходного соcтояния
             this.currentStateCheck = true;
-            this.productCounter = this.currentState;
+            this.saveProducts();
             this.carTruncClear();
             break;
           }
         }
       }
     });
+
+
 
     Object.entries(this.btnData).forEach(btnObj => {
       const [key, btn] = btnObj;
@@ -367,7 +372,6 @@ export default class StoragePanel extends Common {
             this.productSubstraction(key);
             this.changeTotal(key, 1);
             this.buttonCondition.ok = true;
-
             break;
           }
         }
@@ -382,9 +386,9 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "All": {
             this.buttonsClick(btn, btn.stepY, btn.click);
-            this.changeTotal(key, this.productCounter[key]);
-            this.carTrunc.drawBox(key, this.productCounter[key]);
-            this.productCounter[key] = 0;
+            this.changeTotal(key, this.productsCounter[key]);
+            this.carTrunc.drawBox(key, this.productsCounter[key]);
+            this.productsCounter[key] = 0;
             this.deleteRow();
             this.buttonCondition.ok = true;
 
@@ -396,6 +400,8 @@ export default class StoragePanel extends Common {
 
     this.carTrunc.clickHundler(event, widthK, heightK);
   }
+
+
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
     this.storageBtn.forEach(btn => {
@@ -452,8 +458,7 @@ export default class StoragePanel extends Common {
   }
 
   private productSubstraction(product: string) {
-
-    const count = this.productCounter[product] -= 1;
+    const count = this.productsCounter[product] -= 1;
 
     if (count > 0) {
       this.iconsText[product].text = `x ${count}`;
@@ -480,7 +485,8 @@ export default class StoragePanel extends Common {
     this.iconImg = new Map();
     this.iconData = {};
     this.checkProduct = {};
-    this.renderStorage();
+
+    this.renderStorage(this.productsCounter);
   }
 
   private changeTotal(product: string, num: number): void {
@@ -511,21 +517,28 @@ export default class StoragePanel extends Common {
     });
   }
 
-  private buttonDisable() {
+  public buttonDisable() {
     this.storageBtn.forEach(btn => {
       if (btn.name === 'Ок') btn.sy = btn.stepY * 3;
     });
   }
 
   // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
-  private saveState(productCounter: IKeyNumber) {
-    this.currentState = JSON.parse(JSON.stringify(productCounter));
+  private saveState(products: IKeyNumber) {
+    this.currentState = JSON.parse(JSON.stringify(products));
     this.currentStateCheck = false;
   }
 
+  public saveProducts() {
+    for (const key in this.productsCounter) {
+      this.productsCounter[key] = this.currentState[key];
+    }
+  }
+
   public changeCountBoxProduct(boxCount: { [key: string]: number }, product: string) {
-    this.productCounter[product] += boxCount[product];
-    this.renderStorage();
+    this.productsCounter[product] += boxCount[product];
+    this.currentStateCheck = false;
+    this.renderStorage(this.productsCounter);
   }
 
   private carTruncClear() {
@@ -536,5 +549,7 @@ export default class StoragePanel extends Common {
     };
     this.carTrunc.box = {};
     this.carTrunc.boxData = {};
+    this.carTrunc.counter = 0;
+    this.carTrunc.startX = 1208;
   }
 }

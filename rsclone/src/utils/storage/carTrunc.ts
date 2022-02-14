@@ -21,6 +21,11 @@ export default class CarTrunc extends Common {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
   };
+  maxProducts: number;
+  counter: number;
+  stepX: number;
+
+
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
@@ -76,6 +81,12 @@ export default class CarTrunc extends Common {
     };
 
     this.startX = 1208;
+    this.stepX = 80;
+
+    this.maxProducts = 2;
+    this.counter = 0;
+
+
 
     this.startTrunc();
   }
@@ -104,36 +115,41 @@ export default class CarTrunc extends Common {
   }
 
   public drawBox(product: string, count: number): void {
-    const { name, img } = this.getImg(product);
-    this.boxData[product] =
-    {
-      type: "button",
-      name: `${product}`,
-      image: `images/level/builds/storage/box/${product}.png`,
-      stepY: 28,
-      stepX: 0,
-      hover: 1,
-      click: 2,
-      x: this.startX,
-      y: 722,
-      width: 68,
-      height: 59,
-      sx: 0,
-      sy: 0,
-      swidth: 44,
-      sheight: 38
-    };
-    if (img) this.box[product] = img;
-    else {
-      throw new Error('box img not found');
+    if (this.boxCounter[product] === 0 && this.counter < this.maxProducts) {
+      this.counter++;
+      const { name, img } = this.getImg(product);
+      this.boxData[product] =
+      {
+        type: "button",
+        name: `${product}`,
+        image: `images/level/builds/storage/box/${product}.png`,
+        stepY: 28,
+        stepX: 0,
+        hover: 1,
+        click: 2,
+        x: this.startX,
+        y: 722,
+        width: 68,
+        height: 59,
+        sx: 0,
+        sy: 0,
+        swidth: 44,
+        sheight: 38
+      };
+      if (img) this.box[product] = img;
+      else {
+        throw new Error('box img not found');
+      }
+      this.changeBoxPosition(product);
     }
-    this.changeBoxPosition();
     console.log('count:', count);
     this.boxCounter[product] += count;
+    console.log(this.counter, 'counter');
   }
 
-  private changeBoxPosition() {
-    this.startX += 80;
+  private changeBoxPosition(product: string) {
+    this.startX += this.stepX;
+
   }
 
   private deleteProduct(product: string) {
@@ -153,14 +169,14 @@ export default class CarTrunc extends Common {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
-            console.log(this.boxCounter, 'egg');
+            this.counter--;
             break;
           }
           case "bear-1": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
-            console.log(this.boxCounter, 'bear');
+            this.counter--;
             break;
           }
         }

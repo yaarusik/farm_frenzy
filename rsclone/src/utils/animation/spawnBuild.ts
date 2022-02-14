@@ -10,13 +10,13 @@ export default class BuildSpawn extends Common {
   btn: IButton[];
   initialBtn: HTMLImageElement[];
   well: Well;
-  animState: IKeyBoolean;
   initialImg: HTMLImageElement[];
   price: IKeyNumber;
   panelState: IKeyBoolean;
   func: IFunctions;
+  products: IKeyNumber;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber) {
     super(canvas, context);
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
@@ -25,11 +25,8 @@ export default class BuildSpawn extends Common {
     this.initialImg = [];
     this.well = new Well(this.btn);
     this.panelState = panelState;
+    this.products = productsCounter;
 
-    this.animState = {
-      well: true,
-      waterIndicator: true,
-    };
 
     this.price = {
       well: 19,
@@ -70,14 +67,17 @@ export default class BuildSpawn extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (button.name) {
           case "well": {
-            initialData.changeTotalMinus(button.name);
-            if (this.animState.well) this.well.wellAnimation(button, this.animState);
-            if (this.animState.waterIndicator) this.well.fullWaterIndicator(this.animState);
+            if (initialData.wellDisable && initialData.btnDisable.well) {
+              initialData.changeTotalMinus(button.name);
+              this.well.wellAnimation(button);
+              this.well.fullWaterIndicator();
+              initialData.wellDisable = false;
+            }
             break;
           }
           case "storage": {
             if (!this.panelState.carAnimationOn) {
-              this.func.renderStorage();
+              this.func.renderStorage(this.products);
               this.panelState.storagePanelSwitch = true;
             }
             break;
@@ -86,8 +86,6 @@ export default class BuildSpawn extends Common {
             console.log("it's pausePanel");
           }
         }
-      } else {
-        // this.buttonsClick(button, 0, 0);
       }
     });
   }
@@ -121,8 +119,3 @@ export default class BuildSpawn extends Common {
     });
   }
 }
-
-
-// смещение товара
-// сохранение состояния
-// перемещение в машину и обратно ***

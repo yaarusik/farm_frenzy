@@ -85,7 +85,7 @@ export default class LevelPage extends Control {
       onSettings: () => this.onSettings(),
       onMap: () => this.onMap(),
       isStart: () => this.panelState.startPanelSwitch = false,
-      renderStorage: () => this.storage.renderStorage(),
+      renderStorage: (productsCounter: IKeyNumber) => this.storage.renderStorage(productsCounter),
       addStorageTotal: (total: string) => this.car.addStorageTotal(total),
     };
 
@@ -98,7 +98,7 @@ export default class LevelPage extends Control {
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
@@ -109,6 +109,8 @@ export default class LevelPage extends Control {
     this.btn = btn;
 
     this.coin = new Coin(anim);
+    // проверка всех кнопок
+    initialData.checkDisable();
 
     this.startUI();
     this.levelRender.startLevel();
@@ -188,33 +190,40 @@ export default class LevelPage extends Control {
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
         if (this.commonFunction.determineCoords(event, scaleCoords)) {
-          if (btn.name === 'coin') {
-            console.log("coin");
-          } else {
-            this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
-            this.commonFunction.changeAnimation(btn, true, text);
-          }
-
-        } else {
           switch (btn.name) {
             case "pig":
-            case "chicken":
-            case "cow":
-            case "ostrich":
-            case "dog":
-            case "cat": {
-              const hoverCoords = 192;
-              const count = 1;
-              // если можно купить, ховер работает
-              this.commonFunction.buttonsHover(btn, hoverCoords, count);
+            case "chicken": {
+              if (initialData.btnDisable[btn.name]) {
+                this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
+              } else {
+                this.commonFunction.btnDisable(btn, btn.stepY);
+              }
               break;
             }
-            case 'coin': {
+            case 'Меню':
+            case 'levelPanel': {
+              this.commonFunction.buttonsHover(btn, btn.stepY, btn.hover);
+              this.commonFunction.changeAnimation(btn, true, text);
               break;
             }
-            default: {
+          }
+        }
+        else {
+          switch (btn.name) {
+            case "pig":
+            case "chicken": {
+              if (initialData.btnDisable[btn.name]) {
+                this.commonFunction.buttonsHover(btn, 0, 0);
+              } else {
+                this.commonFunction.btnDisable(btn, btn.stepY);
+              }
+              break;
+            }
+            case 'Меню':
+            case 'levelPanel': {
               this.commonFunction.buttonsHover(btn, 0, 0);
               this.commonFunction.changeAnimation(btn, false, text);
+              break;
             }
           }
         }
@@ -241,19 +250,26 @@ export default class LevelPage extends Control {
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 this.panelState.pausePanelSwitch = true;
                 this.timer.isRunning = false;
+                setTimeout(() => this.startBtn(btn), 200);
                 break;
               }
               case 'chicken': {
-                this.levelRender.createAnimal("chicken");
-                initialData.changeTotalMinus(btn.name);
-                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                if (initialData.btnDisable[btn.name]) {
+                  this.levelRender.createAnimal("chicken");
+                  initialData.changeTotalMinus(btn.name);
+                  this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                  setTimeout(() => this.startBtn(btn), 200);
+                }
                 break;
               }
               case 'pig': {
-                // this.levelRender.createAnimal("pig"); Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
-                this.levelRender.createAnimal("bear");
-                initialData.changeTotalMinus(btn.name);
-                this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                if (initialData.btnDisable[btn.name]) {
+                  // this.levelRender.createAnimal("pig"); Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
+                  this.levelRender.createAnimal("bear");
+                  initialData.changeTotalMinus(btn.name);
+                  this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
+                  setTimeout(() => this.startBtn(btn), 200);
+                }
                 break;
               }
               case 'mainArea': {
@@ -264,17 +280,17 @@ export default class LevelPage extends Control {
                 if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
                 break;
               }
-              default: console.log("error");
             }
-          } else {
-            // переделать сброс кнопки
-            // this.buttonsClick(btn, 0, 0);
           }
         });
       } else {
         this.products.add(this.storageProducts);
       }
     }
+  }
+
+  private startBtn(btn: IButton) {
+    this.commonFunction.btnActive(btn, btn.stepY);
   }
 
   onMap(): void {
