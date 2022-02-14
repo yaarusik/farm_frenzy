@@ -103,7 +103,7 @@ export default class LevelPage extends Control {
     this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
     this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
-    this.total = new Total(this.canvas.node, this.context);
+    this.total = new Total(this.canvas.node, this.context, this.level);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer, this.opacityState);
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.progress = new Progress(this.canvas.node, this.context, this.level);

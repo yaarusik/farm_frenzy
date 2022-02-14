@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions, IKeyBoolean, IOpacity } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
 import { levelInitial } from "../gameData/startLevelData";

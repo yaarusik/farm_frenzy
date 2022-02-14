@@ -77,6 +77,10 @@ export interface IKeyText {
   [key: string]: IText;
 }
 
+export interface IKeyString {
+  [key: string]: string;
+}
+
 export interface IOpacity {
   opacity: number,
   show: boolean,
