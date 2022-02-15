@@ -40,6 +40,10 @@ export default class BuildSpawn extends BuildUtils {
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
     this.arrow = new Arrow(canvas, context);
 
+    // this.coin = [];
+    // this.coinData = [];
+    // this.cointText = [];
+
 
 
     this.price = {
@@ -137,6 +141,8 @@ export default class BuildSpawn extends BuildUtils {
         }
       }
     });
+    this.driedEgg.moveHundler(event, widthK, heightK);
+
   }
 
 

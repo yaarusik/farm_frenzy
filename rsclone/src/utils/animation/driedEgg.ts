@@ -36,7 +36,7 @@ export default class DriedEgg extends BuildUtils {
       height: 96,
       hover: 1,
       click: 2,
-      stepY: 0,
+      stepY: 96,
       stepX: 0,
       sx: 0,
       sy: 0,
@@ -97,6 +97,27 @@ export default class DriedEgg extends BuildUtils {
           case "flour": {
             const product = this.deleteProduct(this.initialFlour, this.flourProducts);
             this.func.productToStorage(product);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
+    this.flourProducts.forEach(button => {
+      const scaleCoords: Coords = this.scaleCoords(button, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (button.name) {
+          case "flour": {
+            this.buttonsHover(button, button.stepY, button.hover);
+            break;
+          }
+        }
+      } else {
+        switch (button.name) {
+          case 'flour': {
+            this.buttonsHover(button, 0, 0);
             break;
           }
         }
