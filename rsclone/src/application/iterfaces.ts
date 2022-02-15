@@ -63,6 +63,8 @@ export interface IFunctions {
   isStart: () => void;
   renderStorage: (productsCounter: IKeyNumber) => void;
   addStorageTotal: (total: string) => void;
+  productToStorage: (product: string[]) => void;
+  reRenderStorage: () => void;
 }
 
 export interface IKeyBoolean {
@@ -79,6 +81,10 @@ export interface IKeyText {
 
 export interface IKeyString {
   [key: string]: string;
+}
+
+export interface IKeyImage {
+  [key: string]: HTMLImageElement;
 }
 
 export interface IOpacity {

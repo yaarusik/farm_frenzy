@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText, IKeyImage } from "../../application/iterfaces";
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
@@ -20,7 +20,6 @@ export default class StoragePanel extends Common {
   iconData: {
     [key: string]: IPicture
   };
-
   stepY: number;
   startY: number;
   iconsText: IKeyText;
@@ -29,7 +28,6 @@ export default class StoragePanel extends Common {
   iconsPrice: IKeyText;
   textY: number;
   priceX: number;
-
   coinImg: {
     [key: string]: HTMLImageElement
   };
@@ -40,17 +38,10 @@ export default class StoragePanel extends Common {
   btnData: {
     [key: string]: IButton
   };
-
-  btnImg: {
-    [key: string]: HTMLImageElement
-  };
-
+  btnImg: IKeyImage;
+  btnAllImg: IKeyImage;
   btnAllData: {
     [key: string]: IButton
-  };
-
-  btnAllImg: {
-    [key: string]: HTMLImageElement
   };
 
   productsCounter: IKeyNumber;
@@ -68,20 +59,17 @@ export default class StoragePanel extends Common {
   currentStateCheck: boolean;
   opacityState: IOpacity;
 
-
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
     this.productsCounter = productsCounter;
-
     this.click = {
       changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
       totalSubstraction: (product: string, number: number) => { this.totalSubstraction(product, number); }
     };
 
     this.carTrunc = new CarTrunc(canvas, context, this.click);
-
 
     this.productClass = productClass;
     this.initialImage = [];
@@ -111,6 +99,7 @@ export default class StoragePanel extends Common {
       'egg': 10,
       'bear-1': 50,
       'chicken': 25,
+      'flour': 30,
     };
 
     this.iconImg = new Map();
@@ -184,7 +173,6 @@ export default class StoragePanel extends Common {
   }
 
   public renderStorage(products: IKeyNumber) {
-
     if (this.currentStateCheck) this.saveState(products);
     this.productsCounter = products;
 
@@ -193,6 +181,8 @@ export default class StoragePanel extends Common {
       for (let i = 1; i <= count; i++) {
         if (i === 1 && this.checkProduct[product] === undefined) {
           const { name, img } = this.getImg(product);
+          console.log(products);
+
           if (img) {
             // смещаем позицию товара на складе
             this.icons[name].y = this.startY;
@@ -354,8 +344,6 @@ export default class StoragePanel extends Common {
       }
     });
 
-
-
     Object.entries(this.btnData).forEach(btnObj => {
       const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
@@ -373,7 +361,6 @@ export default class StoragePanel extends Common {
       }
     });
 
-
     Object.entries(this.btnAllData).forEach(btnObj => {
       const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
@@ -386,7 +373,6 @@ export default class StoragePanel extends Common {
             this.productsCounter[key] = 0;
             this.deleteRow();
             this.buttonCondition.ok = true;
-
             break;
           }
         }
@@ -395,7 +381,6 @@ export default class StoragePanel extends Common {
 
     this.carTrunc.clickHundler(event, widthK, heightK);
   }
-
 
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
@@ -540,7 +525,8 @@ export default class StoragePanel extends Common {
     this.carTrunc.boxCounter = {
       'egg': 0,
       'bear-1': 0,
-      'chicken': 0
+      'chicken': 0,
+      'flour': 0
     };
     this.carTrunc.box = {};
     this.carTrunc.boxData = {};

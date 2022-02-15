@@ -147,7 +147,14 @@ export default class GameMapPage extends Control {
 						cancelAnimationFrame(this.animation);
 						break;
 					}
-					default: console.log("error");
+					case "3": {
+						this.buttonsClick(btn, btn.stepY);
+						setTimeout(() => {
+							this.startLevel(3);
+						}, 250);
+						cancelAnimationFrame(this.animation);
+						break;
+					}
 				}
 			} else {
 				this.buttonsClick(btn, 0);

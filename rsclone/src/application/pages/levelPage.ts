@@ -76,7 +76,8 @@ export default class LevelPage extends Control {
     this.productsCounter = {
       'egg': 0,
       'chicken': 0,
-      'bear-1': 0
+      'bear-1': 0,
+      'flour': 0,
     };
 
     this.opacityState = {
@@ -94,18 +95,20 @@ export default class LevelPage extends Control {
       isStart: () => this.panelState.startPanelSwitch = false,
       renderStorage: (productsCounter: IKeyNumber) => this.storage.renderStorage(productsCounter),
       addStorageTotal: (total: string) => this.car.addStorageTotal(total),
+      productToStorage: (product: string[]) => this.products.add(product),
+      reRenderStorage: () => this.products.reRenderStorage(),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
 
-    this.levelInterface = new LevelInterface(this.canvas.node, this.context);
+    this.levelInterface = new LevelInterface(this.canvas.node, this.context, this.level);
     this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
     this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context, this.level);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer, this.opacityState);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState, this.level);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);

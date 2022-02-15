@@ -166,6 +166,124 @@ const textTwo = [
   },
 ];
 
+const imgThree = [
+  {
+    type: "button",
+    name: "chicken",
+    image: "images/pets/chicken/death.png",
+    x: 510,
+    y: 552,
+    width: 100,
+    height: 100,
+    sx: 0,
+    sy: 0,
+    swidth: 64,
+    sheight: 64
+  },
+  {
+    type: "button",
+    name: "egg",
+    image: "images/level/initial/egg.png",
+    x: 524,
+    y: 488,
+    width: 60,
+    height: 64,
+    sx: 0,
+    sy: 0,
+    swidth: 60,
+    sheight: 64
+  },
+  {
+    type: "button",
+    name: "flour",
+    image: "images/level/initial/flour.png",
+    x: 520,
+    y: 656,
+    width: 80,
+    height: 96,
+    sx: 0,
+    sy: 0,
+    swidth: 80,
+    sheight: 96
+  },
+];
+
+const textThree = [
+  {
+    name: "eggsCount",
+    text: '6',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 656,
+    y: 534,
+    animation: false,
+  },
+  {
+    name: "chickenCount",
+    text: '3',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 656,
+    y: 628,
+    animation: false,
+  },
+  {
+    name: "flourCount",
+    text: '2',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 656,
+    y: 722,
+    animation: false,
+  },
+  {
+    name: "levelEnd",
+    text: '50',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 920,
+    y: 534,
+    animation: false,
+  },
+  {
+    name: "goldEnd",
+    text: '+150',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 1008,
+    y: 630,
+    animation: false,
+  },
+  {
+    name: "goldTime",
+    text: '02:00',
+    fontSize: '30px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 842,
+    y: 682,
+    animation: false,
+  },
+  {
+    name: "silverEnd",
+    text: '+50',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1026,
+    y: 766,
+    animation: false,
+  },
+  {
+    name: "silverTimer",
+    text: '03:00',
+    fontSize: '30px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 838,
+    y: 816,
+    animation: false,
+  },
+];
+
+
 export const levelInitial = {
   '1': {
     img: imgOne,
@@ -174,6 +292,10 @@ export const levelInitial = {
   '2': {
     img: imgTwo,
     text: textTwo,
+  },
+  '3': {
+    img: imgThree,
+    text: textThree,
   }
 };
 
