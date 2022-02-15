@@ -1,4 +1,4 @@
-import Common from "../../application/common/common";
+import BuildUtils from "../classes/buildUtil";
 import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
@@ -6,7 +6,7 @@ import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
 import DriedEgg from "./driedEgg";
 
-export default class BuildSpawn extends Common {
+export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
   btn: IButton[];
   initialBtn: HTMLImageElement[];
@@ -33,7 +33,7 @@ export default class BuildSpawn extends Common {
     this.opacityState = opacityState;
     this.level = level;
 
-    this.driedEgg = new DriedEgg(canvas, context);
+    this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
 
 
     this.price = {
@@ -54,22 +54,15 @@ export default class BuildSpawn extends Common {
     // сделать потом по клику
     if (this.level === 3) this.driedEgg.render();
     // надо будет зажизейблить после первой отрисовки
-    this.buildSpawn();
+    this.startSpawn();
   }
 
-  private buildSpawn() {
+  private startSpawn() {
     this.build.forEach((item, index) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildAnimation(item, build), 400 * index);
+        setTimeout(() => this.buildSpawn(item, build), 400 * index);
       });
     });
-  }
-
-  private buildAnimation(item: IAnimBuild, build: IButton) {
-    if (item.name === build.name) {
-      if (item.maxY > build.y)
-        build.y += item.speed;
-    }
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
@@ -128,8 +121,9 @@ export default class BuildSpawn extends Common {
             break;
           }
         }
-
       }
     });
   }
+
+
 }

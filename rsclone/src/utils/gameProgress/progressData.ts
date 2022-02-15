@@ -130,7 +130,7 @@ const textTwoSmall = [
     x: 1420,
     y: 1130,
     animation: false,
-    id: 0
+    id: 1
   },
 ];
 
@@ -161,6 +161,19 @@ const imgThreeSmall = [
     swidth: 60,
     sheight: 64
   },
+  {
+    type: "button",
+    name: "flour",
+    image: "images/level/initial/flour.png",
+    x: 1475,
+    y: 1056,
+    width: 44,
+    height: 55,
+    sx: 0,
+    sy: 0,
+    swidth: 80,
+    sheight: 96
+  },
 ];
 
 const textThreeSmall = [
@@ -182,7 +195,17 @@ const textThreeSmall = [
     x: 1420,
     y: 1130,
     animation: false,
-    id: 0
+    id: 1
+  },
+  {
+    name: "flour",
+    text: '0/2',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1480,
+    y: 1130,
+    animation: false,
+    id: 2
   },
 ];
 

@@ -1,8 +1,8 @@
-import Common from "../../application/common/common";
-import { IButton, IAnimBuild, Coords, } from "../../application/iterfaces";
+import BuildUtils from "../classes/buildUtil";
+import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, } from "../../application/iterfaces";
 import { driedEggsBtn, driedAnim } from "./../gameData/spawnData";
 
-export default class DriedEgg extends Common {
+export default class DriedEgg extends BuildUtils {
   build: IAnimBuild[];
   btn: IButton[];
   initialBtn: HTMLImageElement[];
@@ -12,12 +12,19 @@ export default class DriedEgg extends Common {
   initialFlour: HTMLImageElement[];
   houseDisable: boolean;
   flourProducts: IButton[];
+  func: IFunctions;
+  productCounter: IKeyNumber;
+  animTime: number;
+  animSpeed: number;
+  useProduct: string;
 
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D,) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: IFunctions, productCounter: IKeyNumber) {
     super(canvas, context);
     this.build = this.objParse(driedAnim);
     this.btn = this.objParse(driedEggsBtn);
+    this.productCounter = productCounter;
+    this.func = func;
     this.initialBtn = [];
     this.flour = {
       type: "button",
@@ -42,7 +49,9 @@ export default class DriedEgg extends Common {
     this.maxFrameY = 7;
     this.maxFrameX = 1;
     this.houseDisable = false;
-
+    this.animTime = 2400;
+    this.animSpeed = 90;
+    this.useProduct = 'egg';
 
     this.startPanel();
   }
@@ -56,23 +65,17 @@ export default class DriedEgg extends Common {
     this.drawImage(this.initialBtn, this.btn);
     this.drawImage(this.initialFlour, this.flourProducts);
 
-    this.buildSpawn();
+    this.startSpawn();
   }
 
-  private buildSpawn() {
+  private startSpawn() {
     this.build.forEach((item, index) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildAnimation(item, build), 400 * index);
+        setTimeout(() => this.buildSpawn(item, build), 400 * index);
       });
     });
   }
 
-  private buildAnimation(item: IAnimBuild, build: IButton) {
-    if (item.name === build.name) {
-      if (item.maxY > build.y)
-        build.y += item.speed;
-    }
-  }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
     [...this.btn, ...this.flourProducts].forEach(button => {
@@ -80,16 +83,21 @@ export default class DriedEgg extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (button.name) {
           case "flourBuild": {
-            if (!this.houseDisable) {
+            if (!this.houseDisable && this.checkProduct(this.useProduct, this.productCounter)) {
               this.houseDisable = true;
-              this.flourAnim(button);
-              this.fullhouseIndicator();
+              this.deleteUseProduct(this.useProduct);
+              this.func.reRenderStorage();
+              this.buildAnimation(button, this.maxFrameX, this.maxFrameY, () => {
+                this.showProduct();
+                this.houseDisable = false;
+              });
+              this.fullhouseIndicator(this.btn, this.animTime, this.animSpeed);
             }
             break;
           }
           case "flour": {
-            const product = this.deleteProduct();
-            console.log(product);
+            const product = this.deleteProduct(this.initialFlour, this.flourProducts);
+            this.func.productToStorage(product);
             break;
           }
         }
@@ -97,55 +105,6 @@ export default class DriedEgg extends Common {
     });
   }
 
-  // пополнение
-  public fullhouseIndicator() {
-
-    const house = <IButton>this.btn.find(item => item.name === 'houseIndicator');
-    let frameY = 0;
-    let animStop = false;
-    const timer = setInterval(() => {
-      if (house.frameY && !animStop) {
-        if (frameY < house.frameY) {
-          house.sy += house.stepY;
-          frameY++;
-        } else {
-          animStop = true;
-        }
-      }
-    }, 90);
-    setTimeout(() => {
-      clearInterval(timer);
-      house.sy = 0;
-    }, 2400);
-  }
-
-  private flourAnim(btn: IButton): void {
-    let frameY = 0;
-    let frameX = 0;
-    const timer = setInterval(() => {
-      if (frameY < this.maxFrameY) {
-        btn.sy += btn.sheight;
-        frameY++;
-      } else if (frameX < this.maxFrameX) {
-        frameX++;
-        frameY = 0;
-        btn.sy = 0;
-        btn.sx += btn.swidth;
-      } else {
-        frameY = 0;
-        btn.sy = 0;
-        frameX = 0;
-        btn.sx = 0;
-      }
-    }, 50);
-    setTimeout(() => {
-      clearInterval(timer);
-      btn.sy = 0;
-      btn.sx = 0;
-      this.showProduct();
-      this.houseDisable = false;
-    }, 2400);
-  }
 
   // отдельный массив, чтоб выплевывал продукт
   private showProduct() {
@@ -158,11 +117,10 @@ export default class DriedEgg extends Common {
     this.initialFlour = await this.renderImages(loadFlour);
   }
 
-  private deleteProduct(): string {
-    this.initialFlour.pop();
-    const product = <IButton>this.flourProducts.pop();
-    return product.name;
+  private deleteUseProduct(product: string) {
+    this.productCounter[product]--;
   }
+
 
 
 

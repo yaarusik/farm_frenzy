@@ -76,7 +76,8 @@ export default class LevelPage extends Control {
     this.productsCounter = {
       'egg': 0,
       'chicken': 0,
-      'bear-1': 0
+      'bear-1': 0,
+      'flour': 0,
     };
 
     this.opacityState = {
@@ -94,6 +95,8 @@ export default class LevelPage extends Control {
       isStart: () => this.panelState.startPanelSwitch = false,
       renderStorage: (productsCounter: IKeyNumber) => this.storage.renderStorage(productsCounter),
       addStorageTotal: (total: string) => this.car.addStorageTotal(total),
+      productToStorage: (product: string[]) => this.products.add(product),
+      reRenderStorage: () => this.products.reRenderStorage(),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");

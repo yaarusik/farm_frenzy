@@ -38,7 +38,7 @@ export default class Well {
 
   // водный индикатор
   public waterIndicatorChange(grace: { [key: string]: boolean }) {
-    if (this.waterCount < this.maxCount - 1) {
+    if (this.waterCount < this.maxCount) {
       const waterIndicator = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
       const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
       const step = 5;
