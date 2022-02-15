@@ -1,11 +1,14 @@
-import Common from "../../application/common/common";
+import BuildUtils from "../classes/buildUtil";
 import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
+import DriedEgg from "./driedEgg";
+import Arrow from "./arrow";
 
-export default class BuildSpawn extends Common {
+
+export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
   btn: IButton[];
   initialBtn: HTMLImageElement[];
@@ -16,8 +19,12 @@ export default class BuildSpawn extends Common {
   func: IFunctions;
   products: IKeyNumber;
   opacityState: IOpacity;
+  driedEgg: DriedEgg;
+  level: number;
+  arrow: Arrow;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
+
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, level: number) {
     super(canvas, context);
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
@@ -28,6 +35,11 @@ export default class BuildSpawn extends Common {
     this.panelState = panelState;
     this.products = productsCounter;
     this.opacityState = opacityState;
+    this.level = level;
+
+    this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
+    this.arrow = new Arrow(canvas, context);
+
 
 
     this.price = {
@@ -45,22 +57,20 @@ export default class BuildSpawn extends Common {
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
-    this.buildSpawn();
+    this.arrow.render();
+
+    // сделать потом по клику
+    if (this.level === 3) this.driedEgg.render();
+
+    this.startSpawn();
   }
 
-  private buildSpawn() {
-    this.build.forEach((item, index) => {
+  public startSpawn() {
+    this.build.forEach((item) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildAnimation(item, build), 500 * index);
+        this.buildSpawn(item, build);
       });
     });
-  }
-
-  private buildAnimation(item: IAnimBuild, build: IButton) {
-    if (item.name === build.name) {
-      if (item.maxY > build.y)
-        build.y += item.speed;
-    }
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
@@ -74,10 +84,15 @@ export default class BuildSpawn extends Common {
               this.well.wellAnimation(button);
               this.well.fullWaterIndicator();
               initialData.wellDisable = false;
+            } else if (!initialData.btnDisable.well) {
+              this.arrow.showArrow('up');
             }
+
+
             break;
           }
-          case "storage": {
+          case "storage":
+          case "car": {
             if (!this.panelState.carAnimationOn) {
               this.opacityState.show = true;
               this.opacityState.disable = false;
@@ -89,6 +104,9 @@ export default class BuildSpawn extends Common {
         }
       }
     });
+
+    // сделать потом условие
+    this.driedEgg.clickHundler(event, widthK, heightK);
   }
 
   public waterChange(grace: { [key: string]: boolean }) {
@@ -103,20 +121,23 @@ export default class BuildSpawn extends Common {
           case 'well': {
             break;
           }
-          case 'storage': {
+          case 'storage':
+          case "car": {
             this.buttonsHover(button, button.stepY, button.hover);
             break;
           }
         }
       } else {
         switch (button.name) {
-          case 'storage': {
+          case 'storage':
+          case 'car': {
             this.buttonsHover(button, 0, 0);
             break;
           }
         }
-
       }
     });
   }
+
+
 }

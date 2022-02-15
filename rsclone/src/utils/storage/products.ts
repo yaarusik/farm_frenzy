@@ -39,7 +39,7 @@ export default class Products extends Common {
 
 
     // исходные данные для отрисовки
-    this.startX = 615;
+    this.startX = 725;
     this.startY = 1090;
     // начальные данные
     this.product = [];
@@ -85,6 +85,19 @@ export default class Products extends Common {
         swidth: 0,
         sheight: 0
       },
+      {
+        type: "picture",
+        name: "flour",
+        image: "images/level/products_mini/mini_flour.png",
+        x: this.startX,
+        y: this.startY,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
     ];
   }
 
@@ -107,11 +120,13 @@ export default class Products extends Common {
   }
 
   public add(product: string[]) {
+
     if (this.columnCount < this.maxColumn) {
       this.goods = product; // ['egg']
       this.goods.forEach(product => {
         this.product.forEach(img => {
           if (img.name === product) {
+            console.log(product, img.name);
             this.productRender.push(img);
             this.changeCoords();
             this.updateProduct();
@@ -133,7 +148,7 @@ export default class Products extends Common {
   public reRenderStorage() {
     this.productRender = [];
     this.initialProducts = [];
-    this.startX = 615;
+    this.startX = 725;
     this.startY = 1090;
     this.changeColumn = 1;
     this.columnCount = 0;

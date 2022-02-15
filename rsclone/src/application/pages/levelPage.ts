@@ -16,6 +16,7 @@ import Progress from "./../../utils/gameProgress/progress";
 import EndPanel from "./../../utils/panels/endPanels";
 import StoragePanel from "../../utils/storage/storagePanel";
 import Car from "../../utils/animation/car";
+import Arrow from "../../utils/animation/arrow";
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -44,6 +45,7 @@ export default class LevelPage extends Control {
   car: Car;
   productsCounter: IKeyNumber;
   opacityState: IOpacity;
+  arrow: Arrow;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -76,7 +78,8 @@ export default class LevelPage extends Control {
     this.productsCounter = {
       'egg': 0,
       'chicken': 0,
-      'bear-1': 0
+      'bear-1': 0,
+      'flour': 0,
     };
 
     this.opacityState = {
@@ -94,24 +97,26 @@ export default class LevelPage extends Control {
       isStart: () => this.panelState.startPanelSwitch = false,
       renderStorage: (productsCounter: IKeyNumber) => this.storage.renderStorage(productsCounter),
       addStorageTotal: (total: string) => this.car.addStorageTotal(total),
+      productToStorage: (product: string[]) => this.products.add(product),
+      reRenderStorage: () => this.products.reRenderStorage(),
     };
 
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
 
-    this.levelInterface = new LevelInterface(this.canvas.node, this.context);
+    this.levelInterface = new LevelInterface(this.canvas.node, this.context, this.level);
     this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
     this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
     this.total = new Total(this.canvas.node, this.context, this.level);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer, this.opacityState);
-    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState);
+    this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState, this.level);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
     this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
-
+    this.arrow = new Arrow(this.canvas.node, this.context);
     const { btn, anim, text } = this.levelInterface.getData();
     this.btn = btn;
 
@@ -170,6 +175,7 @@ export default class LevelPage extends Control {
       this.buildSpawn.render();
       this.products.render();
       this.progress.render();
+      this.arrow.render();
 
       if (this.panelState.carAnimationOn) this.car.render();
       if (this.panelState.storagePanelSwitch) this.storage.render();
@@ -268,6 +274,8 @@ export default class LevelPage extends Control {
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
+                } else {
+                  this.arrow.showArrow('up');
                 }
                 break;
               }
@@ -278,6 +286,8 @@ export default class LevelPage extends Control {
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
+                } else {
+                  this.arrow.showArrow('up');
                 }
                 break;
               }
@@ -287,6 +297,7 @@ export default class LevelPage extends Control {
                 const clickY = (event.clientY - rect.top) * this.curHeightK;
                 this.buildSpawn.waterChange(this.isGrace);
                 if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+                else this.arrow.showArrow('right');
                 break;
               }
             }

@@ -1,6 +1,7 @@
 import { IPicture, IButton, IText } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { lvlInterfaceImg, lvlInterfaceBtn, lvlInterfaceAnim, levelTextOptions } from './../gameData/levelData';
+import backs from "../gameData/backData";
 
 export default class LevelInterface extends Common {
   initialImg: HTMLImageElement[];
@@ -12,12 +13,14 @@ export default class LevelInterface extends Common {
     anim: IButton[],
     text: IText[]
   };
+  level: number;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
     this.initialImg = [];
     this.initialBtn = [];
     this.initialAnim = [];
+    this.level = level
 
     this.lvlInterface = {
       btn: JSON.parse(JSON.stringify(lvlInterfaceBtn)),
@@ -25,6 +28,10 @@ export default class LevelInterface extends Common {
       text: JSON.parse(JSON.stringify(levelTextOptions)),
       img: JSON.parse(JSON.stringify(lvlInterfaceImg)),
     };
+
+    if (this.level === 3) {
+      this.lvlInterface.img.push(backs.upLeft);
+    }
 
     this.startPanel();
   }
