@@ -39,16 +39,18 @@ export default class Well {
   // водный индикатор
   public waterIndicatorChange(grace: { [key: string]: boolean }) {
     if (this.waterCount < this.maxCount) {
+      this.waterCount++;
+
       const waterIndicator = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
       const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
       const step = 5;
+
       if (waterIndicator.sy < maxHeight) {
         waterIndicator.sy += step * waterIndicator.stepY;
       } else {
         waterIndicator.sy = 0;
       }
       grace.grace = true;
-      this.waterCount++;
     } else {
       // индикатор травы
       initialData.wellDisable = true;

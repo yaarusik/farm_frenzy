@@ -4,11 +4,8 @@ import { IAnimBuild, IButton, IKeyNumber } from "../../application/iterfaces";
 
 export default class BuildUtils extends Common {
 
-
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
-
-
   }
 
   public buildSpawn(item: IAnimBuild, build: IButton) {
