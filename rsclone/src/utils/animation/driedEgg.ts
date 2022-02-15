@@ -64,14 +64,13 @@ export default class DriedEgg extends BuildUtils {
   public render() {
     this.drawImage(this.initialBtn, this.btn);
     this.drawImage(this.initialFlour, this.flourProducts);
-
     this.startSpawn();
   }
 
   private startSpawn() {
-    this.build.forEach((item, index) => {
+    this.build.forEach((item) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildSpawn(item, build), 400 * index);
+        this.buildSpawn(item, build);
       });
     });
   }
@@ -104,7 +103,6 @@ export default class DriedEgg extends BuildUtils {
       }
     });
   }
-
 
   // отдельный массив, чтоб выплевывал продукт
   private showProduct() {

@@ -5,6 +5,8 @@ import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
 import DriedEgg from "./driedEgg";
+import Arrow from "./arrow";
+
 
 export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
@@ -19,6 +21,8 @@ export default class BuildSpawn extends BuildUtils {
   opacityState: IOpacity;
   driedEgg: DriedEgg;
   level: number;
+  arrow: Arrow;
+
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, level: number) {
     super(canvas, context);
@@ -34,6 +38,8 @@ export default class BuildSpawn extends BuildUtils {
     this.level = level;
 
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
+    this.arrow = new Arrow(canvas, context);
+
 
 
     this.price = {
@@ -51,16 +57,18 @@ export default class BuildSpawn extends BuildUtils {
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
+    this.arrow.render();
+
     // сделать потом по клику
     if (this.level === 3) this.driedEgg.render();
-    // надо будет зажизейблить после первой отрисовки
+
     this.startSpawn();
   }
 
-  private startSpawn() {
-    this.build.forEach((item, index) => {
+  public startSpawn() {
+    this.build.forEach((item) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildSpawn(item, build), 400 * index);
+        this.buildSpawn(item, build);
       });
     });
   }
@@ -76,7 +84,11 @@ export default class BuildSpawn extends BuildUtils {
               this.well.wellAnimation(button);
               this.well.fullWaterIndicator();
               initialData.wellDisable = false;
+            } else if (!initialData.btnDisable.well) {
+              this.arrow.showArrow('up');
             }
+
+
             break;
           }
           case "storage":
@@ -109,14 +121,16 @@ export default class BuildSpawn extends BuildUtils {
           case 'well': {
             break;
           }
-          case 'storage': {
+          case 'storage':
+          case "car": {
             this.buttonsHover(button, button.stepY, button.hover);
             break;
           }
         }
       } else {
         switch (button.name) {
-          case 'storage': {
+          case 'storage':
+          case 'car': {
             this.buttonsHover(button, 0, 0);
             break;
           }

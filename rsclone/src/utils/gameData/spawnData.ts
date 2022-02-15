@@ -25,7 +25,7 @@ export const buildSpawnBtn = [
     y: -210,
     width: 200,
     height: 192,
-    stepY: 52,
+    stepY: 106,
     stepX: 0,
     hover: 1,
     click: 2,
@@ -57,7 +57,7 @@ export const buildSpawnBtn = [
     name: "waterIndicator",
     image: "images/level/indicators/indicator_water.png",
     x: 930,
-    y: -198,
+    y: -200,
     width: 22,
     stepY: 52,
     stepX: 0,
@@ -68,7 +68,7 @@ export const buildSpawnBtn = [
     sx: 0,
     sy: 0,
     swidth: 12,
-    sheight: 53
+    sheight: 52
   },
 
 ];
