@@ -4,7 +4,7 @@ export const buildSpawnBtn = [
     type: "button",
     name: "storage",
     image: "images/level/builds/storage/storage_1.png",
-    x: 530,
+    x: 640,
     y: -300,
     stepY: 132,
     stepX: 0,
@@ -16,6 +16,23 @@ export const buildSpawnBtn = [
     sy: 0,
     swidth: 164,
     sheight: 132
+  },
+  {
+    type: "animation",
+    name: "car",
+    image: "images/level/car/car-1.png",
+    x: 400,
+    y: -210,
+    width: 200,
+    height: 192,
+    stepY: 52,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    sx: 0,
+    sy: 0,
+    swidth: 110,
+    sheight: 106
   },
   {
     type: "button",
@@ -57,3 +74,56 @@ export const buildSpawnBtn = [
 ];
 
 
+export const driedEggsBtn = [
+  {
+    type: "button",
+    name: "flourBuild",
+    image: "images/level/builds/driedEgg/flour-1.png",
+    x: 206,
+    y: -300,
+    stepY: 156,
+    stepX: 176,
+    hover: 1,
+    click: 2,
+    width: 280,
+    height: 248,
+    sx: 0,
+    sy: 0,
+    swidth: 176,
+    sheight: 156
+  },
+  {
+    type: "animation",
+    name: "houseIndicator",
+    image: "images/level/builds/driedEgg/houseIndicator.png",
+    x: 470,
+    y: -100,
+    width: 22,
+    height: 100,
+    stepY: 52,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    frameY: 27,
+    sx: 0,
+    sy: 0,
+    swidth: 12,
+    sheight: 53
+  },
+
+];
+
+export const driedAnim = [
+  {
+    name: 'flourBuild',
+    maxX: 0,
+    maxY: 235,
+    speed: 24
+  },
+  {
+    name: 'houseIndicator',
+    maxX: 0,
+    maxY: 330,
+    speed: 24
+  },
+];

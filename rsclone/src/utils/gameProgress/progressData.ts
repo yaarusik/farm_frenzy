@@ -134,6 +134,58 @@ const textTwoSmall = [
   },
 ];
 
+const imgThreeSmall = [
+  {
+    type: "button",
+    name: "egg",
+    image: "images/level/initial/egg.png",
+    x: 1346,
+    y: 1058,
+    width: 44,
+    height: 48,
+    sx: 0,
+    sy: 0,
+    swidth: 60,
+    sheight: 64
+  },
+  {
+    type: "button",
+    name: "egg",
+    image: "images/level/initial/chicken.png",
+    x: 1406,
+    y: 1052,
+    width: 60,
+    height: 64,
+    sx: 0,
+    sy: 0,
+    swidth: 60,
+    sheight: 64
+  },
+];
+
+const textThreeSmall = [
+  {
+    name: "egg",
+    text: '0/6',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1350,
+    y: 1130,
+    animation: false,
+    id: 0
+  },
+  {
+    name: "chicken",
+    text: '0/3',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1420,
+    y: 1130,
+    animation: false,
+    id: 0
+  },
+];
+
 export const levelSmallInitial = {
   '1': {
     img: imgOneSmall,
@@ -142,7 +194,10 @@ export const levelSmallInitial = {
   '2': {
     img: imgTwoSmall,
     text: textTwoSmall,
+  },
+  '3': {
+    img: imgThreeSmall,
+    text: textThreeSmall,
   }
 };
 
-export const x = 3;

@@ -4,6 +4,7 @@ import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
+import DriedEgg from "./driedEgg";
 
 export default class BuildSpawn extends Common {
   build: IAnimBuild[];
@@ -16,8 +17,10 @@ export default class BuildSpawn extends Common {
   func: IFunctions;
   products: IKeyNumber;
   opacityState: IOpacity;
+  driedEgg: DriedEgg;
+  level: number;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, level: number) {
     super(canvas, context);
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
@@ -28,6 +31,9 @@ export default class BuildSpawn extends Common {
     this.panelState = panelState;
     this.products = productsCounter;
     this.opacityState = opacityState;
+    this.level = level;
+
+    this.driedEgg = new DriedEgg(canvas, context);
 
 
     this.price = {
@@ -45,13 +51,16 @@ export default class BuildSpawn extends Common {
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
+    // сделать потом по клику
+    if (this.level === 3) this.driedEgg.render();
+    // надо будет зажизейблить после первой отрисовки
     this.buildSpawn();
   }
 
   private buildSpawn() {
     this.build.forEach((item, index) => {
       this.btn.forEach(build => {
-        setTimeout(() => this.buildAnimation(item, build), 500 * index);
+        setTimeout(() => this.buildAnimation(item, build), 400 * index);
       });
     });
   }
@@ -77,7 +86,8 @@ export default class BuildSpawn extends Common {
             }
             break;
           }
-          case "storage": {
+          case "storage":
+          case "car": {
             if (!this.panelState.carAnimationOn) {
               this.opacityState.show = true;
               this.opacityState.disable = false;
@@ -89,6 +99,9 @@ export default class BuildSpawn extends Common {
         }
       }
     });
+
+    // сделать потом условие
+    this.driedEgg.clickHundler(event, widthK, heightK);
   }
 
   public waterChange(grace: { [key: string]: boolean }) {

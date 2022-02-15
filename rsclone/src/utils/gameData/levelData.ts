@@ -243,6 +243,12 @@ export const animationBuildOptions = [
     speed: 36
   },
   {
+    name: 'car',
+    maxX: 0,
+    maxY: 950,
+    speed: 36
+  },
+  {
     name: 'well',
     maxX: 0,
     maxY: 146,
@@ -252,7 +258,7 @@ export const animationBuildOptions = [
     name: 'waterIndicator',
     maxX: 0,
     maxY: 200,
-    speed: 25
+    speed: 24
   },
 ];
 
