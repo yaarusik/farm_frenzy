@@ -1,5 +1,5 @@
 import  Control from "../../builder/controller";
-import  { houses, aside, Engineering, Pets, IcontentData } from "../../utils/shopPageData";
+import  { houses, aside, Engineering, Pets, IcontentData, IcontentBl } from "../../utils/shopPageData";
 import  { startMoney, setMoney, moneyBlock, setMoneyWindow, currentContent } from "../../utils/shopPageMoney";
 
 export default class ShopPage extends Control {
@@ -53,15 +53,14 @@ export default class ShopPage extends Control {
 
       for (key in obj) {
          const contentBlock = new Control(parent, "div", className ,"");
-         contentBlock.node.setAttribute("curstage", "1");
+         contentBlock.node.setAttribute("curstage", `${obj[key].currentStage}`);
          contentBlock.node.setAttribute("maxstage", maxStage);
          contentBlock.node.setAttribute("costs", obj[key].costs);
-         const currentStage = contentBlock.node.getAttribute("curstage");
-         if (!currentStage) return;
+         const currentStage = obj[key].currentStage;
          const allCosts = obj[key].costs;
          const name = obj[key].name;
          const cost = obj[key].costs.split("/")[+currentStage - 1];
-         const link = obj[key].src;
+         const link = obj[key].src.split("-")[0] + `-0${obj[key].currentStage}.png`;
          const blockClass = link.split("/").length === 5 ? link.split("/")[3] : link.split("/")[4];
 
          const contentName = new Control(contentBlock.node, "p", "content__name", name);
@@ -79,9 +78,11 @@ export default class ShopPage extends Control {
          this.setButtonStyle(contentBtn, cost);
 
          contentBtn.node.onclick = () => this.shopButtonClick(contentBlock, contentBtn, contentBlockImg, 
-         contentImg, link, allCosts);
+         contentImg, link, allCosts, obj[key]);
 
          currentContent.push(contentBlock);
+         
+         this.updateShopBackground();
       }
 
       while (parent.childElementCount < count) {
@@ -102,13 +103,12 @@ export default class ShopPage extends Control {
    }
 
    shopButtonClick(contentBlock: Control<HTMLElement>, btn: Control<HTMLButtonElement>, imgBlock: Control<HTMLElement>, 
-   img: Control<HTMLImageElement>, link: string, allCosts: string) {
-      let currentStage = contentBlock.node.getAttribute("curstage");
+   img: Control<HTMLImageElement>, link: string, allCosts: string, obj: IcontentBl) {
       const maxStage = contentBlock.node.getAttribute("maxstage");
 
-      if (!currentStage || !maxStage) return;
-      const cost = allCosts.split("/")[+currentStage - 1];
-      if (+maxStage === +currentStage) return;
+      if (!maxStage) return;
+      const cost = allCosts.split("/")[obj.currentStage - 1];
+      if (+maxStage === obj.currentStage) return;
       if (+startMoney < +cost) return;
 
       const currentCount = `${+startMoney - +cost}`;
@@ -120,12 +120,12 @@ export default class ShopPage extends Control {
          moneyBlock.node.textContent = currentCount;
       };
 
-      currentStage = `${+currentStage + 1}`;
-      contentBlock.node.setAttribute("curstage", currentStage);
+      obj.currentStage += 1;
+      contentBlock.node.setAttribute("curstage", `${obj.currentStage}`);
 
 
-      const newLink = link.split("-")[0] + `-0${+currentStage}.png`;
-      const newCost = allCosts.split("/")[+currentStage - 1];
+      const newLink = link.split("-")[0] + `-0${obj.currentStage}.png`;
+      const newCost = allCosts.split("/")[obj.currentStage - 1];
 
       this.updateShopData(btn, img, newLink, newCost);
    }
