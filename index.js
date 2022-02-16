@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const dataURL = process.env.MONGO_CONNECTION_STRING;
 
 app
 .use(express.static(__dirname))
@@ -11,9 +12,9 @@ app
 
 app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-app.get('/test', (req, res) => res.send(MONGO_CONNECTION_STRING));
+app.get('/test', (req, res) => res.send());
 
-mongoose.connect(MONGO_CONNECTION_STRING);
+mongoose.connect(dataURL);
 const connect = mongoose.connection;
 connect.on('connected', function() {
   console.log('database is connected successfully');
