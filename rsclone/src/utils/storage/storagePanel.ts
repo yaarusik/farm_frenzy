@@ -361,7 +361,6 @@ export default class StoragePanel extends Common {
         }
       }
     });
-
     [...Object.entries(this.btnData), ...Object.entries(this.btnAllData)].forEach(btnObj => {
       const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
