@@ -12,7 +12,7 @@ app
 
 app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-app.get('/test', (req, res) => res.send());
+app.get('/test', (req, res) => res.send(dataURL));
 
 mongoose.connect(dataURL);
 const connect = mongoose.connection;
