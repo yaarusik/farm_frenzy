@@ -11,8 +11,15 @@
     "test": "node test.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.2",
     "ejs": "^3.1.5",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.2.2",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^6.1.0"
   },
   "devDependencies": {
     "got": "^11.3.0",
