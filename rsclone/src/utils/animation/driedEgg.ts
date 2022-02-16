@@ -1,5 +1,5 @@
 import BuildUtils from "../classes/buildUtil";
-import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, IKeyBoolean, } from "../../application/iterfaces";
 import { driedEggsBtn, driedAnim } from "./../gameData/spawnData";
 
 export default class DriedEgg extends BuildUtils {
@@ -17,6 +17,12 @@ export default class DriedEgg extends BuildUtils {
   animTime: number;
   animSpeed: number;
   useProduct: string;
+
+  animationProduct: boolean;
+  opacityState: { active: boolean; opacity: number; };
+
+  productWait: number;
+  productOpacity: number;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: IFunctions, productCounter: IKeyNumber) {
@@ -49,9 +55,13 @@ export default class DriedEgg extends BuildUtils {
     this.maxFrameY = 7;
     this.maxFrameX = 1;
     this.houseDisable = false;
-    this.animTime = 2400;
-    this.animSpeed = 90;
+    this.animTime = 16000;
+    this.animSpeed = 600;
     this.useProduct = 'egg';
+    this.opacityState = { active: true, opacity: 1 };
+    this.animationProduct = false;
+    this.productOpacity = 5000;
+    this.productWait = 9000;
 
     this.startPanel();
   }
@@ -63,7 +73,9 @@ export default class DriedEgg extends BuildUtils {
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
+    if (this.animationProduct) this.productGhost(this.opacityState);
     this.drawImage(this.initialFlour, this.flourProducts);
+    this.context.globalAlpha = 1;
     this.startSpawn();
   }
 
@@ -95,6 +107,7 @@ export default class DriedEgg extends BuildUtils {
             break;
           }
           case "flour": {
+            this.opacityState.active = false;
             const product = this.deleteProduct(this.initialFlour, this.flourProducts);
             this.func.productToStorage(product);
             break;
@@ -129,7 +142,18 @@ export default class DriedEgg extends BuildUtils {
   private showProduct() {
     this.flourProducts.push(this.flour);
     this.drawProduct();
+    setTimeout(() => this.trackingProducts(), this.productWait);
   }
+
+  private trackingProducts() {
+    this.animationProduct = true;
+    setTimeout(() => {
+      this.deleteProduct(this.initialFlour, this.flourProducts);
+      this.animationProduct = false;
+    }, this.productOpacity);
+  }
+
+
 
   private async drawProduct() {
     const loadFlour = this.flourProducts.map(image => this.loadImage(image.image));
