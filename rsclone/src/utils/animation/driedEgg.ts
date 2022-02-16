@@ -84,7 +84,7 @@ export default class DriedEgg extends BuildUtils {
           case "flourBuild": {
             if (!this.houseDisable && this.checkProduct(this.useProduct, this.productCounter)) {
               this.houseDisable = true;
-              this.deleteUseProduct(this.useProduct);
+              this.deleteUseProduct(this.useProduct, this.productCounter);
               this.func.reRenderStorage();
               this.buildAnimation(button, this.maxFrameX, this.maxFrameY, () => {
                 this.showProduct();
@@ -135,12 +135,5 @@ export default class DriedEgg extends BuildUtils {
     const loadFlour = this.flourProducts.map(image => this.loadImage(image.image));
     this.initialFlour = await this.renderImages(loadFlour);
   }
-
-  private deleteUseProduct(product: string) {
-    this.productCounter[product]--;
-  }
-
-
-
 
 }

@@ -74,12 +74,9 @@ export default class EndPanel extends Common {
       }
       this.context.shadowOffsetX = 4;
       this.context.shadowOffsetY = 4;
-
       this.context.strokeText(item.text, item.x, item.y);
       this.context.fillText(item.text, item.x, item.y);
-      this.context.shadowBlur = 0;
-      this.context.shadowOffsetX = 0;
-      this.context.shadowOffsetY = 0;
+      this.canvasFilters(0);
       this.context.shadowColor = '';
     });
   }

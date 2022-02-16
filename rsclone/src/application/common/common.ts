@@ -130,11 +130,14 @@ export default class Common {
 
   public opacityDisable(opacityState: IOpacity) {
     if (opacityState.opacity >= 0) opacityState.opacity -= 0.04;
-    // else {
-    //   opacityState.disable = false;
-    //   opacityState.show = true;
-    // }
     this.context.globalAlpha = opacityState.opacity;
+  }
+
+
+  public canvasFilters(number: number): void {
+    this.context.shadowBlur = number;
+    this.context.shadowOffsetX = number;
+    this.context.shadowOffsetY = number;
   }
 
 }

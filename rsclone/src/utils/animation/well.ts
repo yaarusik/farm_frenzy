@@ -1,14 +1,16 @@
 import { initialData } from "../../application/common/initialData";
-import { IButton } from "../../application/iterfaces";
+import { IButton, IKeyBoolean } from "../../application/iterfaces";
 export default class Well {
 
   animbtnOptions: IButton[];
   waterCount: number;
   maxCount: number;
-  constructor (animbtnOptions: IButton[],) {
+  showPrice: IKeyBoolean;
+  constructor (animbtnOptions: IButton[], showPrice: IKeyBoolean) {
     this.animbtnOptions = animbtnOptions;
     this.waterCount = 0;
     this.maxCount = 5;
+    this.showPrice = showPrice;
   }
   public wellAnimation(btn: IButton) {
     // если в индикаторе есть вода, то блокируем нажатие на колодец
@@ -36,11 +38,18 @@ export default class Well {
     }
   }
 
+  private activeWell() {
+    if (this.waterCount >= this.maxCount) {
+      initialData.wellDisable = true;
+      this.showPrice.well = true;
+    }
+  }
+
   // водный индикатор
   public waterIndicatorChange(grace: { [key: string]: boolean }) {
     if (this.waterCount < this.maxCount) {
       this.waterCount++;
-
+      this.activeWell();
       const waterIndicator = <IButton>this.animbtnOptions.find(item => item.name === 'waterIndicator');
       const maxHeight = waterIndicator.sheight * <number>waterIndicator.frameY;
       const step = 5;
@@ -53,7 +62,6 @@ export default class Well {
       grace.grace = true;
     } else {
       // индикатор травы
-      initialData.wellDisable = true;
       grace.grace = false;
     }
   }
