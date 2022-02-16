@@ -56,14 +56,14 @@ export const timerData = [
         silvSec: 40
     },
     {
-        deafultStar: 25,
-        goldStar: 75,
-        silverStar: 25,
+        deafultStar: 50,
+        goldStar: 150,
+        silverStar: 50,
         x: 1495,
         y: 1183,
-        goldMin: 1,
+        goldMin: 2,
         goldSec: 0,
-        silvMin: 2,
+        silvMin: 3,
         silvSec: 0
     }
 ];
