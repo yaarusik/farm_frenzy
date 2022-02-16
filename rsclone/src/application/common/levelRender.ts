@@ -59,6 +59,11 @@ export default class LevelRender {
 			} else
 				item.isHover = false;
 		});
+		let animalsNow : string[] = [];
+		this.animals.forEach((item) => {
+			animalsNow.push(item.name);
+		});
+		return animalsNow;
 	}
 
 	public clickHundler(event: MouseEvent, widthK: number, heightK: number): string[] {
