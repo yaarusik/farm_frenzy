@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const express = require('express')
 const mongoose = require('mongoose');
 
@@ -12,7 +13,13 @@ app
 
 app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-app.get('/test', (req, res) => res.send(dataURL));
+app.get('/test', (req, res) => res.send(__dirname));
+app.post('/', (req, res) => {
+  res.json({
+    upcode: '10-4',
+    text: 'response text'
+  });
+});
 
 mongoose.connect(dataURL);
 const connect = mongoose.connection;
