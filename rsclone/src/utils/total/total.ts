@@ -15,7 +15,7 @@ export default class Total extends Common {
     this.level = level.toString();
 
     this.levelTotal = {
-      '1': '100',
+      '1': '10000',
       '2': '90',
       '3': '190',
     };

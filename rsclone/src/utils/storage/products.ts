@@ -120,7 +120,7 @@ export default class Products extends Common {
   }
 
   public add(product: string[]) {
-
+    console.log(product);
     if (this.columnCount < this.maxColumn) {
       this.goods = product; // ['egg']
       this.goods.forEach(product => {
