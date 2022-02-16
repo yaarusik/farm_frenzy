@@ -73,5 +73,9 @@ export default class BuildUtils extends Common {
     return [product.name];
   }
 
+  public deleteUseProduct(product: string, productCounter: IKeyNumber) {
+    productCounter[product]--;
+  }
+
 }
 

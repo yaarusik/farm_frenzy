@@ -58,6 +58,7 @@ export default class StoragePanel extends Common {
   };
   currentStateCheck: boolean;
   opacityState: IOpacity;
+  iconsAllText: IKeyText;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
@@ -79,6 +80,7 @@ export default class StoragePanel extends Common {
     this.iconsText = {};
     this.iconsPrice = {};
     this.iconsBtnText = {};
+    this.iconsAllText = {};
 
     this.checkProduct = {};
 
@@ -86,14 +88,13 @@ export default class StoragePanel extends Common {
     this.storageStaticText = this.objParse(storagePanelStaticText);
     this.storageBtn = this.objParse(storagePanelBtn);
     this.storageText = this.objParse(storagePanelText);
+    this.icons = JSON.parse(JSON.stringify(icons));
 
     this.stepY = 62;
     this.startY = 210;
     this.textY = 46; //смещение текста
     this.priceX = 120; // смещение цены
     this.coinX = 17; //смещение денюжки
-
-    this.icons = JSON.parse(JSON.stringify(icons));
 
     this.price = {
       'egg': 10,
@@ -106,7 +107,6 @@ export default class StoragePanel extends Common {
     this.iconData = {};
     this.coinData = {};
     this.coinImg = {};
-
     this.btnImg = {};
     this.btnData = {};
     this.btnAllImg = {};
@@ -118,8 +118,6 @@ export default class StoragePanel extends Common {
     // сохраняем текущее состояние склада
     this.currentState = {};
     this.currentStateCheck = true;
-
-
     this.opacityState = opacityState;
 
     this.startPanel();
@@ -141,7 +139,6 @@ export default class StoragePanel extends Common {
     this.drawImage(this.initialBtn, this.storageBtn);
     this.drawStaticText(this.storageStaticText);
     this.drawText(this.storageText);
-
     this.drawImage([...this.iconImg.values()], Object.values(this.iconData));
     this.drawText(Object.values(this.iconsText));
     this.drawText(Object.values(this.iconsPrice));
@@ -149,26 +146,20 @@ export default class StoragePanel extends Common {
     this.drawImage(Object.values(this.btnImg), Object.values(this.btnData));
     this.drawImage(Object.values(this.btnAllImg), Object.values(this.btnAllData));
     this.drawText(Object.values(this.iconsBtnText));
+    this.drawText(Object.values(this.iconsAllText));
 
     this.carTrunc.render();
   }
 
-  drawStaticText(text: IText[]) {
+  public drawStaticText(text: IText[]) {
     text.forEach(item => {
       this.context.fillStyle = item.color;
       this.context.font = item.fontSize;
       this.context.shadowColor = '#222222';
-
-      this.context.shadowBlur = 4;
-      this.context.shadowOffsetX = 4;
-      this.context.shadowOffsetY = 4;
-
+      this.canvasFilters(4);
       this.context.strokeText(item.text, item.x, item.y);
       this.context.fillText(item.text, item.x, item.y);
-
-      this.context.shadowBlur = 0;
-      this.context.shadowOffsetX = 0;
-      this.context.shadowOffsetY = 0;
+      this.canvasFilters(0);
     });
   }
 
@@ -181,33 +172,21 @@ export default class StoragePanel extends Common {
       for (let i = 1; i <= count; i++) {
         if (i === 1 && this.checkProduct[product] === undefined) {
           const { name, img } = this.getImg(product);
-          console.log(products);
-
           if (img) {
-            // смещаем позицию товара на складе
-            this.icons[name].y = this.startY;
-            // добавляем данные картинки
-            this.iconData[name] = this.icons[name];
-            // добавляем саму картинку
-            this.iconImg.set(name, img);
-            // рисуем количество элементов
-            this.addText(this.iconsText, product, i, 'x', 0, this.textY);
-            // рисуем цену
-            this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY);
-            // рисуем монетку
-            this.drawCoin(product);
-            // рисуем кнопки
-            this.drawBtn(product);
-            // рисуем текст для кнопок
-            this.addText(this.iconsBtnText, product, 1, '', 250, this.textY);
-            // смещаем координату
-            this.changeCoordsUp();
-            // знаем что продукт уже есть
-            this.checkProduct[product] = true;
+            this.icons[name].y = this.startY; // смещаем позицию товара на складе
+            this.iconData[name] = this.icons[name]; // добавляем данные картинки
+            this.iconImg.set(name, img); // добавляем саму картинку
+            this.addText(this.iconsText, product, i, 'x', 0, this.textY); // рисуем количество элементов            
+            this.addText(this.iconsPrice, product, this.price[product], '', this.priceX, this.textY); // рисуем цену    
+            this.drawCoin(product);// рисуем монетку          
+            this.drawBtn(product, this.btnData, '1', 0, this.btnImg);// рисуем кнопки   
+            this.drawBtn(product, this.btnAllData, 'All', 75, this.btnAllImg);
+            this.addText(this.iconsBtnText, product, 1, '', 250, this.textY); // рисуем текст для кнопок
+            this.addText(this.iconsAllText, product, 'Все', '', 307, this.textY);
+            this.changeCoordsUp(); // смещаем координату
+            this.checkProduct[product] = true; // знаем что продукт уже есть
           }
-        } else if (i > 1) {
-          this.iconsText[product].text = `x ${i}`;
-        }
+        } else if (i > 1) this.iconsText[product].text = `x ${i}`;
       }
     });
   }
@@ -255,39 +234,20 @@ export default class StoragePanel extends Common {
       sheight: 0
     };
     if (img) this.coinImg[product] = img;
-    else {
-      throw new Error('coin img not found');
-    }
+    else throw new Error('coin img not found');
   }
 
-  private drawBtn(product: string) {
+  private drawBtn(product: string, container: { [key: string]: IButton }, btnName: string, x: number, imgContainer: IKeyImage) {
     const { name, img } = this.getImg('btn');
-    this.btnData[product] = {
+    container[product] = {
       type: "button",
-      name: "1",
+      name: btnName,
       image: "images/level/builds/storage/btn.png",
       stepY: 28,
       stepX: 0,
       hover: 1,
       click: 2,
-      x: 360,
-      y: this.icons[product].y + 12,
-      width: 70,
-      height: 50,
-      sx: 0,
-      sy: 0,
-      swidth: 40,
-      sheight: 28
-    };
-    this.btnAllData[product] = {
-      type: "button",
-      name: "All",
-      image: "images/level/builds/storage/btn.png",
-      stepY: 28,
-      stepX: 0,
-      hover: 1,
-      click: 2,
-      x: 360 + 75,
+      x: 360 + x,
       y: this.icons[product].y + 12,
       width: 70,
       height: 50,
@@ -297,14 +257,9 @@ export default class StoragePanel extends Common {
       sheight: 28
     };
     if (img) {
-      this.btnImg[product] = img;
-      this.btnAllImg[product] = img;
-    }
-    else {
-      throw new Error('coin img not found');
-    }
+      imgContainer[product] = img;
+    } else throw new Error('coin img not found');
   }
-
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number, isState: IKeyBoolean): void {
     this.storageBtn.forEach(btn => {
@@ -344,7 +299,7 @@ export default class StoragePanel extends Common {
       }
     });
 
-    Object.entries(this.btnData).forEach(btnObj => {
+    [...Object.entries(this.btnData), ...Object.entries(this.btnAllData)].forEach(btnObj => {
       const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
@@ -357,15 +312,6 @@ export default class StoragePanel extends Common {
             this.buttonCondition.ok = true;
             break;
           }
-        }
-      }
-    });
-
-    Object.entries(this.btnAllData).forEach(btnObj => {
-      const [key, btn] = btnObj;
-      const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
-      if (this.determineCoords(event, scaleCoords)) {
-        switch (btn.name) {
           case "All": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.changeTotal(key, this.productsCounter[key]);
@@ -378,10 +324,8 @@ export default class StoragePanel extends Common {
         }
       }
     });
-
     this.carTrunc.clickHundler(event, widthK, heightK);
   }
-
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
     this.storageBtn.forEach(btn => {
@@ -401,7 +345,6 @@ export default class StoragePanel extends Common {
             break;
           }
         }
-
       } else {
         switch (btn.name) {
           case "Ок": {
@@ -416,30 +359,28 @@ export default class StoragePanel extends Common {
             this.changeAnimation(btn, false, this.storageText);
           }
         }
-
       }
     });
 
-    Object.entries(this.btnData).forEach(btnObj => {
+    [...Object.entries(this.btnData), ...Object.entries(this.btnAllData)].forEach(btnObj => {
       const [key, btn] = btnObj;
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
-          case "1": {
+          case "1":
+          case "All": {
             this.buttonsHover(btn, btn.stepY, btn.hover);
-            this.changeAnimation(btn, true, [this.iconsBtnText[key]]);
             break;
           }
         }
       } else {
-        this.buttonsClick(btn, 0, 0);
+        this.buttonsHover(btn, 0, 0);
       }
     });
   }
 
   private productSubstraction(product: string) {
     const count = this.productsCounter[product] -= 1;
-
     if (count > 0) {
       this.iconsText[product].text = `x ${count}`;
     } else if (count === 0) {
@@ -452,6 +393,7 @@ export default class StoragePanel extends Common {
     this.iconsText = {};
     this.iconsPrice = {};
     this.iconsBtnText = {};
+    this.iconsAllText = {};
     // данные монетки
     this.coinData = {};
     this.coinImg = {};
@@ -503,7 +445,6 @@ export default class StoragePanel extends Common {
     });
   }
 
-  // ПРИ ОТКРЫТИИ ПАНЕЛИ СОХРАНЯТЬ ТЕКУЩЕЕ СОСТОЯНИЕ
   private saveState(products: IKeyNumber) {
     this.currentState = JSON.parse(JSON.stringify(products));
     this.currentStateCheck = false;

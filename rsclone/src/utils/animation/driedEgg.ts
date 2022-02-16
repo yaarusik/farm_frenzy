@@ -36,7 +36,7 @@ export default class DriedEgg extends BuildUtils {
       height: 96,
       hover: 1,
       click: 2,
-      stepY: 0,
+      stepY: 96,
       stepX: 0,
       sx: 0,
       sy: 0,
@@ -84,7 +84,7 @@ export default class DriedEgg extends BuildUtils {
           case "flourBuild": {
             if (!this.houseDisable && this.checkProduct(this.useProduct, this.productCounter)) {
               this.houseDisable = true;
-              this.deleteUseProduct(this.useProduct);
+              this.deleteUseProduct(this.useProduct, this.productCounter);
               this.func.reRenderStorage();
               this.buildAnimation(button, this.maxFrameX, this.maxFrameY, () => {
                 this.showProduct();
@@ -104,6 +104,27 @@ export default class DriedEgg extends BuildUtils {
     });
   }
 
+  public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
+    this.flourProducts.forEach(button => {
+      const scaleCoords: Coords = this.scaleCoords(button, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (button.name) {
+          case "flour": {
+            this.buttonsHover(button, button.stepY, button.hover);
+            break;
+          }
+        }
+      } else {
+        switch (button.name) {
+          case 'flour': {
+            this.buttonsHover(button, 0, 0);
+            break;
+          }
+        }
+      }
+    });
+  }
+
   // отдельный массив, чтоб выплевывал продукт
   private showProduct() {
     this.flourProducts.push(this.flour);
@@ -114,12 +135,5 @@ export default class DriedEgg extends BuildUtils {
     const loadFlour = this.flourProducts.map(image => this.loadImage(image.image));
     this.initialFlour = await this.renderImages(loadFlour);
   }
-
-  private deleteUseProduct(product: string) {
-    this.productCounter[product]--;
-  }
-
-
-
 
 }

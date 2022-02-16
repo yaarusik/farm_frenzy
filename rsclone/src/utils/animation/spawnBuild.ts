@@ -1,12 +1,12 @@
 import BuildUtils from "../classes/buildUtil";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IPicture, IText } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
 import { initialData } from "./../../application/common/initialData";
 import DriedEgg from "./driedEgg";
 import Arrow from "./arrow";
-
+import WellPrice from "./wellPrice";
 
 export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
@@ -22,6 +22,9 @@ export default class BuildSpawn extends BuildUtils {
   driedEgg: DriedEgg;
   level: number;
   arrow: Arrow;
+  wellPrice: WellPrice;
+  showPrice: IKeyBoolean;
+
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, panelState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, level: number) {
@@ -31,7 +34,10 @@ export default class BuildSpawn extends BuildUtils {
     this.btn = this.objParse(buildSpawnBtn);
     this.initialBtn = [];
     this.initialImg = [];
-    this.well = new Well(this.btn);
+    this.showPrice = {
+      well: false,
+    };
+    this.well = new Well(this.btn, this.showPrice);
     this.panelState = panelState;
     this.products = productsCounter;
     this.opacityState = opacityState;
@@ -39,7 +45,7 @@ export default class BuildSpawn extends BuildUtils {
 
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
     this.arrow = new Arrow(canvas, context);
-
+    this.wellPrice = new WellPrice(canvas, context);
 
 
     this.price = {
@@ -58,6 +64,7 @@ export default class BuildSpawn extends BuildUtils {
   public render() {
     this.drawImage(this.initialBtn, this.btn);
     this.arrow.render();
+    if (this.showPrice.well) this.wellPrice.render();
 
     // сделать потом по клику
     if (this.level === 3) this.driedEgg.render();
@@ -84,11 +91,10 @@ export default class BuildSpawn extends BuildUtils {
               this.well.wellAnimation(button);
               this.well.fullWaterIndicator();
               initialData.wellDisable = false;
+              this.showPrice.well = false;
             } else if (!initialData.btnDisable.well) {
               this.arrow.showArrow('up');
             }
-
-
             break;
           }
           case "storage":
@@ -137,6 +143,8 @@ export default class BuildSpawn extends BuildUtils {
         }
       }
     });
+    this.driedEgg.moveHundler(event, widthK, heightK);
+
   }
 
 

@@ -11,7 +11,6 @@ export default class StartPanel extends Common {
   startPanelStaticText: IText[];
   startPanelText: IText[];
   level: string;
-
   startImg: HTMLImageElement[];
   levelInitial: {
     [key: string]: {
@@ -35,8 +34,6 @@ export default class StartPanel extends Common {
     this.level = level.toString();
 
     this.levelInitial = JSON.parse(JSON.stringify(levelInitial));
-
-
     // не работает из-за того что рендериться сразу
     this.opacityState = {
       show: true,
@@ -44,19 +41,16 @@ export default class StartPanel extends Common {
       opacity: 0
     };
 
-
-
     this.startPanel();
   }
 
   private async startPanel() {
-
     const loadStartImg = this.levelInitial[this.level].img.map(image => this.loadImage(image.image));
-    this.startImg = await this.renderImages(loadStartImg);
     const loadImage = this.startPanelImg.map(image => this.loadImage(image.image));
     const loadBtn = this.startPanelBtn.map(image => this.loadImage(image.image));
     this.initialBtn = await this.renderImages(loadBtn);
     this.initialImage = await this.renderImages(loadImage);
+    this.startImg = await this.renderImages(loadStartImg);
 
   }
 
@@ -67,7 +61,6 @@ export default class StartPanel extends Common {
     this.drawImage(this.initialBtn, this.startPanelBtn);
     this.drawImage(this.startImg, this.levelInitial[this.level].img);
     this.drawStaticText(this.startPanelStaticText);
-
     this.drawText([...this.startPanelText, ...this.levelInitial[this.level].text]);
   }
 
@@ -85,13 +78,12 @@ export default class StartPanel extends Common {
       this.context.shadowOffsetX = 4;
       this.context.shadowOffsetY = 4;
       if (item.text === 'Лучшее время :') {
-        this.context.shadowBlur = 0;
-        this.context.shadowOffsetX = 0;
-        this.context.shadowOffsetY = 0;
+        this.canvasFilters(0);
         this.context.shadowColor = '';
       }
       this.context.strokeText(item.text, item.x, item.y);
       this.context.fillText(item.text, item.x, item.y);
+      this.canvasFilters(0);
     });
   }
 

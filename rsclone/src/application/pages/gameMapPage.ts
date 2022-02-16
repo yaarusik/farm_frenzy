@@ -6,7 +6,7 @@ import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 import { Music } from "../../utils/music/music";
 export default class GameMapPage extends Control {
-	startLevel!: (lever: number) => void;
+	startLevel!: (level: number) => void;
 	onBack!: () => void;
 	onSelectShop!: () => void;
 
@@ -111,6 +111,10 @@ export default class GameMapPage extends Control {
 			if (item.text === btn.name) item.animation = animEnable;
 		});
 	}
+	private stopAnimation(func: () => void) {
+		setTimeout(func, 250);
+		setTimeout(() => cancelAnimationFrame(this.animation), 250);
+	}
 
 	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
 		buttons.forEach(btn => {
@@ -120,39 +124,33 @@ export default class GameMapPage extends Control {
 					case "Магазин": {
 						// асинхронно дождаться settimeout
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(this.onSelectShop, 250);
-						cancelAnimationFrame(this.animation);
+						this.stopAnimation(this.onSelectShop);
 						break;
 					}
 					case "Меню": {
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(this.onBack, 250);
-						cancelAnimationFrame(this.animation);
+						this.stopAnimation(this.onBack);
 						this.music.onStart();
 						break;
 					}
 					case "1": {
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(() => {
-							this.startLevel(1);
-						}, 250);
-						cancelAnimationFrame(this.animation);
+						this.stopAnimation(() => this.startLevel(1));
 						break;
 					}
 					case "2": {
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(() => {
-							this.startLevel(2);
-						}, 250);
-						cancelAnimationFrame(this.animation);
+						this.stopAnimation(() => this.startLevel(2));
 						break;
 					}
 					case "3": {
 						this.buttonsClick(btn, btn.stepY);
-						setTimeout(() => {
-							this.startLevel(3);
-						}, 250);
-						cancelAnimationFrame(this.animation);
+						this.stopAnimation(() => this.startLevel(3));
+						break;
+					}
+					case "4": {
+						this.buttonsClick(btn, btn.stepY);
+						this.stopAnimation(() => this.startLevel(4));
 						break;
 					}
 				}
