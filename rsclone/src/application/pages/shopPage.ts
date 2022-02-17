@@ -61,6 +61,7 @@ export default class ShopPage extends Control {
          const name = obj[key].name;
          const cost = obj[key].costs.split("/")[+currentStage - 1];
          const link = obj[key].src.split("-")[0] + `-0${obj[key].currentStage}.png`;
+         const nameBlock = obj[key].name;
          const blockClass = link.split("/").length === 5 ? link.split("/")[3] : link.split("/")[4];
 
          const contentName = new Control(contentBlock.node, "p", "content__name", name);
@@ -77,8 +78,8 @@ export default class ShopPage extends Control {
          this.setBackground(contentBlockImg, cost);
          this.setButtonStyle(contentBtn, cost);
 
-         contentBtn.node.onclick = () => this.shopButtonClick(contentBlock, contentBtn, contentBlockImg, 
-         contentImg, link, allCosts, obj[key]);
+         contentBtn.node.onclick = () => this.shopButtonClick(contentBlock, contentBtn, 
+         contentImg, link, allCosts, obj, nameBlock);
 
          currentContent.push(contentBlock);
          
@@ -102,13 +103,22 @@ export default class ShopPage extends Control {
       }
    }
 
-   shopButtonClick(contentBlock: Control<HTMLElement>, btn: Control<HTMLButtonElement>, imgBlock: Control<HTMLElement>, 
-   img: Control<HTMLImageElement>, link: string, allCosts: string, obj: IcontentBl) {
+   shopButtonClick(contentBlock: Control<HTMLElement>, btn: Control<HTMLButtonElement>, 
+   img: Control<HTMLImageElement>, link: string, allCosts: string, fullObbject: IcontentData, name: string) {
+      let key: keyof IcontentData;
+      let curStage;
+
+      for (key in fullObbject) {
+         if (fullObbject[key].name === name) {
+            fullObbject[key].currentStage += 1;
+            curStage = fullObbject[key].currentStage;
+         } 
+      }
       const maxStage = contentBlock.node.getAttribute("maxstage");
 
-      if (!maxStage) return;
-      const cost = allCosts.split("/")[obj.currentStage - 1];
-      if (+maxStage === obj.currentStage) return;
+      if (!maxStage || !curStage) return;
+      if(+maxStage === (curStage - 1)) return;
+      const cost = allCosts.split("/")[curStage - 2];
       if (+startMoney < +cost) return;
 
       const currentCount = `${+startMoney - +cost}`;
@@ -120,12 +130,11 @@ export default class ShopPage extends Control {
          moneyBlock.node.textContent = currentCount;
       };
 
-      obj.currentStage += 1;
-      contentBlock.node.setAttribute("curstage", `${obj.currentStage}`);
+      contentBlock.node.setAttribute("curstage", `${curStage}`);
 
 
-      const newLink = link.split("-")[0] + `-0${obj.currentStage}.png`;
-      const newCost = allCosts.split("/")[obj.currentStage - 1];
+      const newLink = link.split("-")[0] + `-0${curStage}.png`;
+      const newCost = allCosts.split("/")[curStage - 1];
 
       this.updateShopData(btn, img, newLink, newCost);
    }
