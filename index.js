@@ -34,7 +34,7 @@ app.post('/', (req, res) => {
     User.find({}, (err, result) => {
       if (err) throw err;
       userInfo = result;
-      mem.push('has', result);s
+      mem.push('has', result);
     });
   } catch (err) {
     // userInfo = {};
