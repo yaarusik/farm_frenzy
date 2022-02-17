@@ -28,17 +28,17 @@ app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
-  let userInfo = '';
+  let userInfo = {};
   try {
     userInfo = connect.db.collection('users').findOne({name: reqParams.name});
   } catch (err) {
-    userInfo = '';
+    userInfo = {};
     console.log(err);
     console.log(connect.db.collection('users'));
   }
 
   if (reqParams.type == 'signup'){
-    if (userInfo == ''){
+    if (userInfo == {}){
       const user = new User({
         name: reqParams.name,
         password: reqParams.password
