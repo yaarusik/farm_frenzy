@@ -31,9 +31,10 @@ app.post('/', (req, res) => {
   let userInfo = {};
   let mem = [];
   try {
-    userInfo = connect.db.collection("users").find().toArray((err, result) => {
+    User.findOne({name: reqParams.name}, (err, result) => {
       if (err) throw err;
-      mem.push(result);
+      userInfo = result;
+      mem.push('has', result);
     });
   } catch (err) {
     // userInfo = {};
