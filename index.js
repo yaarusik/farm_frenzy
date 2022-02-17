@@ -11,19 +11,11 @@ app
 .set('views', __dirname)
 .set('view engine', 'ejs');
 
-app.get('/', (req, res) => res.render('index'))
-app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
-app.get('/test', (req, res) => res.send(__dirname));
-app.post('/', (req, res) => {
-  res.json({
-    upcode: '10-4',
-    text: 'response text'
-  });
-});
-
 mongoose.connect(dataURL);
 const connect = mongoose.connection;
+let isConnected = false;
 connect.on('connected', function() {
+  isConnected = true;
   console.log('database is connected successfully');
 });
 connect.on('disconnected',function(){
@@ -31,3 +23,8 @@ connect.on('disconnected',function(){
 })
 connect.on('error', console.error.bind(console, 'connection error:'));
 module.exports = connect;
+
+app.get('/', (req, res) => res.render('index'))
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.get('/test', (req, res) => res.send(__dirname));
+app.post('/', (req, res) => isConnected);
