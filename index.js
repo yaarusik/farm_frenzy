@@ -28,33 +28,13 @@ app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
-  let userInfo = {};
-  let mem = [];
-  try {
-    User.find({}, (err, result) => {
-      if (err) throw err;
-      userInfo = result;
-      mem.push('has', result);
-    });
-  } catch (err) {
-    // userInfo = {};
-    userInfo = {
-      error: "error",
-    };
-    console.log(err);
-  }
+  let userInfo = await User.findOne({name: reqParams.name}).exec();
 
   if (reqParams.type == 'signup'){
-    if (typeof userInfo.name == 'undefined'){
-      const user = {
-        name: reqParams.name,
-        password: reqParams.password
-      };
-
-      User.create(user, (err, doc) => {});
-      res.send({ userInfo: userInfo, mem: mem, userMod: User });
+    if (false){
+      
     } else {
-      res.status(501).send({ error: 'Already has account', userInfo: userInfo, mem: mem });
+      res.status(501).send({ error: 'Already has account', userInfo: userInfo});
     }
     return;
   } else if (reqParams.type == 'signin'){
