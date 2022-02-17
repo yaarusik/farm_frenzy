@@ -9,6 +9,7 @@ export default class Total extends Common {
   level: string;
 
 
+
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
 
@@ -20,12 +21,16 @@ export default class Total extends Common {
       '3': '190',
     };
 
+
+
     this.startTotal();
   }
 
   private startTotal() {
     initialData.totalText.text = this.levelTotal[this.level];
   }
+
+
 
   public render() {
     this.drawText([initialData.totalText]);

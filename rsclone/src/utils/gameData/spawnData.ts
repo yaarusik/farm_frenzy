@@ -3,7 +3,7 @@ export const buildSpawnBtn = [
   {
     type: "button",
     name: "storage",
-    image: "images/level/builds/storage/storage_1.png",
+    image: "images/level/builds/storage/storage-1.png",
     x: 640,
     y: -300,
     stepY: 132,
@@ -37,7 +37,7 @@ export const buildSpawnBtn = [
   {
     type: "button",
     name: "well",
-    image: "images/level/builds/well/house_well_step_1.png",
+    image: "images/level/builds/well/well-1.png",
     frameY: 16,
     stepY: 100,
     stepX: 0,
@@ -117,7 +117,7 @@ export const driedAnim = [
   {
     name: 'flourBuild',
     maxX: 0,
-    maxY: 235,
+    maxY: 225,
     speed: 24
   },
   {

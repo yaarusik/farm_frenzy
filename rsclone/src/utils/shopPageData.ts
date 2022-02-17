@@ -6,11 +6,11 @@ export interface IcontentBl {
 }
 
 export interface IcontentData {
-    [key: string] : IcontentBl
+    [key: string]: IcontentBl
 }
 
 export const houses: IcontentData = {
-    "driedEggs": {
+    "flourBuild": {
         name: "Порошковый",
         costs: "130/180/230/280/330/380",
         src: "../images/shop/houses/driedEggs/driedEggs-01.png",
@@ -25,7 +25,7 @@ export const aside: IcontentData = {
         src: "../images/shop/wells/well-01.png",
         currentStage: 1
     },
-    "depot": {
+    "storage": {
         name: "Склад",
         costs: "150/200/250",
         src: "../images/shop/depots/depot-01.png",

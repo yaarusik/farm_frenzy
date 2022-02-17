@@ -120,20 +120,16 @@ export default class Products extends Common {
   }
 
   public add(product: string[]) {
-    console.log(product);
     if (this.columnCount < this.maxColumn) {
       this.goods = product; // ['egg']
       this.goods.forEach(product => {
         this.product.forEach(img => {
           if (img.name === product) {
-            console.log(product, img.name);
             this.productRender.push(img);
             this.changeCoords();
             this.updateProduct();
-            // сохранение количества продуктов
-            this.productsCounter[product]++;
-            // отображение прогресса игры
-            this.progress.scoreCheck(product);
+            this.productsCounter[product]++;   // сохранение количества продуктов
+            this.progress.scoreCheck(product);// отображение прогресса игры
           }
         });
       });
