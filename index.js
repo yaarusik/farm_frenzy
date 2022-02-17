@@ -27,5 +27,18 @@ app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
-  res.send(url.parse(req.url, true).query);
+  const reqParams = url.parse(req.url, true).query;
+  const userInfo = connect.get(reqParams.user);
+
+  if (reqParams.type == 'signup'){
+
+  } else if (reqParams.type == 'signin'){
+
+  } else if (reqParams.type == 'put'){
+
+  } else if (reqParams.type == 'get'){
+
+  }
+
+  res.send(userInfo);
 });
