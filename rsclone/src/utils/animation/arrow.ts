@@ -11,8 +11,6 @@ export default class Arrow extends Common {
   animDisable: boolean;
   animUpDisable: boolean;
 
-
-
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
     this.maxFrame = 7;
@@ -32,7 +30,6 @@ export default class Arrow extends Common {
       swidth: 52,
       sheight: 52
     },
-
       this.arrowRight = {
         type: "animation",
         name: "right",
@@ -46,7 +43,6 @@ export default class Arrow extends Common {
         swidth: 52,
         sheight: 52
       },
-
       this.arrow = [];
     this.initialArrow = [];
 
@@ -69,13 +65,11 @@ export default class Arrow extends Common {
       this.drawProduct();
       this.arrowUpAnim();
     }
-
   }
 
   private async drawProduct() {
     const arrow = this.arrow.map(image => this.loadImage(image.image));
     this.initialArrow = await this.renderImages(arrow);
-
   }
 
   private arrowRightAnim() {
@@ -125,7 +119,6 @@ export default class Arrow extends Common {
         this.animEnd();
       }, 1200);
     }
-
   }
 
   public render() {
@@ -136,9 +129,6 @@ export default class Arrow extends Common {
     this.arrow = [];
     this.initialArrow = [];
   }
-
-
-
 }
 
 

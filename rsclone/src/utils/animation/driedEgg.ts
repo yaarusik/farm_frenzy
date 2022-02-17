@@ -1,5 +1,5 @@
 import BuildUtils from "../classes/buildUtil";
-import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, IKeyBoolean, } from "../../application/iterfaces";
 import { driedEggsBtn, driedAnim } from "./../gameData/spawnData";
 
 export default class DriedEgg extends BuildUtils {
@@ -17,6 +17,12 @@ export default class DriedEgg extends BuildUtils {
   animTime: number;
   animSpeed: number;
   useProduct: string;
+
+  animationProduct: boolean;
+  opacityState: { active: boolean; opacity: number; };
+
+  productWait: number;
+  productOpacity: number;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: IFunctions, productCounter: IKeyNumber) {
@@ -36,7 +42,7 @@ export default class DriedEgg extends BuildUtils {
       height: 96,
       hover: 1,
       click: 2,
-      stepY: 0,
+      stepY: 96,
       stepX: 0,
       sx: 0,
       sy: 0,
@@ -49,9 +55,13 @@ export default class DriedEgg extends BuildUtils {
     this.maxFrameY = 7;
     this.maxFrameX = 1;
     this.houseDisable = false;
-    this.animTime = 2400;
-    this.animSpeed = 90;
+    this.animTime = 16000;
+    this.animSpeed = 600;
     this.useProduct = 'egg';
+    this.opacityState = { active: true, opacity: 1 };
+    this.animationProduct = false;
+    this.productOpacity = 5000;
+    this.productWait = 9000;
 
     this.startPanel();
   }
@@ -63,7 +73,9 @@ export default class DriedEgg extends BuildUtils {
 
   public render() {
     this.drawImage(this.initialBtn, this.btn);
+    if (this.animationProduct) this.productGhost(this.opacityState);
     this.drawImage(this.initialFlour, this.flourProducts);
+    this.context.globalAlpha = 1;
     this.startSpawn();
   }
 
@@ -84,7 +96,7 @@ export default class DriedEgg extends BuildUtils {
           case "flourBuild": {
             if (!this.houseDisable && this.checkProduct(this.useProduct, this.productCounter)) {
               this.houseDisable = true;
-              this.deleteUseProduct(this.useProduct);
+              this.deleteUseProduct(this.useProduct, this.productCounter);
               this.func.reRenderStorage();
               this.buildAnimation(button, this.maxFrameX, this.maxFrameY, () => {
                 this.showProduct();
@@ -95,8 +107,30 @@ export default class DriedEgg extends BuildUtils {
             break;
           }
           case "flour": {
+            this.opacityState.active = false;
             const product = this.deleteProduct(this.initialFlour, this.flourProducts);
             this.func.productToStorage(product);
+            break;
+          }
+        }
+      }
+    });
+  }
+
+  public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
+    this.flourProducts.forEach(button => {
+      const scaleCoords: Coords = this.scaleCoords(button, widthK, heightK);
+      if (this.determineCoords(event, scaleCoords)) {
+        switch (button.name) {
+          case "flour": {
+            this.buttonsHover(button, button.stepY, button.hover);
+            break;
+          }
+        }
+      } else {
+        switch (button.name) {
+          case 'flour': {
+            this.buttonsHover(button, 0, 0);
             break;
           }
         }
@@ -108,18 +142,22 @@ export default class DriedEgg extends BuildUtils {
   private showProduct() {
     this.flourProducts.push(this.flour);
     this.drawProduct();
+    setTimeout(() => this.trackingProducts(), this.productWait);
   }
+
+  private trackingProducts() {
+    this.animationProduct = true;
+    setTimeout(() => {
+      this.deleteProduct(this.initialFlour, this.flourProducts);
+      this.animationProduct = false;
+    }, this.productOpacity);
+  }
+
+
 
   private async drawProduct() {
     const loadFlour = this.flourProducts.map(image => this.loadImage(image.image));
     this.initialFlour = await this.renderImages(loadFlour);
   }
-
-  private deleteUseProduct(product: string) {
-    this.productCounter[product]--;
-  }
-
-
-
 
 }

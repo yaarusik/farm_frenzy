@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IAnimBuild, IButton, IKeyNumber } from "../../application/iterfaces";
+import { IAnimBuild, IButton, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
 
 
 export default class BuildUtils extends Common {
@@ -10,8 +10,7 @@ export default class BuildUtils extends Common {
 
   public buildSpawn(item: IAnimBuild, build: IButton) {
     if (item.name === build.name) {
-      if (item.maxY > build.y)
-        build.y += item.speed;
+      if (item.maxY > build.y) build.y += item.speed;
     }
   }
 
@@ -60,7 +59,7 @@ export default class BuildUtils extends Common {
       btn.sy = 0;
       btn.sx = 0;
       animEnd();
-    }, 2400);
+    }, 16000);
   }
 
   public checkProduct(product: string, prodCounter: IKeyNumber): boolean {
@@ -71,6 +70,21 @@ export default class BuildUtils extends Common {
     initialData.pop();
     const product = <IButton>productData.pop();
     return [product.name];
+  }
+
+  public deleteUseProduct(product: string, productCounter: IKeyNumber) {
+    productCounter[product]--;
+  }
+
+  public productGhost(opacityState: { active: boolean; opacity: number; }) {
+    if (opacityState.opacity <= 1 && opacityState.opacity > 0.5 && opacityState.active) {
+      opacityState.opacity -= 0.02;
+    } else {
+      opacityState.active = false;
+      opacityState.opacity += 0.02;
+      if (opacityState.opacity >= 1) opacityState.active = true;
+    }
+    this.context.globalAlpha = opacityState.opacity;
   }
 
 }

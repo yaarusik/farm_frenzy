@@ -1,7 +1,7 @@
 import Control from "../builder/controller";
 
 // Update money
-export let startMoney = "1000"; // Start money
+export let startMoney = "10000"; // Start money
 export const setMoney = (update: string) => {
     startMoney = update;
 };
