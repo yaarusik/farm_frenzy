@@ -30,9 +30,15 @@ app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
   let userInfo = {};
   try {
-    userInfo = connect.db.users.findOne({name: reqParams.name});
+    connect.db.collection("users").findOne({name: reqParams.name}, function(err, result) {
+      if (err) throw err;
+      userInfo = result;
+    });
   } catch (err) {
     // userInfo = {};
+    userInfo = {
+      error: "error",
+    };
     console.log(err);
   }
 
