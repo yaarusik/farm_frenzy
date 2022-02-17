@@ -30,7 +30,7 @@ app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
   let userInfo = '';
   try {
-    userInfo = connect.db.collection('users').findOne({name: reqParams.name}).toArray();
+    userInfo = connect.db.collection('users').findOne({name: reqParams.name});
   } catch (err) {
     userInfo = '';
     console.log(err);
