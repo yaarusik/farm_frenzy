@@ -59,6 +59,7 @@ export default class StoragePanel extends Common {
   currentStateCheck: boolean;
   opacityState: IOpacity;
   iconsAllText: IKeyText;
+  check: IKeyNumber;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
     super(canvas, context);
@@ -70,7 +71,12 @@ export default class StoragePanel extends Common {
       totalSubstraction: (product: string, number: number) => { this.totalSubstraction(product, number); }
     };
 
-    this.carTrunc = new CarTrunc(canvas, context, this.click);
+    this.check = {
+      counter: 0,
+      maxProducts: 2
+    };
+
+    this.carTrunc = new CarTrunc(canvas, context, this.click, this.check);
 
     this.productClass = productClass;
     this.initialImage = [];
@@ -305,25 +311,33 @@ export default class StoragePanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "1": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.carTrunc.drawBox(key, 1);
-            this.productSubstraction(key);
-            this.changeTotal(key, 1);
-            this.buttonCondition.ok = true;
+            if (this.check.counter < this.check.maxProducts) {
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.carTrunc.drawBox(key, 1);
+              this.productSubstraction(key);
+              this.changeTotal(key, 1);
+              this.buttonCondition.ok = true;
+            }
             break;
           }
           case "All": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.changeTotal(key, this.productsCounter[key]);
-            this.carTrunc.drawBox(key, this.productsCounter[key]);
-            this.productsCounter[key] = 0;
-            this.deleteRow();
-            this.buttonCondition.ok = true;
+            if (this.check.counter < this.check.maxProducts) {
+              this.buttonsClick(btn, btn.stepY, btn.click);
+              this.changeTotal(key, this.productsCounter[key]);
+              this.carTrunc.drawBox(key, this.productsCounter[key]);
+              this.productsCounter[key] = 0;
+              this.deleteRow();
+              this.buttonCondition.ok = true;
+
+            }
+
             break;
           }
         }
       }
     });
+
+
     this.carTrunc.clickHundler(event, widthK, heightK);
   }
 
@@ -470,7 +484,7 @@ export default class StoragePanel extends Common {
     };
     this.carTrunc.box = {};
     this.carTrunc.boxData = {};
-    this.carTrunc.counter = 0;
+    this.carTrunc.check.counter = 0;
     this.carTrunc.startX = 1208;
   }
 }

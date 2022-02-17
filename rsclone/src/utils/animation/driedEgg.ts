@@ -109,7 +109,7 @@ export default class DriedEgg extends BuildUtils {
           case "flour": {
             this.opacityState.active = false;
             const product = this.deleteProduct(this.initialFlour, this.flourProducts);
-            this.func.productToStorage(product);
+            if (product) this.func.productToStorage(product);
             break;
           }
         }
