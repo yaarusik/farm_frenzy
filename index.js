@@ -46,7 +46,7 @@ app.post('/', (req, res) => {
 
       user.save();
     } else {
-      res.status(501).send({ error: 'Already has account' });
+      res.status(501).send({ error: 'Already has account', userInfo: userInfo });
     }
   } else if (reqParams.type == 'signin'){
 
