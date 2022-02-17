@@ -29,8 +29,12 @@ app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
   let userInfo = {};
+  let mem = [];
   try {
-    userInfo = connect.db.collection("users").find().toArray();
+    userInfo = connect.db.collection("users").find().toArray((err, result) => {
+      if (err) throw err;
+      mem.push(result);
+    });
   } catch (err) {
     // userInfo = {};
     userInfo = {
