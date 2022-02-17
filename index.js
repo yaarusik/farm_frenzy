@@ -38,7 +38,7 @@ app.post('/', (req, res) => {
   }
 
   if (reqParams.type == 'signup'){
-    if (userInfo == {}){
+    if (typeof userInfo.name == 'undefined'){
       const user = new User({
         name: reqParams.name,
         password: reqParams.password
