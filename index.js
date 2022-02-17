@@ -31,10 +31,10 @@ app.post('/', (req, res) => {
   let userInfo = {};
   let mem = [];
   try {
-    User.findOne({name: reqParams.name}, (err, result) => {
+    User.find({}, (err, result) => {
       if (err) throw err;
       userInfo = result;
-      mem.push('has', result);
+      mem.push('has', result);s
     });
   } catch (err) {
     // userInfo = {};
@@ -52,9 +52,9 @@ app.post('/', (req, res) => {
       });
 
       user.save();
-      res.send({ userInfo: userInfo });
+      res.send({ userInfo: userInfo, mem: mem });
     } else {
-      res.status(501).send({ error: 'Already has account', userInfo: userInfo });
+      res.status(501).send({ error: 'Already has account', userInfo: userInfo, mem: mem });
     }
     return;
   } else if (reqParams.type == 'signin'){
