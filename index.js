@@ -43,6 +43,8 @@ app.post('/', (req, res) => {
     console.log(err);
   }
 
+  res.send(mem);
+
   if (reqParams.type == 'signup'){
     if (typeof userInfo.name == 'undefined'){
       const user = new User({
