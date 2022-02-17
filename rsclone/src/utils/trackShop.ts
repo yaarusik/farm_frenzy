@@ -1,6 +1,16 @@
 import { houses, aside, Engineering, IcontentData } from './shopPageData';
 import { IButton } from './../application/iterfaces';
+import { buildData } from './storage/storageData';
+interface IItems {
+  [Key: string]: IProp
+}
+interface Example {
+  [key: string]: IItems
+}
 
+interface IProp {
+  [key: string]: number;
+}
 export default class TrackShop {
   unionData: IcontentData[];
   shopParams: IButton[];
@@ -8,9 +18,12 @@ export default class TrackShop {
     [key: string]: number;
   };
 
+  buildData: Example;
+
   constructor (shopParams: IButton[]) {
     this.unionData = [houses, aside, Engineering];
     this.shopParams = shopParams;
+    this.buildData = buildData;
     this.shopData = {};
     this.saveParams();
   }
@@ -29,11 +42,22 @@ export default class TrackShop {
     this.shopParams.forEach(item => {
 
       if (item.name in this.shopData) {
-        const num = this.shopData[item.name];
-        console.log(num);
+        // получаем currentStage
+        // const number = this.shopData[item.name];
+        const number = 2;
+
         let imgUrl = item.image;
         const regex = new RegExp(/[0-9]/, 'g');
-        imgUrl = imgUrl.replace(regex, `${num}`);
+        imgUrl = imgUrl.replace(regex, `${number}`);
+        item.image = imgUrl;
+        if (item.name in this.buildData) {
+          item.width = this.buildData[item.name][`${number}`].width;
+          item.height = this.buildData[item.name][`${number}`].height;
+          item.swidth = this.buildData[item.name][`${number}`].swidth;
+          item.sheight = this.buildData[item.name][`${number}`].sheight;
+          item.stepY = this.buildData[item.name][`${number}`].stepY;
+        }
+
         console.log(imgUrl);
       }
     });

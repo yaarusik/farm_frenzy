@@ -117,7 +117,7 @@ export const driedAnim = [
   {
     name: 'flourBuild',
     maxX: 0,
-    maxY: 235,
+    maxY: 225,
     speed: 24
   },
   {

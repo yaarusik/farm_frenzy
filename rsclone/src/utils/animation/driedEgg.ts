@@ -1,7 +1,7 @@
 import BuildUtils from "../classes/buildUtil";
-import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber, IKeyBoolean, } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber } from "../../application/iterfaces";
 import { driedEggsBtn, driedAnim } from "./../gameData/spawnData";
-
+import TrackShop from "./../trackShop";
 export default class DriedEgg extends BuildUtils {
   build: IAnimBuild[];
   btn: IButton[];
@@ -23,12 +23,14 @@ export default class DriedEgg extends BuildUtils {
 
   productWait: number;
   productOpacity: number;
+  trackShop: TrackShop;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: IFunctions, productCounter: IKeyNumber) {
     super(canvas, context);
     this.build = this.objParse(driedAnim);
     this.btn = this.objParse(driedEggsBtn);
+    this.trackShop = new TrackShop(this.btn);
     this.productCounter = productCounter;
     this.func = func;
     this.initialBtn = [];

@@ -25,7 +25,7 @@ export default class BuildSpawn extends BuildUtils {
   arrow: Arrow;
   wellPrice: WellPrice;
   showPrice: IKeyBoolean;
-  // trackShop: TrackShop;
+  trackShop: TrackShop;
 
 
 
@@ -34,6 +34,8 @@ export default class BuildSpawn extends BuildUtils {
     this.func = func;
     this.build = this.objParse(animationBuildOptions);
     this.btn = this.objParse(buildSpawnBtn);
+    this.trackShop = new TrackShop(this.btn);
+
     this.initialBtn = [];
     this.initialImg = [];
     this.showPrice = {
@@ -48,7 +50,6 @@ export default class BuildSpawn extends BuildUtils {
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
     this.arrow = new Arrow(canvas, context);
     this.wellPrice = new WellPrice(canvas, context);
-    // this.trackShop = new TrackShop(this.btn);
 
 
     this.price = {
