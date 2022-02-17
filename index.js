@@ -32,15 +32,16 @@ app.post('/', (req, res) => {
   try {
     userInfo = connect.get(reqParams.user);
   } catch (err) {
+    userInfo = '';
     console.log(err);
   }
 
   if (reqParams.type == 'signup'){
     if (userInfo == ''){
-      const user = {
+      const user = new User({
         name: reqParams.name,
         password: reqParams.password
-      }
+      });
 
       user.save();
     } else {
