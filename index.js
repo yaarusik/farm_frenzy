@@ -46,13 +46,13 @@ app.post('/', (req, res) => {
 
   if (reqParams.type == 'signup'){
     if (typeof userInfo.name == 'undefined'){
-      const user = new User({
+      const user = {
         name: reqParams.name,
         password: reqParams.password
-      });
+      };
 
-      user.save();
-      res.send({ userInfo: userInfo, mem: mem });
+      User.create(user, (err, doc) => {});
+      res.send({ userInfo: userInfo, mem: mem, user: User });
     } else {
       res.status(501).send({ error: 'Already has account', userInfo: userInfo, mem: mem });
     }
