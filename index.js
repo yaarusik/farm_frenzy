@@ -52,7 +52,7 @@ app.post('/', (req, res) => {
       };
 
       User.create(user, (err, doc) => {});
-      res.send({ userInfo: userInfo, mem: mem, user: User });
+      res.send({ userInfo: userInfo, mem: mem, userMod: User });
     } else {
       res.status(501).send({ error: 'Already has account', userInfo: userInfo, mem: mem });
     }
