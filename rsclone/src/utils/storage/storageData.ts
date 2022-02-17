@@ -82,7 +82,7 @@ export const buildData = {
       swidth: 168,
       sheight: 140,
       stepY: 140,
-      y: -320
+      y: -300
     },
     '3': {
       width: 290,
@@ -90,7 +90,7 @@ export const buildData = {
       swidth: 168,
       sheight: 136,
       stepY: 136,
-      y: -320
+      y: -300
     },
     '4': {
       width: 300,
@@ -111,12 +111,12 @@ export const buildData = {
       y: -300
     },
     '2': {
-      width: 280,
-      height: 280,
+      width: 260,
+      height: 260,
       swidth: 184,
       sheight: 184,
       stepY: 184,
-      y: -300
+      y: -200
     },
     '3': {
       width: 280,
@@ -132,15 +132,15 @@ export const buildData = {
       swidth: 184,
       sheight: 184,
       stepY: 184,
-      y: -450
+      y: -350
     },
     '5': {
-      width: 300,
-      height: 300,
+      width: 250,
+      height: 250,
       swidth: 184,
       sheight: 184,
       stepY: 184,
-      y: -350
+      y: -340
     },
   },
 

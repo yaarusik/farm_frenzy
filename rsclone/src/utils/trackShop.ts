@@ -35,6 +35,7 @@ export default class TrackShop {
         this.shopData[key] = value.currentStage;
       });
     });
+    console.log(this.shopData);
     this.changeImgParams();
   }
 
@@ -43,9 +44,7 @@ export default class TrackShop {
 
       if (item.name in this.shopData) {
         // получаем currentStage
-        // const number = this.shopData[item.name];
-        const number = 2;
-
+        const number = this.shopData[item.name];
         let imgUrl = item.image;
         const regex = new RegExp(/[0-9]/, 'g');
         imgUrl = imgUrl.replace(regex, `${number}`);
@@ -56,12 +55,10 @@ export default class TrackShop {
           item.swidth = this.buildData[item.name][`${number}`].swidth;
           item.sheight = this.buildData[item.name][`${number}`].sheight;
           item.stepY = this.buildData[item.name][`${number}`].stepY;
+          item.y = this.buildData[item.name][`${number}`].y;
         }
-
-        console.log(imgUrl);
       }
     });
-    console.log(this.shopData);
   }
 
 }
