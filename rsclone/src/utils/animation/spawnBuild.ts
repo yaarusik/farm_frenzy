@@ -7,6 +7,7 @@ import { initialData } from "./../../application/common/initialData";
 import DriedEgg from "./driedEgg";
 import Arrow from "./arrow";
 import WellPrice from "./wellPrice";
+import TrackShop from "./../trackShop";
 
 export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
@@ -24,6 +25,7 @@ export default class BuildSpawn extends BuildUtils {
   arrow: Arrow;
   wellPrice: WellPrice;
   showPrice: IKeyBoolean;
+  // trackShop: TrackShop;
 
 
 
@@ -46,6 +48,7 @@ export default class BuildSpawn extends BuildUtils {
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
     this.arrow = new Arrow(canvas, context);
     this.wellPrice = new WellPrice(canvas, context);
+    // this.trackShop = new TrackShop(this.btn);
 
 
     this.price = {
