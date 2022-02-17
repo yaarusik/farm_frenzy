@@ -30,7 +30,7 @@ app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
   let userInfo = '';
   try {
-    userInfo = connect.db.collection('users').find({name: reqParams.name});
+    userInfo = connect.db.collection('users').findOne({name: reqParams.name}).toArray();
   } catch (err) {
     userInfo = '';
     console.log(err);
@@ -45,9 +45,11 @@ app.post('/', (req, res) => {
       });
 
       user.save();
+      res.send({ userInfo: userInfo });
     } else {
       res.status(501).send({ error: 'Already has account', userInfo: userInfo });
     }
+    return;
   } else if (reqParams.type == 'signin'){
 
   } else if (reqParams.type == 'put'){
