@@ -36,7 +36,16 @@ app.post('/', (req, res) => {
   }
 
   if (reqParams.type == 'signup'){
+    if (userInfo == ''){
+      const user = {
+        name: reqParams.name,
+        password: reqParams.password
+      }
 
+      user.save();
+    } else {
+      res.status(501).send({ error: 'Already has account' });
+    }
   } else if (reqParams.type == 'signin'){
 
   } else if (reqParams.type == 'put'){
