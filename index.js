@@ -1,5 +1,6 @@
 const { text } = require('body-parser');
-const express = require('express')
+const express = require('express');
+const { lazyrouter } = require('express/lib/application');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -26,12 +27,5 @@ app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
-  const user = new User({
-    name: "Farmer",
-    password: "12345678"
-  });
-
-  user.save();
-
-  res.json(JSON.stringify(user));
+  res.send(req);
 });
