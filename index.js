@@ -28,7 +28,12 @@ app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
   const reqParams = url.parse(req.url, true).query;
-  const userInfo = connect.get(reqParams.user);
+  let userInfo = '';
+  try {
+    userInfo = connect.get(reqParams.user);
+  } catch (err) {
+    console.log(err);
+  }
 
   if (reqParams.type == 'signup'){
 
