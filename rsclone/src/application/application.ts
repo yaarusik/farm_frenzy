@@ -7,6 +7,7 @@ import SettingsPage from "./pages/settingsPage";
 import AwardsPage from "./pages/awardsPage";
 import AuthorsPage from "./pages/authorsPage";
 import { Music } from "../utils/music/music";
+import LoginPage from "./pages/loginPage";
 
 export default class Application extends Control {
 	music: Music;
@@ -14,9 +15,9 @@ export default class Application extends Control {
 		super(parentNode, tagName, className);
 		// preloader
 
-		// this.mainCycle();
+		this.mainCycle();
 		// this.gameMapCycle();
-		this.levelCycle(3);
+		// this.levelCycle(3);
 
 		this.music = new Music();
 		this.music.start();
@@ -40,6 +41,10 @@ export default class Application extends Control {
 		startPage.onAuthors = () => {
 			startPage.destroy();
 			this.authorsCycle();
+		};
+		startPage.onLogin = () => {
+			startPage.destroy();
+			this.loginCycle();
 		};
 	}
 
@@ -120,6 +125,14 @@ export default class Application extends Control {
 		const authorsPage = new AuthorsPage(this.node);
 		authorsPage.onBack = () => {
 			authorsPage.destroy();
+			this.mainCycle();
+		};
+	}
+
+	private loginCycle() {
+		const loginPage = new LoginPage(this.node);
+		loginPage.onBack = () => {
+			loginPage.destroy();
 			this.mainCycle();
 		};
 	}
