@@ -31,8 +31,15 @@ app.post('/', async function(req, res) {
   let userInfo = await User.findOne({name: reqParams.name}).exec();
 
   if (reqParams.type == 'signup'){
-    if (false){
-      
+    if (!userInfo){
+      const user = new User({
+        name: reqParams.name,
+        password: reqParams.password
+      });
+
+      user.save();
+
+      res.status(200).send('new User with name ' + reqParams.name);
     } else {
       res.status(501).send({ error: 'Already has account', userInfo: userInfo});
     }
