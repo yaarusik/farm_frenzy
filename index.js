@@ -27,5 +27,5 @@ app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 app.post('/', (req, res) => {
-  res.send(req);
+  res.send(req.headers);
 });
