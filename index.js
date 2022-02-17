@@ -32,7 +32,7 @@ app.post('/', (req, res) => {
   try {
     userInfo = connect.db.users.findOne({name: reqParams.name});
   } catch (err) {
-    userInfo = {};
+    // userInfo = {};
     console.log(err);
   }
 
