@@ -26,7 +26,7 @@ module.exports = connect;
 app.get('/', (req, res) => res.render('index'))
 app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
-app.post('/', (req, res) => {
+app.post('/', async function(req, res) {
   const reqParams = url.parse(req.url, true).query;
   let userInfo = await User.findOne({name: reqParams.name}).exec();
 
