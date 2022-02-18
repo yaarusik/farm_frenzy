@@ -39,7 +39,7 @@ export default class LoginPage extends Control {
     this.buttonEffect.devideButton(loginBtn.node);
     loginBtn.node.onclick = () => {
       const name = nameInput.node.value;
-      const password = nameInput.node.value;
+      const password = passInput.node.value;
       const status = this.backend.login(name, password);
       console.log(status);
     };

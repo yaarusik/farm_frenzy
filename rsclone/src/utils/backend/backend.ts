@@ -2,14 +2,17 @@ export default class Backend {
   url: string;
 
   constructor(){
-    this.url = window.location.href + '/';
+    this.url = 'https://farm-frenzy.herokuapp.com/';
   }
 
   public async login(name: string, password: string){
-    const responce = await fetch(this.url, {
-      method: 'POST'
+    const url = this.url + '?type=signin&name=' + name + '&password=' + password;
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors'
     });
 
-    return await responce.json();
+    return await response;
   }
 }
