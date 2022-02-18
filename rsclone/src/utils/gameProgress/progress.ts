@@ -91,6 +91,7 @@ export default class Progress extends Common {
         this.productText(product, product.name);
         this.done[product.id].height = 0;
         this.done[product.id].width = 0;
+        this.goalsDone.delete(product.name);
       }
       this.doneCheck(product);
     }

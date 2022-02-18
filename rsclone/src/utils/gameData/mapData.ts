@@ -57,6 +57,8 @@ export const imagesOptions = [
 
 export const levelFinish = {
   '1': 'start',
+  '2': 'gold',
+  '3': 'silver'
 };
 
 export const levelCoords = {
