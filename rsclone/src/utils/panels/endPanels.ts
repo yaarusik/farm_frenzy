@@ -2,7 +2,7 @@ import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyString } fr
 import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
 import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
-import { levelFinish } from "../gameData/mapData";
+import { levelFinish, levelCoords } from "../gameData/mapData";
 
 export default class EndPanel extends Common {
   endPanelImg: IPicture[];
@@ -121,9 +121,11 @@ export default class EndPanel extends Common {
 
   private addLevelBtn() {
     const nextLevel = (this.level + 1).toString();
-    if (!(nextLevel in this.levelFinish)) {
+    if (!(nextLevel in this.levelFinish) && (nextLevel in levelCoords)) {
       this.levelFinish[nextLevel] = 'start';
-    }
+    } //else {
+    //   throw new Error('level does not exist');
+    // }
   }
 
 
