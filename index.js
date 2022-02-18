@@ -49,7 +49,7 @@ app.post('/', async function(req, res) {
     else if (userInfo.password === reqParams.password)
       res.status(200).json({ message: 'Авторизация прошла успешно'});
     else
-      res.status(500).json({ message: 'Неверный логин и/или пароль'});
+      res.status(500).json({ message: 'Неверный пароль'});
     return;
   } else if (reqParams.type == 'put'){
 
