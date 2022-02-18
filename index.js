@@ -39,17 +39,17 @@ app.post('/', async function(req, res) {
 
       user.save();
 
-      res.status(200).json({ message: 'Создан новый пользователь с ником ' + reqParams.name} );
+      res.status(200).send({ message: 'Создан новый пользователь с ником ' + reqParams.name} );
     } else
-      res.status(200).json({ message: 'Такой аккаунт уже зарегистрирован'});
+      res.status(200).send({ message: 'Такой аккаунт уже зарегистрирован'});
     return;
   } else if (reqParams.type == 'signin'){
     if (!userInfo)
-      res.status(200).json({ message: 'Такого пользователя не существует'});
+      res.status(200).send({ message: 'Такого пользователя не существует'});
     else if (userInfo.password === reqParams.password)
-      res.status(200).json({ message: 'Авторизация прошла успешно'});
+      res.status(200).send({ message: 'Авторизация прошла успешно'});
     else
-      res.status(200).json({ message: 'Неверный пароль'});
+      res.status(200).send({ message: 'Неверный пароль'});
     return;
   } else if (reqParams.type == 'put'){
 
