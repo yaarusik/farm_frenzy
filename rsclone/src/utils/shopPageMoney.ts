@@ -1,10 +1,12 @@
 import Control from "../builder/controller";
 
 // Update money
-export let startMoney = "10000"; // Start money
+export let startMoney = "0"; // Start money
 export const setMoney = (update: string) => {
     startMoney = update;
 };
+
+export const addMoney = (update: number) => startMoney = `${+startMoney + update}`;
 
 // Update money on window
 export let moneyBlock: Control<HTMLElement>;

@@ -104,5 +104,6 @@ export default class SettingsPage extends Control {
 
   soundChange(val: string) {
     this.soundVal = val;
+    this.music.changeSoundVolume(val);
   }
 }

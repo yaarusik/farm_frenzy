@@ -3,6 +3,7 @@ import { levelImagesPath } from "../../utils/gameData/levelData";
 import { Coords } from "../iterfaces";
 import { Grass, AnimalList, Chicken, Product, Pig, Bear, Animal } from "../types";
 import Common from "./common";
+import { Music } from "../../utils/music/music";
 
 
 export default class LevelRender {
@@ -22,10 +23,13 @@ export default class LevelRender {
 	heightRatio: number;
 	gameFrame: number;
 	staggeredFrames: number;
+	music: Music;
 
 	constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
 		this.canvas = canvas;
 		this.context = context;
+
+		this.music = new Music();
 
 		this.commonFunction = new Common(this.canvas, this.context);
 
@@ -329,6 +333,8 @@ export default class LevelRender {
 	}
 
 	private renderBear(item: Bear, isPaused: boolean) {
+		this.music.bearAppiarance();
+
 		let imageFile = new Image();
 		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
