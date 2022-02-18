@@ -115,7 +115,7 @@ export default class LevelPage extends Control {
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState, this.level);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
-    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
+    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer, this.level);
     this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
     this.arrow = new Arrow(this.canvas.node, this.context);
