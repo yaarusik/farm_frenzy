@@ -1,7 +1,8 @@
-import { IPicture, IButton, IText, Coords, IFunctions, IOpacity } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyNumber } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
 import { levelInitial } from "../gameData/startLevelData";
+import LevelRender from "../../application/common/levelRender";
 
 export default class StartPanel extends Common {
   startPanelImg: IPicture[];
@@ -20,12 +21,16 @@ export default class StartPanel extends Common {
   };
 
   opacityState: IOpacity;
+  levelRender: LevelRender;
+  levelAnimals: IKeyNumber;
+  levelBear: IKeyNumber;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number, levelRender: LevelRender) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
     this.startImg = [];
+    this.levelRender = levelRender;
 
     this.startPanelImg = this.objParse(startPanelImg);
     this.startPanelBtn = this.objParse(startPanelBtn);
@@ -39,6 +44,19 @@ export default class StartPanel extends Common {
       show: true,
       disable: false,
       opacity: 0
+    };
+
+    this.levelAnimals = {
+      '1': 2,
+      '2': 2,
+      '3': 2,
+      '4': 0,
+    };
+    this.levelBear = {
+      '1': 2,
+      '2': 5,
+      '3': 4,
+      '4': 3
     };
 
     this.startPanel();
@@ -108,6 +126,8 @@ export default class StartPanel extends Common {
           case "Ок": {
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
+            setTimeout(() => this.initialAnimal(), 200);
+            setTimeout(() => this.initialBear(), 1000);
             setTimeout(() => func.isStart(), 300);
             break;
           }
@@ -118,10 +138,23 @@ export default class StartPanel extends Common {
     });
   }
 
+  private initialAnimal() {
+    for (let i = 1; i <= this.levelAnimals[this.level]; i++) {
+      setTimeout(() => {
+        this.levelRender.createAnimal('chicken');
+      }, 500 * i);
+    }
+  }
 
+  private initialBear() {
+    for (let i = 1; i <= this.levelBear[this.level]; i++) {
+      setTimeout(() => {
+        this.levelRender.createAnimal('bear');
+      }, this.random(25000, 40000) * i);
+    }
+  }
 
-
-
-
-
+  private random(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 }

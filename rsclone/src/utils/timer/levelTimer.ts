@@ -3,7 +3,7 @@ import { endTextData } from "../gameData/endPanelData";
 import { timerData, goldCup, silvCup, silvCupText, goldCupText } from "./levelTimerData";
 import { initialData } from "../../application/common/initialData";
 import { IText } from "../../application/iterfaces";
-import { startMoney, addMoney } from "../shopPageMoney";
+import { addMoney } from "../shopPageMoney";
 
 export default class Timer {
     canvas: HTMLCanvasElement;

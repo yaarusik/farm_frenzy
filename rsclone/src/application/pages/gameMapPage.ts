@@ -1,10 +1,11 @@
 
 
 import Control from "../../builder/controller";
-import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
+import { imagesOptions, textOptions, levelCoords, levelFinish } from "../../utils/gameData/mapData";
 import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 import { Music } from "../../utils/music/music";
+import LevelProgress from "../../utils/gameProgress/levelProgress";
 export default class GameMapPage extends Control {
 	startLevel!: (level: number) => void;
 	onBack!: () => void;
@@ -20,6 +21,9 @@ export default class GameMapPage extends Control {
 	commonFunction: Common;
 	animation: number;
 	music: Music;
+	levelBtn: LevelProgress;
+
+
 
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
 		super(parentNode, tagName, className, content);
@@ -28,6 +32,7 @@ export default class GameMapPage extends Control {
 
 		this.textOptions = JSON.parse(JSON.stringify(textOptions));
 		this.imagesOptions = JSON.parse(JSON.stringify(imagesOptions));
+
 		this.buttons = this.imagesOptions.filter(btn => btn.type === "button") as IButton[];
 		// коэффициенты масштаба
 		this.curWidthK = 1;
@@ -39,9 +44,8 @@ export default class GameMapPage extends Control {
 		this.canvas.node.width = 1600;
 		this.canvas.node.height = 1200;
 		this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
-		// создание общего класса с функциями
 		this.commonFunction = new Common(this.canvas.node, this.context);
-
+		this.levelBtn = new LevelProgress(this.canvas.node, this.context);
 		this.startMap();
 
 		window.onresize = () => {
@@ -59,6 +63,8 @@ export default class GameMapPage extends Control {
 		});
 	}
 
+
+
 	private async startMap() {
 		const loadImages = this.imagesOptions.map(image => this.commonFunction.loadImage(image.image));
 		const coefficients = this.commonFunction.canvasScale();
@@ -74,6 +80,7 @@ export default class GameMapPage extends Control {
 		this.context.clearRect(0, 0, this.canvas.node.width, this.canvas.node.height);
 		this.commonFunction.drawImage(saveImg, this.imagesOptions);
 		this.commonFunction.drawText(this.textOptions);
+		this.levelBtn.render();
 	}
 
 	private async run(saveImg: HTMLImageElement[]) {
@@ -94,7 +101,7 @@ export default class GameMapPage extends Control {
 	}
 
 	private canvasMoveHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
-		buttons.forEach(btn => {
+		[...buttons, ...this.levelBtn.levelBtnData].forEach(btn => {
 			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				this.buttonsHover(btn, btn.stepY);
@@ -117,7 +124,7 @@ export default class GameMapPage extends Control {
 	}
 
 	private canvasClickHundler(event: MouseEvent, canvas: HTMLCanvasElement, buttons: IButton[]) {
-		buttons.forEach(btn => {
+		[...buttons, ...this.levelBtn.levelBtnData].forEach(btn => {
 			const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
@@ -159,5 +166,7 @@ export default class GameMapPage extends Control {
 			}
 		});
 	}
+
+
 }
 

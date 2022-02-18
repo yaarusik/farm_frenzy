@@ -66,10 +66,11 @@ export default class BuildUtils extends Common {
     return prodCounter[product] !== 0;
   }
 
-  public deleteProduct(initialData: HTMLImageElement[], productData: IButton[]): string[] {
-    initialData.pop();
+  public deleteProduct(initialData: HTMLImageElement[], productData: IButton[]): string[] | undefined {
+
     const product = <IButton>productData.pop();
-    return [product.name];
+    initialData.pop();
+    if (product) return [product.name];
   }
 
   public deleteUseProduct(product: string, productCounter: IKeyNumber) {

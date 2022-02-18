@@ -53,54 +53,27 @@ export const imagesOptions = [
     swidth: 80,
     sheight: 41,
   },
-  {
-    type: "button",
-    name: "1",
-    image: "images/map/new__level.png",
-    id: 1,
-    x: 560,
-    y: 928,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  },
-  {
-    type: "button",
-    name: "2",
-    image: "images/map/new__level.png",
-    id: 2,
-    x: 635,
-    y: 997,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  },
-  {
-    type: "button",
-    name: "3",
-    image: "images/map/new__level.png",
-    id: 3,
-    x: 716,
-    y: 1068,
-    width: 76,
-    height: 76,
-    sx: 0,
-    sy: 0,
-    stepY: 76,
-    swidth: 76,
-    sheight: 76,
-  },
-
-
 ];
+
+export const levelFinish = {
+  '1': 'start',
+};
+
+export const levelCoords = {
+  '1': {
+    x: 560,
+    y: 928
+  },
+  '2': {
+    x: 635,
+    y: 997
+  },
+  '3': {
+    x: 716,
+    y: 1068
+  }
+};
+
 
 export const textOptions = [
   {

@@ -48,11 +48,11 @@ export default class LevelPage extends Control {
   opacityState: IOpacity;
   arrow: Arrow;
   music: Music;
+  animals: string[];
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
     this.level = level;
-
 
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
@@ -105,19 +105,21 @@ export default class LevelPage extends Control {
       reRenderStorage: () => this.products.reRenderStorage(),
     };
 
+    this.animals = [];
+
     this.context = <CanvasRenderingContext2D>this.canvas.node.getContext("2d");
     this.commonFunction = new Common(this.canvas.node, this.context);
 
     this.levelInterface = new LevelInterface(this.canvas.node, this.context, this.level);
-    this.startPanel = new StartPanel(this.canvas.node, this.context, this.level);
-    this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.levelRender = new LevelRender(this.canvas.node, this.context);
+    this.startPanel = new StartPanel(this.canvas.node, this.context, this.level, this.levelRender);
+    this.timer = new Timer(this.canvas.node, this.context, this.level);
     this.total = new Total(this.canvas.node, this.context, this.level);
     this.pausePanel = new PausePanel(this.canvas.node, this.context, this.timer, this.node, canvasContainer, this.opacityState);
     this.buildSpawn = new BuildSpawn(this.canvas.node, this.context, this.panelState, this.click, this.productsCounter, this.opacityState, this.level);
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
-    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer);
+    this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer, this.level);
     this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
     this.arrow = new Arrow(this.canvas.node, this.context);
@@ -196,13 +198,13 @@ export default class LevelPage extends Control {
   }
 
   private canvasMoveHundler(event: MouseEvent, buttons: IButton[], text: IText[]) {
-    this.levelRender.moveHundler(event, this.curWidthK, this.curHeightK);
+
     if (this.panelState.pausePanelSwitch) this.pausePanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.startPanelSwitch) this.startPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.endPanelSwitch) this.endPanel.moveHundler(event, this.curWidthK, this.curHeightK);
     else if (this.panelState.storagePanelSwitch) this.storage.moveHundler(event, this.curWidthK, this.curHeightK);
     else {
-      //взаимодействие с зданиями
+      this.checkChicken(event);
       this.buildSpawn.moveHundler(event, this.curWidthK, this.curHeightK);
       buttons.forEach(btn => {
         const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -255,9 +257,7 @@ export default class LevelPage extends Control {
     else if (this.panelState.storagePanelSwitch) this.storage.clickHundler(event, this.curWidthK, this.curHeightK, this.panelState);
     else {
       this.storageProducts = [...this.levelRender.clickHundler(event, this.curWidthK, this.curHeightK)];
-
       if (this.storageProducts.length === 0) {
-        //взаимодействие с зданиями
         this.buildSpawn.clickHundler(event, this.curWidthK, this.curHeightK);
         buttons.forEach(btn => {
           const scaleCoords: Coords = this.commonFunction.scaleCoords(btn, this.curWidthK, this.curHeightK);
@@ -316,6 +316,12 @@ export default class LevelPage extends Control {
 
   private startBtn(btn: IButton) {
     this.commonFunction.btnActive(btn, btn.stepY);
+  }
+
+  private checkChicken(event: MouseEvent) {
+    this.animals = this.levelRender.moveHundler(event, this.curWidthK, this.curHeightK);
+    this.animals = this.animals.filter(item => item === 'chicken');
+    this.progress.scoreCheck('chicken', this.animals.length);
   }
 
   onMap(): void {

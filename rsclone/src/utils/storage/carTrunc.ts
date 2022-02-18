@@ -21,16 +21,16 @@ export default class CarTrunc extends Common {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
   };
-  maxProducts: number;
-  counter: number;
+
   stepX: number;
+  check: IKeyNumber;
 
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: {
     changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => void;
     totalSubstraction: (product: string, number: number) => void;
-  }) {
+  }, check: IKeyNumber) {
     super(canvas, context);
     this.initialBox = [];
     this.func = func;
@@ -101,10 +101,7 @@ export default class CarTrunc extends Common {
     this.startX = 1208;
     this.stepX = 80;
 
-    this.maxProducts = 2;
-    this.counter = 0;
-
-
+    this.check = check;
 
     this.startTrunc();
   }
@@ -133,8 +130,9 @@ export default class CarTrunc extends Common {
   }
 
   public drawBox(product: string, count: number): void {
-    if (this.boxCounter[product] === 0 && this.counter < this.maxProducts) {
-      this.counter++;
+    if (this.boxCounter[product] === 0 && this.check.counter < this.check.maxProducts) {
+      this.check.counter++;
+      this.checkCounter();
       const { name, img } = this.getImg(product);
       this.boxData[product] =
       {
@@ -160,18 +158,20 @@ export default class CarTrunc extends Common {
       }
       this.changeBoxPosition(product);
     }
-    console.log('count:', count);
     this.boxCounter[product] += count;
-    console.log(this.counter, 'counter');
   }
 
   private changeBoxPosition(product: string) {
-    this.startX += this.stepX;
+    if (this.check.counter === 1) this.startX += this.stepX;
 
   }
 
+  private checkCounter() {
+    if (this.check.count > 2) this.check.count = 2;
+  }
+
   private deleteProduct(product: string) {
-    this.startX = 1208;
+    if (this.check.counter === 1 || this.check.counter === 0) this.startX = 1208;
     delete this.box[product];
     delete this.boxData[product];
     // перед этим нужно передать значение
@@ -179,34 +179,39 @@ export default class CarTrunc extends Common {
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
+
     Object.values(this.boxData).forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
+
         switch (btn.name) {
+
           case "egg": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
-            this.counter--;
+            this.check.counter--;
             break;
           }
           case "bear-1": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
-            this.counter--;
+            this.check.counter--;
             break;
           }
           case "flour": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
-            this.counter--;
+            this.check.counter--;
             break;
           }
         }
       }
     });
+
+
 
   }
 
