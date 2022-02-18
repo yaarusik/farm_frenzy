@@ -40,7 +40,8 @@ export default class LoginPage extends Control {
     loginBtn.node.onclick = () => {
       const name = nameInput.node.value;
       const password = passInput.node.value;
-      const status = this.backend.login(name, password);
+      let status;
+      this.backend.login(name, password).then((res) => {status = res});
       console.log(status);
     };
 

@@ -8,11 +8,16 @@ export default class Backend {
   public async login(name: string, password: string){
     const url = this.url + '?type=signin&name=' + name + '&password=' + password;
     
-    const response = await fetch(url, {
+    let response;
+    try {
+    await fetch(url, {
       method: 'POST',
       mode: 'no-cors'
-    });
-
+    }).then((res) => {return res.json()})
+      .then((json) => {response = json})
+    } catch (e) {
+      console.log(e);
+    }
     return await response;
   }
 }
