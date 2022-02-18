@@ -55,7 +55,11 @@ export const imagesOptions = [
   },
 ];
 
-export const levelFinish = {
+export interface IlevelFinish {
+  [key: string] : string
+}
+
+export const levelFinish: IlevelFinish = {
   '1': 'start',
 };
 
