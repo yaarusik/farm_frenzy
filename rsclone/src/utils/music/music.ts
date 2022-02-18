@@ -1,9 +1,8 @@
-export const soundVal = "50";
+export let soundVal = "50";
 export let musicVal = "50";
 
-export function changeVal(val: string) {
-    musicVal = val;
-}
+const soundMusic = new Audio();
+soundMusic.volume = 0.5;
 
 const musicStart = new Audio("audio/front_music/start.mp3");
 musicStart.volume = 0; // Change on 0.5
@@ -22,6 +21,11 @@ export class Music {
         musicMain.volume = +val / 100;
     }
 
+    public changeSoundVolume(val: string) {
+        soundVal = val;
+        soundMusic.volume = +val / 100;
+    }
+
     public start() {
         window.addEventListener("click", this.startMusicPlay);
     }
@@ -36,19 +40,58 @@ export class Music {
         }
     }
 
-    onStart() {
+    public onStart() {
         musicMain.pause();
         musicMain.currentTime = 0;
         musicStart.currentTime = 0;
         musicStart.play();
     }
 
-    onMain() {
+    public onMain() {
         musicStart.pause();
         musicStart.currentTime = 0;
         musicMain.currentTime = 0;
         musicMain.loop = true;
         musicMain.play();
+    }
+
+    private UpdateMusic(audio: HTMLAudioElement) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+
+    // CHICKEN
+
+    public onChicken() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/chicken/chicken_voice.wav";
+        soundMusic.play();
+    }
+    public chickenDie() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/chicken/chicken_die.wav";
+        soundMusic.play();
+    }
+    public chickenHungry() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/chicken/chicken_hungry.wav";
+        soundMusic.play();
+    }
+
+    // CAR
+
+    public car() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/car/car_came.wav";
+        soundMusic.play();
+    }
+
+    // BEAR
+
+    public bearAppiarance() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/bear/bear_landing.wav";
+        soundMusic.play();
     }
 
 }

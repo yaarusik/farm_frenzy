@@ -3,6 +3,7 @@ import { endTextData } from "../gameData/endPanelData";
 import { timerData, goldCup, silvCup, silvCupText, goldCupText } from "./levelTimerData";
 import { initialData } from "../../application/common/initialData";
 import { IText } from "../../application/iterfaces";
+import { startMoney, addMoney } from "../shopPageMoney";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -117,18 +118,24 @@ export default class Timer {
     }
 
     countBonus() {
+        let money;
         const tmData = timerData[this.level - 1];
         if (this.min > this.silvMin || (this.min >= this.silvMin && this.sec >= this.silvSec)) {
             this.bonus = "default";
-            return `${tmData.deafultStar}`;
+            money = tmData.deafultStar;
+            addMoney(money);
+            return `${money}`;
         }
         else if (this.min >= this.goldMin && this.sec >= this.goldSec) {
             this.bonus = "silver";
-            return `${tmData.deafultStar + tmData.silverStar}`;
-        }
+            money = tmData.deafultStar + tmData.silverStar;
+            addMoney(money);
+            return `${money}`;
+        } else money = tmData.deafultStar + tmData.goldStar;
 
         this.bonus = "gold";
-        return `${tmData.deafultStar + tmData.goldStar}`;
+        addMoney(money);
+        return `${money}`;
     }
 
     showCup() {

@@ -4,6 +4,7 @@ import Common from "./../common/common";
 import { Coords, IButton, IText, IFunctions, IKeyBoolean, IKeyNumber, IOpacity } from "./../iterfaces";
 import Coin from "../../utils/animation/coin";
 import Timer from "../../utils/timer/levelTimer";
+import { Music } from "../../utils/music/music";
 import LevelRender from "../common/levelRender";
 import PausePanel from "../../utils/panels/pausePanel";
 import StartPanel from "../../utils/panels/startPanel";
@@ -46,6 +47,7 @@ export default class LevelPage extends Control {
   productsCounter: IKeyNumber;
   opacityState: IOpacity;
   arrow: Arrow;
+  music: Music;
 
   constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
     super(parentNode, tagName, className);
@@ -57,6 +59,8 @@ export default class LevelPage extends Control {
 
     this.canvas.node.width = 1600;
     this.canvas.node.height = 1200;
+
+    this.music = new Music();
 
     this.curWidthK = 1;
     this.curHeightK = 1;
@@ -269,7 +273,8 @@ export default class LevelPage extends Control {
                 break;
               }
               case 'chicken': {
-                if (initialData.btnDisable[btn.name]) {
+                if (initialData.btnDisable[btn.name]) { // chicken music
+                  this.music.onChicken();
                   this.levelRender.createAnimal("chicken");
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
