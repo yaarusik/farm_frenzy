@@ -82,21 +82,6 @@ export default class StartPanel extends Common {
     this.drawText([...this.startPanelText, ...this.levelInitial[this.level].text]);
   }
 
-  drawStaticText(text: IStaticText[]) {
-    text.forEach(item => {
-      this.context.fillStyle = item.color;
-      this.context.font = item.fontSize;
-      this.context.shadowColor = item.shadowColor;
-      this.context.shadowBlur = item.shadowBlur;
-      this.context.shadowOffsetX = item.shadowOffsetX;
-      this.context.shadowOffsetY = item.shadowOffsetY;
-
-      this.context.strokeText(item.text, item.x, item.y);
-      this.context.fillText(item.text, item.x, item.y);
-      this.canvasFilters(0);
-    });
-  }
-
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
     this.startPanelBtn.forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
