@@ -2,6 +2,7 @@ import Common from "../../application/common/common";
 import { IKeyBoolean, IPicture, IText } from "../../application/iterfaces";
 import { initialData } from "../../application/common/initialData";
 import { Music } from "../music/music";
+import Preloader from "../../application/preloader";
 
 
 export default class Car extends Common {
@@ -28,7 +29,6 @@ export default class Car extends Common {
     super(canvas, context);
 
     this.isState = isState;
-
     this.music = new Music();
 
     this.total = 0;
@@ -122,7 +122,7 @@ export default class Car extends Common {
       this.carRight.x += 0.5;
       this.minimap.x += 0.5;
       this.text.x += 0.5;
-    } else { 
+    } else {
       // Car drop music
       this.carRight.width = 0;
       this.carRight.height = 0;

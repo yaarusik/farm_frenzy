@@ -1,4 +1,4 @@
-import { IPicture, IText, Coords, IButton, IAnimBuild, IOpacity } from './../iterfaces';
+import { IPicture, IText, Coords, IButton, IAnimBuild, IOpacity, IStaticText } from './../iterfaces';
 import Picture from "../../utils/classes/canvasBtn";
 import CutPicture from "../../utils/classes/cutPictures";
 
@@ -118,7 +118,7 @@ export default class Common {
     });
   }
 
-  public objParse(obj: IPicture[] | IButton[] | IText[] | IAnimBuild[]) {
+  public objParse(obj: IPicture[] | IButton[] | IText[] | IAnimBuild[] | IStaticText[]) {
     return JSON.parse(JSON.stringify(obj));
   }
 
