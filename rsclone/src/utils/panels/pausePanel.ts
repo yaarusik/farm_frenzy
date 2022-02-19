@@ -15,7 +15,6 @@ export default class PausePanel extends Common {
   node: HTMLElement;
   canvasContainer: Control<HTMLElement>;
   music: Music;
-
   opacityState: IOpacity;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer,
@@ -31,10 +30,7 @@ export default class PausePanel extends Common {
     this.node = node;
     this.canvasContainer = canvasContainer;
     this.music = new Music();
-
     this.opacityState = opacityState;
-
-
 
     this.startPanel();
   }
