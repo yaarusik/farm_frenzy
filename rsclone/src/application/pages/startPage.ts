@@ -1,6 +1,7 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
 import { Music } from "../../utils/music/music";
+import { userInfo } from "../../utils/userData";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
@@ -27,6 +28,7 @@ export default class StartPage extends Control {
       const nameInput = new Control<HTMLInputElement>(panel.node, "input", "panel__name", "");
       nameInput.node.type = "text";
       nameInput.node.readOnly = true;
+      nameInput.node.value = userInfo.name;
 
       const campaignBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Карьера");
       this.buttonEffect.devideButton(campaignBtn.node);

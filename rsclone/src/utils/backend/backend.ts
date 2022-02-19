@@ -1,4 +1,5 @@
 import { ResponseSign } from "../../application/types";
+import { userInfo } from "../userData";
 
 export default class Backend {
   url: string;
@@ -45,5 +46,11 @@ export default class Backend {
     }
 
     return await response;
+  }
+
+  public updateUser(name: string, password: string){
+    userInfo.name = name;
+    userInfo.password = password;
+    userInfo.logged = true;
   }
 }
