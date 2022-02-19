@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyString } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyString, IStaticText } from "../../application/iterfaces";
 import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
 import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
@@ -8,7 +8,7 @@ export default class EndPanel extends Common {
   endPanelImg: IPicture[];
   initialImage: HTMLImageElement[];
   initialBtn: HTMLImageElement[];
-  endPanelStaticText: IText[];
+  endPanelStaticText: IStaticText[];
   startImg: HTMLImageElement[];
   endPanelBtn: IButton[];
   endPanelText: IText[];
@@ -25,7 +25,6 @@ export default class EndPanel extends Common {
     this.startImg = [];
 
     this.endPanelImg = endImg;
-    this.endPanelStaticText = endStaticText;
     this.endPanelBtn = endBtn;
     this.endPanelText = endText;
     this.dataText = endTextData;
@@ -66,25 +65,6 @@ export default class EndPanel extends Common {
     this.timer.checkZeroTime();
   }
 
-  drawStaticText(text: IText[]) {
-    text.forEach(item => {
-      this.context.fillStyle = item.color;
-      this.context.font = item.fontSize;
-      if (item.text === 'Результаты уровня') {
-        this.context.shadowColor = '#7f5f30';
-        this.context.shadowBlur = 10;
-      } else {
-        this.context.shadowColor = '#222222';
-        this.context.shadowBlur = 4;
-      }
-      this.context.shadowOffsetX = 4;
-      this.context.shadowOffsetY = 4;
-      this.context.strokeText(item.text, item.x, item.y);
-      this.context.fillText(item.text, item.x, item.y);
-      this.canvasFilters(0);
-      this.context.shadowColor = '';
-    });
-  }
 
   public moveHundler(event: MouseEvent, widthK: number, heightK: number) {
     this.endPanelBtn.forEach(btn => {
@@ -123,9 +103,7 @@ export default class EndPanel extends Common {
     const nextLevel = (this.level + 1).toString();
     if (!(nextLevel in this.levelFinish) && (nextLevel in levelCoords)) {
       this.levelFinish[nextLevel] = 'start';
-    } //else {
-    //   throw new Error('level does not exist');
-    // }
+    }
   }
 
 

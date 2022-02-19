@@ -156,14 +156,13 @@ export default class CarTrunc extends Common {
       else {
         throw new Error('box img not found');
       }
-      this.changeBoxPosition(product);
+      this.changeBoxPosition();
     }
     this.boxCounter[product] += count;
   }
 
-  private changeBoxPosition(product: string) {
+  private changeBoxPosition() {
     if (this.check.counter === 1) this.startX += this.stepX;
-
   }
 
   private checkCounter() {
@@ -179,13 +178,10 @@ export default class CarTrunc extends Common {
   }
 
   public clickHundler(event: MouseEvent, widthK: number, heightK: number): void {
-
     Object.values(this.boxData).forEach(btn => {
       const scaleCoords: Coords = this.scaleCoords(btn, widthK, heightK);
       if (this.determineCoords(event, scaleCoords)) {
-
         switch (btn.name) {
-
           case "egg": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
@@ -210,11 +206,18 @@ export default class CarTrunc extends Common {
         }
       }
     });
-
-
-
   }
 
-
-
+  public carTruncClear() {
+    this.boxCounter = {
+      'egg': 0,
+      'bear-1': 0,
+      'chicken': 0,
+      'flour': 0
+    };
+    this.box = {};
+    this.boxData = {};
+    this.check.counter = 0;
+    this.startX = 1208;
+  }
 }
