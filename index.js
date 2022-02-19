@@ -44,7 +44,7 @@ app.post('/', async function(req, res) {
         coin: 0,
       });
       user.save();
-      res.status(200).send({ message: 'Создан новый пользователь с ником ' + reqParams.name} );
+      res.status(200).send({ message: 'Создан новый пользователь с ником ' + reqParams.name, userInfo: user} );
     } else
       res.status(200).send({ message: 'Такой аккаунт уже зарегистрирован'});
     return;
@@ -53,7 +53,7 @@ app.post('/', async function(req, res) {
     if (!userInfo)
       res.status(200).send({ message: 'Такого пользователя не существует'});
     else if (userInfo.password === reqParams.password)
-      res.status(200).send({ message: 'Авторизация прошла успешно'});
+      res.status(200).send({ message: 'Авторизация прошла успешно', userInfo: userInfo});
     else
       res.status(200).send({ message: 'Неверный пароль'});
     return;
