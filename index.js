@@ -10,6 +10,7 @@ const dataURL = process.env.MONGO_CONNECTION_STRING;
 app
 .use(express.static(__dirname))
 .set('views', __dirname)
+.set('view engine', 'ejs');
 
 const Schema = mongoose.Schema; 
 const userScheme = new Schema({
