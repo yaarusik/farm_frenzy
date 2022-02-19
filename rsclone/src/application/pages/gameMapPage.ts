@@ -34,7 +34,6 @@ export default class GameMapPage extends Control {
 		super(parentNode, tagName, className, content);
 
 		this.preloader = preloader;
-
 		this.music = new Music();
 
 		this.textOptions = JSON.parse(JSON.stringify(textOptions));
