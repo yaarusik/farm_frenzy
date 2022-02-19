@@ -14,7 +14,9 @@ export default class Backend {
     const url = this.url + '?type=signin&name=' + name + '&password=' + password;
     
     let response : ResponseSign = {
-      message: 'Что-то пошло не так'
+      message: 'Что-то пошло не так',
+      levelInfo: [],
+      mapInfo: [],
     };
 
     try {
@@ -34,7 +36,9 @@ export default class Backend {
     const url = this.url + '?type=signup&name=' + name + '&password=' + password;
     
     let response : ResponseSign = {
-      message: 'Что-то пошло не так'
+      message: 'Что-то пошло не так',
+      levelInfo: [],
+      mapInfo: [],
     };
 
     try {
@@ -71,6 +75,8 @@ export default class Backend {
       
     let response : ResponseSign = {
       message: 'Что-то пошло не так',
+      levelInfo: [],
+      mapInfo: [],
     };
 
     try {
