@@ -63,7 +63,7 @@ export default class LevelRender {
 			} else
 				item.isHover = false;
 		});
-		const animalsNow: string[] = [];
+		let animalsNow: string[] = [];
 		this.animals.forEach((item) => {
 			animalsNow.push(item.name);
 		});
@@ -333,8 +333,6 @@ export default class LevelRender {
 	}
 
 	private renderBear(item: Bear, isPaused: boolean) {
-		this.music.bearAppiarance();
-
 		let imageFile = new Image();
 		let dx = 0, dy = 0, dWidth = 0, dHeight = 0, sx = 0, sy = 0, sWidth = 0, sHeight = 0;
 
@@ -531,6 +529,7 @@ export default class LevelRender {
 
 				if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
 					item.frame = (item.frame + 1) % item.frameNum;
+				// eslint-disable-next-line no-dupe-else-if
 				else if (this.gameFrame % Math.ceil(this.staggeredFrames / frameK) === 0)
 					item.frame = (item.frame + 1) % item.frameNum;
 			}

@@ -123,6 +123,7 @@ export default class Arrow extends Common {
 
   public render() {
     this.drawImage(this.initialArrow, this.arrow);
+
   }
 
   private animEnd() {

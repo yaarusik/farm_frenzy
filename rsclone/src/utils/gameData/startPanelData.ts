@@ -99,39 +99,68 @@ export const startPanelBtn = [
   },
 ];
 
+export interface IStartPanelText {
+  text: string,
+  fontSize: string,
+  color: string,
+  x: number,
+  y: number,
+  animation: boolean,
+}
+
 export const startPanelStaticText = [
   {
     text: 'Соберите',
     fontSize: '32px Vag_Rounded-Bold CY',
     color: '#eed940',
+    shadowColor: '#222222',
+    shadowBlur: 4,
     x: 542,
     y: 442,
-    animation: false,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4
   },
   {
     text: 'За прохождение',
     fontSize: '32px Vag_Rounded-Bold CY',
     color: '#eed940',
+    shadowColor: '#222222',
+    shadowBlur: 4,
     x: 810,
     y: 442,
-    animation: false,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4
   },
   {
     text: 'Цели уровня',
     fontSize: '62px Vag_Rounded-Bold CY',
     color: '#fbead0',
-    x: 600,
+    shadowColor: '#7f5f30',
+    shadowBlur: 10,
+    x: 620,
     y: 252,
-    animation: false,
+    shadowOffsetX: 5,
+    shadowOffsetY: 5
   },
   {
     text: 'Лучшее время :',
     fontSize: '30px Arial',
     color: '#704f0c',
+    shadowColor: '',
+    shadowBlur: 0,
     x: 676,
     y: 302,
-    animation: false,
+    shadowOffsetX: 0,
+    shadowOffsetY: 0
   },
+  {
+    text: '00:00',
+    fontSize: '30px Arial',
+    color: '#704f0c',
+    x: 900,
+    y: 302,
+    animation: false,
+  }
 ];
 
 export const startPanelText = [
@@ -139,6 +168,7 @@ export const startPanelText = [
     text: 'Ок',
     fontSize: '32px Vag_Rounded-Bold CY',
     color: '#fff',
+    shadowColor: '',
     x: 770,
     y: 944,
     animation: false,

@@ -15,9 +15,11 @@ export default class Application extends Control {
 	music: Music;
 	constructor (parentNode: HTMLElement, tagName: string, className: string) {
 		super(parentNode, tagName, className);
-		// preloader
 
-		// const preloader = new Preloader(this.node, 'div', 'preloader');
+		const preloader = new Preloader(this.node, 'div', 'preloader');
+		window.onload = () => {
+			preloader.hide(preloader.node);
+		};
 
 		this.mainCycle();
 		// this.gameMapCycle();
@@ -55,8 +57,9 @@ export default class Application extends Control {
 
 	// страница карты
 	private gameMapCycle() {
+		const preloader = new Preloader(this.node, 'div', 'preloader');
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
-		const gameMapPage = new GameMapPage(pageWrapper.node, "div", "map", "");
+		const gameMapPage = new GameMapPage(pageWrapper.node, "div", "map", "", preloader);
 		gameMapPage.onSelectShop = () => {
 			pageWrapper.destroy();
 			gameMapPage.destroy();
@@ -76,6 +79,7 @@ export default class Application extends Control {
 
 	// страница магазина
 	private shopCycle() {
+		const preloader = new Preloader(this.node, 'div', 'preloader');
 		const shopPage = new ShopPage(this.node);
 		shopPage.gameMapBack = () => {
 			shopPage.destroy();
@@ -84,8 +88,9 @@ export default class Application extends Control {
 	}
 
 	private levelCycle(level: number) {
+		const preloader = new Preloader(this.node, 'div', 'preloader');
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map level", "");
-		const levelPage = new LevelPage(pageWrapper.node, "div", 'level__page', level);
+		const levelPage = new LevelPage(pageWrapper.node, "div", 'level__page', level, preloader);
 
 		levelPage.onMap = () => {
 			pageWrapper.destroy();

@@ -18,6 +18,7 @@ import EndPanel from "./../../utils/panels/endPanels";
 import StoragePanel from "../../utils/storage/storagePanel";
 import Car from "../../utils/animation/car";
 import Arrow from "../../utils/animation/arrow";
+import Preloader from "../preloader";
 export default class LevelPage extends Control {
   canvas: Control<HTMLCanvasElement>;
   context: CanvasRenderingContext2D;
@@ -49,11 +50,12 @@ export default class LevelPage extends Control {
   arrow: Arrow;
   music: Music;
   animals: string[];
+  preloader: Preloader;
 
-  constructor (parentNode: HTMLElement, tagName: string, className: string, level: number) {
+  constructor (parentNode: HTMLElement, tagName: string, className: string, level: number, preloader: Preloader) {
     super(parentNode, tagName, className);
     this.level = level;
-
+    this.preloader = preloader;
     const canvasContainer = new Control(this.node, "div", "canvas__container", "");
     this.canvas = new Control<HTMLCanvasElement>(canvasContainer.node, "canvas", "canvas", "");
 
@@ -120,7 +122,7 @@ export default class LevelPage extends Control {
     this.progress = new Progress(this.canvas.node, this.context, this.level);
     this.products = new Products(this.canvas.node, this.context, this.progress, this.productsCounter);
     this.endPanel = new EndPanel(this.canvas.node, this.context, this.timer, this.level);
-    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState);
+    this.storage = new StoragePanel(this.canvas.node, this.context, this.products, this.panelState, this.click, this.productsCounter, this.opacityState, this.preloader,);
     this.car = new Car(this.canvas.node, this.context, this.panelState);
     this.arrow = new Arrow(this.canvas.node, this.context);
     const { btn, anim, text } = this.levelInterface.getData();
@@ -191,6 +193,7 @@ export default class LevelPage extends Control {
         if (this.panelState.endPanelSwitch) this.endPanel.render();
       }
     }
+
   }
 
   private endGameCheck(): void {
