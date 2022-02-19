@@ -3,6 +3,7 @@ import ButtonEffect from "./../../builder/button";
 import { Music } from "../../utils/music/music";
 import Backend from "../../utils/backend/backend";
 import { ResponseSign } from "../types";
+import { userInfo } from "../../utils/userData";
 
 export default class RegPage extends Control {
   wrapper: Control<HTMLElement>;
@@ -73,6 +74,7 @@ export default class RegPage extends Control {
     const loginBtn = new Control(footer.node, "button", "btn", "Авторизация");
     this.buttonEffect.devideButton(loginBtn.node);
     loginBtn.node.onclick = () => {
+      this.backend.put(userInfo.name, userInfo.password); // УБРАТЬ УБРАТЬ УБРАТЬ
       this.onLogin();
     };  
   }
