@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText, IKeyImage } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IKeyText, IKeyImage, IStaticText } from "../../application/iterfaces";
 import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
@@ -10,7 +10,7 @@ export default class StoragePanel extends Common {
   initialImage: HTMLImageElement[];
   initialBtn: HTMLImageElement[];
   startImg: HTMLImageElement[];
-  storageStaticText: IText[];
+  storageStaticText: IStaticText[];
   storageBtn: IButton[];
   storageText: IText[];
   icons: {
@@ -157,20 +157,7 @@ export default class StoragePanel extends Common {
     this.drawImage(Object.values(this.btnAllImg), Object.values(this.btnAllData));
     this.drawText(Object.values(this.iconsBtnText));
     this.drawText(Object.values(this.iconsAllText));
-
     this.carTrunc.render();
-  }
-
-  public drawStaticText(text: IText[]) {
-    text.forEach(item => {
-      this.context.fillStyle = item.color;
-      this.context.font = item.fontSize;
-      this.context.shadowColor = '#222222';
-      this.canvasFilters(4);
-      this.context.strokeText(item.text, item.x, item.y);
-      this.context.fillText(item.text, item.x, item.y);
-      this.canvasFilters(0);
-    });
   }
 
   public renderStorage(products: IKeyNumber) {
@@ -286,7 +273,7 @@ export default class StoragePanel extends Common {
               this.isState.carAnimationOn = true; // запуск анимации машины
               this.buttonDisable();              // дизейблим кнопку
               this.buttonCondition.ok = false;
-              this.carTruncClear();
+              this.carTrunc.carTruncClear();
               // для возврата исходного сотояния
               this.currentStateCheck = true;
             }
@@ -302,7 +289,7 @@ export default class StoragePanel extends Common {
             // для возврата исходного соcтояния
             this.currentStateCheck = true;
             this.saveProducts();
-            this.carTruncClear();
+            this.carTrunc.carTruncClear();
             break;
           }
         }
@@ -332,9 +319,7 @@ export default class StoragePanel extends Common {
               this.productsCounter[key] = 0;
               this.deleteRow();
               this.buttonCondition.ok = true;
-
             }
-
             break;
           }
         }
@@ -477,18 +462,5 @@ export default class StoragePanel extends Common {
     this.productsCounter[product] += boxCount[product];
     this.currentStateCheck = false;
     this.renderStorage(this.productsCounter);
-  }
-
-  private carTruncClear() {
-    this.carTrunc.boxCounter = {
-      'egg': 0,
-      'bear-1': 0,
-      'chicken': 0,
-      'flour': 0
-    };
-    this.carTrunc.box = {};
-    this.carTrunc.boxData = {};
-    this.carTrunc.check.counter = 0;
-    this.carTrunc.startX = 1208;
   }
 }

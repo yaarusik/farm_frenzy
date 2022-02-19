@@ -59,17 +59,24 @@ export const endStaticText = [
     text: 'Результаты уровня',
     fontSize: '62px Vag_Rounded-Bold CY',
     color: '#fff',
-    x: 522,
+    x: 532,
     y: 200,
-    animation: false,
+    shadowColor: '#7f5f30',
+    shadowBlur: 10,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4
   },
   {
     text: 'Монет:',
     fontSize: '50px Vag_Rounded-Bold CY',
     color: '#fff',
+    shadowColor: '#222222',
+    shadowBlur: 4,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4,
     x: 510,
     y: 340,
-    animation: false,
+
   },
   {
     text: 'Время:',
@@ -77,7 +84,11 @@ export const endStaticText = [
     color: '#fff',
     x: 510,
     y: 478,
-    animation: false,
+    shadowColor: '#222222',
+    shadowBlur: 10,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4
+
   },
   {
     text: 'Бонус:',
@@ -85,7 +96,10 @@ export const endStaticText = [
     color: '#fff',
     x: 510,
     y: 600,
-    animation: false,
+    shadowColor: '#222222',
+    shadowBlur: 10,
+    shadowOffsetX: 4,
+    shadowOffsetY: 4
   }
 ];
 

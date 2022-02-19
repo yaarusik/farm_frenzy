@@ -138,6 +138,22 @@ export default class Common {
     this.context.shadowBlur = number;
     this.context.shadowOffsetX = number;
     this.context.shadowOffsetY = number;
+    this.context.shadowColor = '';
+  }
+
+  drawStaticText(text: IStaticText[]) {
+    text.forEach(item => {
+      this.context.fillStyle = item.color;
+      this.context.font = item.fontSize;
+      this.context.shadowColor = item.shadowColor;
+      this.context.shadowBlur = item.shadowBlur;
+      this.context.shadowOffsetX = item.shadowOffsetX;
+      this.context.shadowOffsetY = item.shadowOffsetY;
+
+      this.context.strokeText(item.text, item.x, item.y);
+      this.context.fillText(item.text, item.x, item.y);
+      this.canvasFilters(0);
+    });
   }
 
 }
