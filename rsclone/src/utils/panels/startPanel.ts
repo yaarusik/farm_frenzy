@@ -1,4 +1,4 @@
-import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyNumber } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyNumber, IStaticText } from "../../application/iterfaces";
 import Common from "./../../application/common/common";
 import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
 import { levelInitial } from "../gameData/startLevelData";
@@ -9,7 +9,7 @@ export default class StartPanel extends Common {
   initialImage: HTMLImageElement[];
   startPanelBtn: IButton[];
   initialBtn: HTMLImageElement[];
-  startPanelStaticText: IText[];
+  startPanelStaticText: IStaticText[];
   startPanelText: IText[];
   level: string;
   startImg: HTMLImageElement[];
@@ -82,23 +82,15 @@ export default class StartPanel extends Common {
     this.drawText([...this.startPanelText, ...this.levelInitial[this.level].text]);
   }
 
-  drawStaticText(text: IText[]) {
+  drawStaticText(text: IStaticText[]) {
     text.forEach(item => {
       this.context.fillStyle = item.color;
       this.context.font = item.fontSize;
-      if (item.text === 'Цели уровня') {
-        this.context.shadowColor = '#7f5f30';
-        this.context.shadowBlur = 10;
-      } else {
-        this.context.shadowColor = '#222222';
-        this.context.shadowBlur = 4;
-      }
-      this.context.shadowOffsetX = 4;
-      this.context.shadowOffsetY = 4;
-      if (item.text === 'Лучшее время :') {
-        this.canvasFilters(0);
-        this.context.shadowColor = '';
-      }
+      this.context.shadowColor = item.shadowColor;
+      this.context.shadowBlur = item.shadowBlur;
+      this.context.shadowOffsetX = item.shadowOffsetX;
+      this.context.shadowOffsetY = item.shadowOffsetY;
+
       this.context.strokeText(item.text, item.x, item.y);
       this.context.fillText(item.text, item.x, item.y);
       this.canvasFilters(0);

@@ -63,9 +63,4 @@ export default class LevelProgress extends Common {
       this.drawLevelBtn(status, Number(level), this.levelCoords[level].x, this.levelCoords[level].y);
     });
   }
-
-  // private async drawProduct() {
-  //   const btnImg = this.levelBtnData.map(image => this.loadImage(image.image));
-  //   this.levelBtnImg = await this.renderImages(btnImg);
-  // }
 }

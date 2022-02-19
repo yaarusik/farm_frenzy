@@ -93,4 +93,15 @@ export interface IOpacity {
   disable: boolean
 }
 
+export interface IStaticText {
+  text: string,
+  fontSize: string,
+  color: string,
+  shadowColor: string,
+  shadowBlur: number,
+  x: number,
+  y: number, shadowOffsetX: number,
+  shadowOffsetY: number
+}
+
 // LEVELSECTION =======================

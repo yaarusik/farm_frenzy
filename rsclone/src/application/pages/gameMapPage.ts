@@ -1,12 +1,13 @@
 
 
 import Control from "../../builder/controller";
-import { imagesOptions, textOptions, levelCoords, levelFinish } from "../../utils/gameData/mapData";
+import { imagesOptions, textOptions } from "../../utils/gameData/mapData";
 import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 import { Music } from "../../utils/music/music";
 import LevelProgress from "../../utils/gameProgress/levelProgress";
 import Timer from "../../utils/timer/levelTimer";
+import Preloader from './../preloader';
 
 export default class GameMapPage extends Control {
 	startLevel!: (level: number) => void;
@@ -25,11 +26,14 @@ export default class GameMapPage extends Control {
 	music: Music;
 	levelBtn: LevelProgress;
 	timer: Timer;
+	preloader: Preloader;
 
 
 
-	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "") {
+	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "", preloader: Preloader) {
 		super(parentNode, tagName, className, content);
+
+		this.preloader = preloader;
 
 		this.music = new Music();
 
@@ -77,6 +81,8 @@ export default class GameMapPage extends Control {
 		this.curHeightK = coefficients.curHeightK;
 
 		const initialImages = await this.commonFunction.renderImages(loadImages);
+
+		this.preloader.hide(this.preloader.node);
 
 		this.run(initialImages);
 	}
