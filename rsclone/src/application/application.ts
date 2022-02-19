@@ -8,6 +8,7 @@ import AwardsPage from "./pages/awardsPage";
 import AuthorsPage from "./pages/authorsPage";
 import { Music } from "../utils/music/music";
 import LoginPage from "./pages/loginPage";
+import Preloader from "./preloader";
 
 export default class Application extends Control {
 	music: Music;
@@ -15,8 +16,10 @@ export default class Application extends Control {
 		super(parentNode, tagName, className);
 		// preloader
 
-		this.mainCycle();
-		// this.gameMapCycle();
+		// const preloader = new Preloader(this.node, 'div', 'preloader');
+
+		// this.mainCycle();
+		this.gameMapCycle();
 		// this.levelCycle(3);
 
 		this.music = new Music();

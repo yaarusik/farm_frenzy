@@ -1,7 +1,8 @@
-import { IPicture, IButton, IText, Coords, IFunctions, IOpacity } from "../../application/iterfaces";
+import { IPicture, IButton, IText, Coords, IFunctions, IOpacity, IKeyString } from "../../application/iterfaces";
 import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
 import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
+import { levelFinish, levelCoords } from "../gameData/mapData";
 
 export default class EndPanel extends Common {
   endPanelImg: IPicture[];
@@ -14,8 +15,10 @@ export default class EndPanel extends Common {
   timer: Timer;
   dataText: IText[];
   opacityState: IOpacity;
+  level: number;
+  levelFinish: IKeyString;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer, level: number) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
@@ -31,6 +34,8 @@ export default class EndPanel extends Common {
     this.endPanelStaticText = this.objParse(endStaticText);
     this.endPanelBtn = this.objParse(endBtn);
     this.endPanelText = this.objParse(endText);
+    this.level = level;
+    this.levelFinish = levelFinish;
 
     this.opacityState = {
       show: false,
@@ -102,6 +107,7 @@ export default class EndPanel extends Common {
           case "Ок": {
             this.opacityState.disable = true;
             this.buttonsClick(btn, btn.stepY, btn.click);
+            this.addLevelBtn();
             setTimeout(() => func.onMap(), 300);
             break;
           }
@@ -113,7 +119,14 @@ export default class EndPanel extends Common {
   }
 
 
-
+  private addLevelBtn() {
+    const nextLevel = (this.level + 1).toString();
+    if (!(nextLevel in this.levelFinish) && (nextLevel in levelCoords)) {
+      this.levelFinish[nextLevel] = 'start';
+    } //else {
+    //   throw new Error('level does not exist');
+    // }
+  }
 
 
 

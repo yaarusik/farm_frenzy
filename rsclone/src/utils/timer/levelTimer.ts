@@ -3,6 +3,8 @@ import { endTextData } from "../gameData/endPanelData";
 import { timerData, goldCup, silvCup, silvCupText, goldCupText } from "./levelTimerData";
 import { initialData } from "../../application/common/initialData";
 import { IText } from "../../application/iterfaces";
+import { addMoney } from "../shopPageMoney";
+import { levelFinish, IlevelFinish } from "../gameData/mapData";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -117,23 +119,41 @@ export default class Timer {
     }
 
     countBonus() {
+        let money;
         const tmData = timerData[this.level - 1];
         if (this.min > this.silvMin || (this.min >= this.silvMin && this.sec >= this.silvSec)) {
-            this.bonus = "default";
-            return `${tmData.deafultStar}`;
+            this.bonus = "start";
+            this.updateLevelFinish();
+            money = tmData.deafultStar;
+            addMoney(money);
+            return `${money}`;
         }
         else if (this.min >= this.goldMin && this.sec >= this.goldSec) {
             this.bonus = "silver";
-            return `${tmData.deafultStar + tmData.silverStar}`;
-        }
+            this.updateLevelFinish();
+            money = tmData.deafultStar + tmData.silverStar;
+            addMoney(money);
+            return `${money}`;
+        } else money = tmData.deafultStar + tmData.goldStar;
 
         this.bonus = "gold";
-        return `${tmData.deafultStar + tmData.goldStar}`;
+        this.updateLevelFinish();
+        addMoney(money);
+        return `${money}`;
+    }
+
+    updateLevelFinish() {
+        let key: keyof IlevelFinish;
+        for(key in levelFinish) {
+            if (key === `${this.level}`)
+                if (levelFinish[key] !== this.bonus) levelFinish[key] = this.bonus;
+        }
+        console.log(levelFinish);
     }
 
     showCup() {
         let cupImg;
-        if (this.bonus === "default") return;
+        if (this.bonus === "start") return;
 
         if (this.bonus === "silver") {
             endTextData.push(silvCupText);

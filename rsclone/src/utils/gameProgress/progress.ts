@@ -61,14 +61,41 @@ export default class Progress extends Common {
     if (product.name) {
       const current = Number(product.text[0]);
       this.productsScore[product.name].current++;
-      if (current < this.productsScore[product.name].max) {
-        product.text = `${this.productsScore[product.name].current}/${this.productsScore[product.name].max}`;
-      }
-      if ((this.productsScore[product.name].current === this.productsScore[product.name].max)) {
-        this.doneView(product);
-        this.goalsDone.add(product.name);
-      }
+      this.currentScore(product, current);
     }
+  }
+
+  private currentScore(product: IText, current: number) {
+    if (product.name && current < this.productsScore[product.name].max) {
+      this.productText(product, product.name);
+    }
+    this.doneCheck(product);
+  }
+
+  private productText(product: IText, productName: string) {
+    product.text = `${this.productsScore[productName].current}/${this.productsScore[productName].max}`;
+  }
+
+  private doneCheck(product: IText) {
+    if ((product.name && this.productsScore[product.name].current === this.productsScore[product.name].max)) {
+      this.doneView(product);
+      this.goalsDone.add(product.name);
+    }
+  }
+
+
+  private chickenChange(product: IText, number: number) {
+    if (product.name && product.id) {
+      this.productsScore['chicken'].current = number;
+      if (number < this.productsScore[product.name].max) {
+        this.productText(product, product.name);
+        this.done[product.id].height = 0;
+        this.done[product.id].width = 0;
+        this.goalsDone.delete(product.name);
+      }
+      this.doneCheck(product);
+    }
+
   }
 
   public endGameCheck() {
@@ -86,11 +113,11 @@ export default class Progress extends Common {
     }
   }
 
-
-
-  public scoreCheck(product: string) {
+  public scoreCheck(product: string, chickenNum?: number) {
     this.levelInitial[this.level].text.forEach(item => {
-      if (item.name === product) {
+      if (item.name === 'chicken') {
+        if (chickenNum !== undefined) this.chickenChange(item, chickenNum);
+      } else if (item.name === product) {
         this.scoreChange(item);
       }
     });

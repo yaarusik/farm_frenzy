@@ -7,5 +7,6 @@ import "./scss/settings.scss";
 import "./scss/author.scss";
 import "./scss/shop.scss";
 import "./scss/level.scss";
+import './scss/preloader.scss';
 
 const app = new Application(document.body, 'div', 'farm');

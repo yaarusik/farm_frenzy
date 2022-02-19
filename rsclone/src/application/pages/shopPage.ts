@@ -1,5 +1,5 @@
 import  Control from "../../builder/controller";
-import  { houses, aside, Engineering, Pets, IcontentData, IcontentBl } from "../../utils/shopPageData";
+import  { houses, aside, Engineering, Pets, IcontentData } from "../../utils/shopPageData";
 import  { startMoney, setMoney, moneyBlock, setMoneyWindow, currentContent } from "../../utils/shopPageMoney";
 
 export default class ShopPage extends Control {

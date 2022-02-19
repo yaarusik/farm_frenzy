@@ -12,9 +12,10 @@
 body {
   overflow: hidden;
   user-select: none;
+  position: relative;
 }
 
-.wrapper{
+.wrapper {
   position: relative;
   height: 100vh;
   aspect-ratio: 4 / 3;
@@ -24,7 +25,7 @@ body {
   background-size: cover;
 }
 
-.title{
+.title {
   position: relative;
   font-size: 2rem;
   font-weight: 700;
@@ -37,4 +38,3 @@ body {
   right: 0;
   -webkit-text-stroke: 0.04em rgb(126, 89, 11);
 }
-

@@ -1,6 +1,7 @@
 import Common from "../../application/common/common";
 import { IKeyBoolean, IPicture, IText } from "../../application/iterfaces";
 import { initialData } from "../../application/common/initialData";
+import { Music } from "../music/music";
 
 
 export default class Car extends Common {
@@ -20,12 +21,15 @@ export default class Car extends Common {
   text: IText;
   textRight: number;
   total: number;
+  music: Music;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, isState: IKeyBoolean) {
     super(canvas, context);
 
     this.isState = isState;
+
+    this.music = new Music();
 
     this.total = 0;
     this.initialL = [];
@@ -118,7 +122,8 @@ export default class Car extends Common {
       this.carRight.x += 0.5;
       this.minimap.x += 0.5;
       this.text.x += 0.5;
-    } else {
+    } else { 
+      // Car drop music
       this.carRight.width = 0;
       this.carRight.height = 0;
       this.carRight.x = this.maxLeft;
@@ -135,6 +140,7 @@ export default class Car extends Common {
       this.carLeft.width = 80;
       this.carLeft.height = 68;
     } else {
+      this.music.car();
       this.carLeft.width = 0;
       this.carLeft.height = 0;
       this.carRight.width = 80;
@@ -149,6 +155,7 @@ export default class Car extends Common {
   }
 
   public addStorageTotal(total: string): void {
+    this.music.car();
     this.text.text = total;
     this.total = +total;
   }
