@@ -54,6 +54,7 @@ export default class LoginPage extends Control {
         if (res.message === 'Авторизация прошла успешно'){
           console.log('Log: Вошёл в аккаунт с ником: ', name);
           this.backend.updateUser(name, password);
+          this.backend.updateFrom(res.levelInfo, res.mapInfo);
           setTimeout(() => {
             this.onBack();
           }, 750);

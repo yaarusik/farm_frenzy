@@ -149,6 +149,11 @@ export class Product{
   }
 }
 
+export type LevelInfo = {num: number, state: string}[];
+export type MapInfo = {categoryName: string, name: string, stage: number}[];
+
 export type ResponseSign = {
-  message: string
+  message: string,
+  levelInfo?: LevelInfo,
+  mapInfo?: MapInfo
 }

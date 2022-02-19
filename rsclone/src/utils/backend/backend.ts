@@ -1,4 +1,4 @@
-import { ResponseSign } from "../../application/types";
+import { LevelInfo, MapInfo, ResponseSign } from "../../application/types";
 import { levelFinish } from "../gameData/mapData";
 import { aside, Engineering, houses, Pets } from "../shopPageData";
 import { userInfo } from "../userData";
@@ -51,11 +51,11 @@ export default class Backend {
   }
 
   public async put(name: string, password: string){
-    let levelInfo: {num: number, state: string}[] = [];
+    let levelInfo: LevelInfo = [];
     for (const [key, value] of Object.entries(levelFinish))
       levelInfo.push({num: Number.parseInt(key), state: value});
 
-    let mapInfo: {categoryName: string, name: string, stage: number}[] = [];
+    let mapInfo: MapInfo = [];
     for (const [key, value] of Object.entries(houses))
       mapInfo.push({categoryName: 'houses', name: key, stage: value.currentStage});
     for (const [key, value] of Object.entries(aside))
@@ -70,7 +70,7 @@ export default class Backend {
     console.log(levelInfo, mapInfo, url);
       
     let response : ResponseSign = {
-      message: 'Что-то пошло не так'
+      message: 'Что-то пошло не так',
     };
 
     try {
@@ -90,5 +90,21 @@ export default class Backend {
     userInfo.name = name;
     userInfo.password = password;
     userInfo.logged = true;
+  }
+
+  public updateFrom(levelInfo: LevelInfo, mapInfo: MapInfo){
+    if (!userInfo.logged)
+      return;
+    levelInfo.forEach((item) => {levelFinish[item.num.toString()] = item.state});
+    mapInfo.forEach((item) => {
+      if (item.categoryName === 'houses')
+        houses[item.name].currentStage = item.stage;
+      if (item.categoryName === 'aside')
+        aside[item.name].currentStage = item.stage;
+      if (item.categoryName === 'Engineering')
+        Engineering[item.name].currentStage = item.stage;
+      if (item.categoryName === 'Pets')
+        Pets[item.name].currentStage = item.stage;
+    });
   }
 }
