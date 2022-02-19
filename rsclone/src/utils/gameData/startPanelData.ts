@@ -125,7 +125,7 @@ export const startPanelStaticText = [
     animation: false,
   },
   {
-    text: 'Лучшее время :',
+    text: 'Лучшееt время :',
     fontSize: '30px Arial',
     color: '#704f0c',
     x: 676,

@@ -3,6 +3,7 @@ import Products from "./products";
 import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
 import CarTrunc from "./carTrunc";
+import Preloader from "../../application/preloader";
 
 export default class StoragePanel extends Common {
   storageImg: IPicture[];
@@ -60,12 +61,14 @@ export default class StoragePanel extends Common {
   opacityState: IOpacity;
   iconsAllText: IKeyText;
   check: IKeyNumber;
+  preloader: Preloader;
 
-  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity) {
+  constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, preloader: Preloader) {
     super(canvas, context);
     this.isState = isState;
     this.func = func;
     this.productsCounter = productsCounter;
+    this.preloader = preloader;
     this.click = {
       changeCountBoxProduct: (boxCounter: IKeyNumber, product: string) => { this.changeCountBoxProduct(boxCounter, product); },
       totalSubstraction: (product: string, number: number) => { this.totalSubstraction(product, number); }
@@ -136,6 +139,7 @@ export default class StoragePanel extends Common {
     this.initialImage = await this.renderImages(loadImage);
     this.initialBtn = await this.renderImages(loadBtn);
     this.initialIcon = await this.renderImages(loadIcon);
+    this.preloader.hide(this.preloader.node);
   }
 
   public render() {

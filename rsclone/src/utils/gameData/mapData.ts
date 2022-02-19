@@ -56,13 +56,11 @@ export const imagesOptions = [
 ];
 
 export interface IlevelFinish {
-  [key: string] : string
+  [key: string]: string
 }
 
 export const levelFinish: IlevelFinish = {
   '1': 'start',
-  '2': 'gold',
-  '3': 'silver'
 };
 
 export const levelCoords = {
