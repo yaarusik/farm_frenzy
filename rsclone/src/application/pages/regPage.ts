@@ -52,7 +52,7 @@ export default class RegPage extends Control {
         console.log("Final: ", res);
         messageBox.node.textContent = res.message;
         if (res.message.includes('Создан новый пользователь с ником ')){
-          console.log('Log: Вошёл в аккаунт с ником: ', name);
+          console.log('Log: Создал и вошёл в аккаунт с ником: ', name);
 
           setTimeout(() => {
             this.onBack();

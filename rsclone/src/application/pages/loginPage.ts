@@ -52,6 +52,8 @@ export default class LoginPage extends Control {
         console.log("Final: ", res);
         messageBox.node.textContent = res.message;
         if (res.message === 'Авторизация прошла успешно'){
+          console.log('Log: Вошёл в аккаунт с ником: ', name);
+
           setTimeout(() => {
             this.onBack();
           }, 750);
