@@ -148,3 +148,7 @@ export class Product{
     this.speedY = (this.wantY - this.coordY) / (0.2 * 60);
   }
 }
+
+export type ResponseSign = {
+  message: string
+}

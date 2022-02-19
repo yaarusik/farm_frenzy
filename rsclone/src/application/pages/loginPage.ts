@@ -2,6 +2,7 @@ import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
 import { Music } from "../../utils/music/music";
 import Backend from "../../utils/backend/backend";
+import { ResponseSign } from "../types";
 
 export default class LoginPage extends Control {
   wrapper: Control<HTMLElement>;
@@ -43,13 +44,13 @@ export default class LoginPage extends Control {
     loginBtn.node.onclick = () => {
       const name = nameInput.node.value;
       const password = passInput.node.value;
-      this.backend.login(name, password).then((res) => {
+      this.backend.login(name, password).then((res : ResponseSign) => {
         if (!res){
           messageBox.node.textContent = 'Что-то пошло не так';
           return;
         }
         console.log("Final: ", res);
-        messageBox.node.textContent = res;
+        messageBox.node.textContent = res.message;
       });
     };
 
