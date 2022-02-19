@@ -44,14 +44,14 @@ export default class RegPage extends Control {
     regBtn.node.onclick = () => {
       const name = nameInput.node.value;
       const password = passInput.node.value;
-      this.backend.login(name, password).then((res : ResponseSign) => {
+      this.backend.register(name, password).then((res : ResponseSign) => {
         if (!res){
           messageBox.node.textContent = 'Что-то пошло не так';
           return;
         }
         console.log("Final: ", res);
         messageBox.node.textContent = res.message;
-        if (!res.message.includes('Создан новый пользователь с ником ')){
+        if (res.message.includes('Создан новый пользователь с ником ')){
           console.log('Log: Вошёл в аккаунт с ником: ', name);
 
           setTimeout(() => {
