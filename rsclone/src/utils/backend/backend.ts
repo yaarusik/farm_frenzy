@@ -13,10 +13,10 @@ export default class Backend {
     await fetch(url, {
       method: 'POST',
       mode: 'no-cors'
-    }).then((res) => {return res.json()})
-      .then((json) => {response = json})
+    }).then((res) => {console.log('Begin: ', res); return res.json()})
+      .then((json) => {console.log('Convert: ', json); response = json})
     } catch (e) {
-      console.log(e);
+      console.log('error: ', e);
     }
     return await response;
   }

@@ -37,13 +37,22 @@ export default class LoginPage extends Control {
     
     const loginBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Войти");
     this.buttonEffect.devideButton(loginBtn.node);
+
+    const messageBox = new Control(panel.node, "div", "panel__msg", "");
+
     loginBtn.node.onclick = () => {
       const name = nameInput.node.value;
       const password = passInput.node.value;
-      let status;
-      this.backend.login(name, password).then((res) => {status = res});
-      console.log(status);
+      this.backend.login(name, password).then((res) => {
+        if (!res){
+          messageBox.node.textContent = 'Что-то пошло не так';
+          return;
+        }
+        console.log("Final: ", res);
+        messageBox.node.textContent = res;
+      });
     };
+
 
     const footer = new Control(this.wrapper.node, "footer", "footer", "");
 
