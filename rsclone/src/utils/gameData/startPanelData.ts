@@ -159,7 +159,10 @@ export const startPanelStaticText = [
     color: '#704f0c',
     x: 900,
     y: 302,
-    animation: false,
+    shadowOffsetX: 0,
+    shadowOffsetY: 0,
+    shadowColor: '',
+    shadowBlur: 0,
   }
 ];
 
