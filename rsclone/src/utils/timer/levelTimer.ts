@@ -1,10 +1,11 @@
 import Picture from "../classes/canvasBtn";
 import { endTextData } from "../gameData/endPanelData";
-import { timerData, goldCup, silvCup, silvCupText, goldCupText } from "./levelTimerData";
+import { timerData, goldCup, silvCup, silvCupText, goldCupText, bestTime, Itime } from "./levelTimerData";
 import { initialData } from "../../application/common/initialData";
 import { IText } from "../../application/iterfaces";
 import { addMoney } from "../shopPageMoney";
 import { levelFinish, IlevelFinish } from "../gameData/mapData";
+import { startPanelStaticText, IStartPanelText } from "../gameData/startPanelData";
 
 export default class Timer {
     canvas: HTMLCanvasElement;
@@ -145,10 +146,46 @@ export default class Timer {
     updateLevelFinish() {
         let key: keyof IlevelFinish;
         for(key in levelFinish) {
-            if (key === `${this.level}`)
+            if (+key === this.level)
                 if (levelFinish[key] !== this.bonus) levelFinish[key] = this.bonus;
         }
         console.log(levelFinish);
+    }
+
+    showBestTime() {
+        startPanelStaticText.forEach(el => {
+            if (el.text.length === 5 && el.text.includes(':')) {
+                this.updateBestTime();
+            }
+        });
+    }
+
+    updateBestTime() {
+        let key: keyof Itime;
+
+        for(key in bestTime) {
+            if (key === `${this.level}`) {
+                const min = +bestTime[key].split(':')[0];
+                const sec = +bestTime[key].split(':')[1];
+
+                if (bestTime[key] === 'null' || (this.min < min || (this.min === min && this.sec < sec))) {
+                    bestTime[key] = this.content(this.min, this.sec);
+                }
+
+                console.log(bestTime);
+            }
+        }
+    }
+
+    updateViewTime(level: string) {
+        let key: keyof Itime;
+
+        for(key in bestTime) {
+            if (+key === +level) {
+                if (bestTime[key] === 'null') startPanelStaticText[startPanelStaticText.length - 1].text = '00:00';
+                else startPanelStaticText[startPanelStaticText.length - 1].text = bestTime[key];
+            }
+        }
     }
 
     showCup() {
@@ -180,6 +217,7 @@ export default class Timer {
     }
 
     timeAnimation(el: IText) {
+        this.showBestTime();
         let interval: NodeJS.Timer;
         setTimeout(() => {
             interval = setInterval(() => {
