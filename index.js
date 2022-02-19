@@ -41,13 +41,12 @@ app.post('/', async function(req, res) {
         levelInfo: [],
         mapInfo: [],
       });
-
       user.save();
-
       res.status(200).send({ message: 'Создан новый пользователь с ником ' + reqParams.name} );
     } else
       res.status(200).send({ message: 'Такой аккаунт уже зарегистрирован'});
     return;
+
   } else if (reqParams.type == 'signin'){
     if (!userInfo)
       res.status(200).send({ message: 'Такого пользователя не существует'});
@@ -56,11 +55,19 @@ app.post('/', async function(req, res) {
     else
       res.status(200).send({ message: 'Неверный пароль'});
     return;
+
   } else if (reqParams.type == 'put'){
-
-  } else if (reqParams.type == 'get'){
-
+    if (!userInfo)
+      res.status(200).send({ message: 'Такого пользователя не существует'});
+    else if (userInfo.password === reqParams.password){
+      userInfo.levelInfo = reqParams.level;
+      userInfo.mapInfo = reqParams.map;
+      await userInfo.save();
+      res.status(200).send({ message: 'Успешно доставлено'});
+    } else
+      res.status(200).send({ message: 'Неверный пароль'});
+    return;
   }
 
-  res.send(userInfo);
+  res.status(200).send({ message: 'Что-то пошло не так'});
 });
