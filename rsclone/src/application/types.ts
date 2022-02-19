@@ -141,7 +141,7 @@ export class Product{
     this.isBlinking = false;
     this.isHover = false;
 
-    this.wantX = 660;
+    this.wantX = 720;
     this.wantY = 925;
 
     this.speedX = (this.wantX - this.coordX) / (0.2 * 60);

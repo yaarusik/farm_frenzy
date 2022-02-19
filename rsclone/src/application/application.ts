@@ -9,6 +9,7 @@ import AuthorsPage from "./pages/authorsPage";
 import { Music } from "../utils/music/music";
 import LoginPage from "./pages/loginPage";
 import Preloader from "./preloader";
+import RegPage from "./pages/regPage";
 
 export default class Application extends Control {
 	music: Music;
@@ -18,8 +19,8 @@ export default class Application extends Control {
 
 		// const preloader = new Preloader(this.node, 'div', 'preloader');
 
-		// this.mainCycle();
-		this.gameMapCycle();
+		this.mainCycle();
+		// this.gameMapCycle();
 		// this.levelCycle(3);
 
 		this.music = new Music();
@@ -137,6 +138,24 @@ export default class Application extends Control {
 		loginPage.onBack = () => {
 			loginPage.destroy();
 			this.mainCycle();
+		};
+
+		loginPage.onReg = () => {
+			loginPage.destroy();
+			this.regCycle();
+		};
+	}
+
+	private regCycle() {
+		const regCycle = new RegPage(this.node);
+		regCycle.onBack = () => {
+			regCycle.destroy();
+			this.mainCycle();
+		};
+
+		regCycle.onLogin = () => {
+			regCycle.destroy();
+			this.loginCycle();
 		};
 	}
 }

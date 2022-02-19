@@ -51,6 +51,11 @@ export default class LoginPage extends Control {
         }
         console.log("Final: ", res);
         messageBox.node.textContent = res.message;
+        if (res.message === 'Авторизация прошла успешно'){
+          setTimeout(() => {
+            this.onBack();
+          }, 750);
+        }
       });
     };
 
@@ -66,11 +71,15 @@ export default class LoginPage extends Control {
     const signBtn = new Control(footer.node, "button", "btn", "Регистрация");
     this.buttonEffect.devideButton(signBtn.node);
     signBtn.node.onclick = () => {
-      throw new Error("Method not implemented.");    
+      this.onReg();  
     };  
   }
 
   onBack() {
+    throw new Error("Method not implemented.");    
+  }
+
+  onReg() {
     throw new Error("Method not implemented.");    
   }
 
