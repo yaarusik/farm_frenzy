@@ -16,7 +16,9 @@ app
 const Schema = mongoose.Schema; 
 const userScheme = new Schema({
     name: String,
-    password: String
+    password: String,
+    levelInfo: [{ num: Number, state: String }],
+    mapInfo: [{ categoryName: String, name: String, stage: Number }],
 });
 const User = mongoose.model("User", userScheme);
 
@@ -35,7 +37,9 @@ app.post('/', async function(req, res) {
     if (!userInfo){
       const user = new User({
         name: reqParams.name,
-        password: reqParams.password
+        password: reqParams.password,
+        levelInfo: [],
+        mapInfo: [],
       });
 
       user.save();
