@@ -1,13 +1,18 @@
 import  Control from "../../builder/controller";
+import Backend from "../../utils/backend/backend";
 import  { houses, aside, Engineering, Pets, IcontentData } from "../../utils/shopPageData";
 import  { startMoney, setMoney, moneyBlock, setMoneyWindow, currentContent } from "../../utils/shopPageMoney";
+import { userInfo } from "../../utils/userData";
 
 export default class ShopPage extends Control {
    wrapper: Control<HTMLElement>;
+   backend: Backend;
 
    
    constructor(parentNode: HTMLElement){
       super(parentNode);
+
+      this.backend = new Backend();
 
       this.wrapper = new Control(this.node, "div", "wrapper shop", "");
 
@@ -145,6 +150,7 @@ export default class ShopPage extends Control {
       img.node.src = link;
 
       this.updateShopBackground();
+      this.backend.put(userInfo.name, userInfo.password);
    }
 
    updateShopBackground() {

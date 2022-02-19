@@ -1,4 +1,6 @@
 import Common from "../../application/common/common";
+import Backend from "../backend/backend";
+import { userInfo } from "../userData";
 import { IButton, IKeyString } from './../../application/iterfaces';
 import { levelFinish, levelCoords } from "./../gameData/mapData";
 interface Level {
@@ -13,14 +15,16 @@ export default class LevelProgress extends Common {
   levelBtnImg: HTMLImageElement[];
   levelFinish: IKeyString;
   levelCoords: Level;
+  backend: Backend;
+
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
     this.levelFinish = levelFinish;
     this.levelCoords = levelCoords;
 
-    this.levelBtnData = [
-    ];
+    this.levelBtnData = [];
     this.levelBtnImg = [];
+    this.backend = new Backend();
 
     this.finishCheck();
     this.startBtn();
@@ -62,5 +66,6 @@ export default class LevelProgress extends Common {
       const [level, status] = btn;
       this.drawLevelBtn(status, Number(level), this.levelCoords[level].x, this.levelCoords[level].y);
     });
+    this.backend.put(userInfo.name, userInfo.password);
   }
 }

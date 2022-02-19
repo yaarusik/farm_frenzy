@@ -74,7 +74,6 @@ export default class RegPage extends Control {
     const loginBtn = new Control(footer.node, "button", "btn", "Авторизация");
     this.buttonEffect.devideButton(loginBtn.node);
     loginBtn.node.onclick = () => {
-      this.backend.put(userInfo.name, userInfo.password); // УБРАТЬ УБРАТЬ УБРАТЬ
       this.onLogin();
     };  
   }
