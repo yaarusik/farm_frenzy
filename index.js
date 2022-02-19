@@ -15,10 +15,11 @@ app
 
 const Schema = mongoose.Schema; 
 const userScheme = new Schema({
-    name: String,
-    password: String,
-    levelInfo: [{ num: Number, state: String }],
-    mapInfo: [{ categoryName: String, name: String, stage: Number }],
+  name: String,
+  password: String,
+  levelInfo: [{ num: Number, state: String }],
+  mapInfo: [{ categoryName: String, name: String, stage: Number }],
+  coin: Number,
 });
 const User = mongoose.model("User", userScheme);
 
@@ -40,6 +41,7 @@ app.post('/', async function(req, res) {
         password: reqParams.password,
         levelInfo: [],
         mapInfo: [],
+        coin: 0,
       });
       user.save();
       res.status(200).send({ message: 'Создан новый пользователь с ником ' + reqParams.name} );
