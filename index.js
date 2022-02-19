@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 const dataURL = process.env.MONGO_CONNECTION_STRING;
 
 app
-.use(express.static(__dirname))
+.use(express.static(path.join(__dirname, 'dist')))
 .set('views', path.join(__dirname, 'dist'))
 .set('view engine', 'ejs');
 
