@@ -99,6 +99,15 @@ export const startPanelBtn = [
   },
 ];
 
+export interface IStartPanelText {
+  text: string,
+  fontSize: string,
+  color: string,
+  x: number,
+  y: number,
+  animation: boolean,
+}
+
 export const startPanelStaticText = [
   {
     text: 'Соберите',
@@ -144,6 +153,14 @@ export const startPanelStaticText = [
     shadowOffsetX: 0,
     shadowOffsetY: 0
   },
+  {
+    text: '00:00',
+    fontSize: '30px Arial',
+    color: '#704f0c',
+    x: 900,
+    y: 302,
+    animation: false,
+  }
 ];
 
 export const startPanelText = [

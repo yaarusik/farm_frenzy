@@ -6,7 +6,9 @@ import { IPicture, IText, Coords, IButton } from "./../iterfaces";
 import Common from "./../common/common";
 import { Music } from "../../utils/music/music";
 import LevelProgress from "../../utils/gameProgress/levelProgress";
+import Timer from "../../utils/timer/levelTimer";
 import Preloader from './../preloader';
+
 export default class GameMapPage extends Control {
 	startLevel!: (level: number) => void;
 	onBack!: () => void;
@@ -23,6 +25,7 @@ export default class GameMapPage extends Control {
 	animation: number;
 	music: Music;
 	levelBtn: LevelProgress;
+	timer: Timer;
 	preloader: Preloader;
 
 
@@ -31,7 +34,6 @@ export default class GameMapPage extends Control {
 		super(parentNode, tagName, className, content);
 
 		this.preloader = preloader;
-
 		this.music = new Music();
 
 		this.textOptions = JSON.parse(JSON.stringify(textOptions));
@@ -51,6 +53,8 @@ export default class GameMapPage extends Control {
 		this.commonFunction = new Common(this.canvas.node, this.context);
 		this.levelBtn = new LevelProgress(this.canvas.node, this.context);
 		this.startMap();
+
+		this.timer = new Timer(this.canvas.node, this.context, 1);
 
 		window.onresize = () => {
 			const coefficients = this.commonFunction.canvasScale();
@@ -148,21 +152,25 @@ export default class GameMapPage extends Control {
 					}
 					case "1": {
 						this.buttonsClick(btn, btn.stepY);
+						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(1));
 						break;
 					}
 					case "2": {
 						this.buttonsClick(btn, btn.stepY);
+						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(2));
 						break;
 					}
 					case "3": {
 						this.buttonsClick(btn, btn.stepY);
+						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(3));
 						break;
 					}
 					case "4": {
 						this.buttonsClick(btn, btn.stepY);
+						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(4));
 						break;
 					}
