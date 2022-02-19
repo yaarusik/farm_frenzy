@@ -73,7 +73,7 @@ export default class Application extends Control {
 
 	// страница магазина
 	private shopCycle() {
-		const preloader = new Preloader(this.node, 'div', 'preloader');
+		// const preloader = new Preloader(this.node, 'div', 'preloader');
 		const shopPage = new ShopPage(this.node);
 		shopPage.gameMapBack = () => {
 			shopPage.destroy();

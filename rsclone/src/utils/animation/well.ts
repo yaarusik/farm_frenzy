@@ -1,20 +1,24 @@
 import { initialData } from "../../application/common/initialData";
 import { IButton, IKeyBoolean } from "../../application/iterfaces";
+import { aside, IcontentData } from "../shopPageData";
 export default class Well {
 
   animbtnOptions: IButton[];
   waterCount: number;
   maxCount: number;
   showPrice: IKeyBoolean;
+  aside: IcontentData;
   constructor (animbtnOptions: IButton[], showPrice: IKeyBoolean) {
     this.animbtnOptions = animbtnOptions;
     this.waterCount = 0;
     this.maxCount = 5;
     this.showPrice = showPrice;
+    this.aside = aside;
   }
   public wellAnimation(btn: IButton) {
+    if (this.aside['well'].currentStage > 2) this.wellAnimationUpgrade(btn);
     // если в индикаторе есть вода, то блокируем нажатие на колодец
-    if (this.waterCount >= this.maxCount) {
+    else if (this.waterCount >= this.maxCount) {
       // во время анимации блокируем колодец
       let frameY = 0;
       const timer = setInterval(() => {
@@ -38,6 +42,35 @@ export default class Well {
     }
   }
 
+  public wellAnimationUpgrade(btn: IButton) {
+    if (this.waterCount >= this.maxCount) {
+      let frameY = 0;
+      let frameX = 0;
+      const timer = setInterval(() => {
+        if (frameY < 7) {
+          btn.sy += btn.sheight;
+          frameY++;
+        } else if (frameX < 1) {
+          frameX++;
+          frameY = 0;
+          btn.sy = 0;
+          btn.sx += btn.swidth;
+        } else {
+          frameY = 0;
+          btn.sy = 0;
+          frameX = 0;
+          btn.sx = 0;
+        }
+      }, 50);
+      setTimeout(() => {
+        clearInterval(timer);
+        btn.sy = 0;
+        btn.sx = 0;
+        // обнуляем счетчик
+        this.waterCount = 0;
+      }, 2400);
+    }
+  }
   private activeWell() {
     if (this.waterCount >= this.maxCount) {
       initialData.wellDisable = true;
