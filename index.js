@@ -62,8 +62,8 @@ app.post('/', async function(req, res) {
     if (!userInfo)
       res.status(200).send({ message: 'Такого пользователя не существует'});
     else if (userInfo.password === reqParams.password){
-      userInfo.levelInfo = reqParams.level;
-      userInfo.mapInfo = reqParams.map;
+      userInfo.levelInfo = JSON.parse(reqParams.level);
+      userInfo.mapInfo = JSON.parse(reqParams.map);
       await userInfo.save();
       res.status(200).send({ message: 'Успешно доставлено'});
     } else
