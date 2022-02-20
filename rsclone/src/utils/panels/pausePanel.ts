@@ -113,12 +113,6 @@ export default class PausePanel extends Common {
             setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             break;
           }
-          case "Помощь": {
-            this.buttonsClick(btn, btn.stepY, btn.click);
-            this.opacityState.disable = true;
-            setTimeout(() => alert("будем делать эту страничку?"), 300);
-            break;
-          }
         }
       } else {
         this.buttonsClick(btn, 0, 0);

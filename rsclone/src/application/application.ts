@@ -19,9 +19,10 @@ export default class Application extends Control {
 			preloader.hide(preloader.node);
 		};
 
-		this.mainCycle();
+		// this.mainCycle();
 		// this.gameMapCycle();
 		// this.levelCycle(4);
+		this.authorsCycle();
 
 		this.music = new Music();
 		this.music.start();
