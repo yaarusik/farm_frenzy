@@ -19,7 +19,7 @@ const userScheme = new Schema({
   password: String,
   levelInfo: [{ num: Number, state: String }],
   mapInfo: [{ categoryName: String, name: String, stage: Number }],
-  coin: Number,
+  moneyInfo: String,
 });
 const User = mongoose.model("User", userScheme);
 
