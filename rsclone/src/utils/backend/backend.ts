@@ -118,6 +118,7 @@ export default class Backend {
         Pets[item.name].currentStage = item.stage;
     });
 
-    setMoney(moneyInfo);
+    if (typeof moneyInfo === 'string' && +moneyInfo >= 0)
+      setMoney(moneyInfo);
   }
 }
