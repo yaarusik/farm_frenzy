@@ -1,6 +1,7 @@
 import { LevelInfo, MapInfo, ResponseSign } from "../../application/types";
 import { levelFinish } from "../gameData/mapData";
 import { aside, Engineering, houses, Pets } from "../shopPageData";
+import { setMoney, startMoney } from "../shopPageMoney";
 import { userInfo } from "../userData";
 
 export default class Backend {
@@ -69,8 +70,9 @@ export default class Backend {
     for (const [key, value] of Object.entries(Pets))
       mapInfo.push({categoryName: 'Pets', name: key, stage: value.currentStage});
 
+    let moneyInfo = startMoney;
       
-    const url = this.url + '?type=put&name=' + name + '&password=' + password +  '&level=' + JSON.stringify(levelInfo) + '&map=' + JSON.stringify(mapInfo);
+    const url = this.url + '?type=put&name=' + name + '&password=' + password +  '&level=' + JSON.stringify(levelInfo) + '&map=' + JSON.stringify(mapInfo) + '&money=' + moneyInfo;
     console.log(levelInfo, mapInfo, url);
       
     let response : ResponseSign = {
@@ -98,7 +100,7 @@ export default class Backend {
     userInfo.logged = true;
   }
 
-  public updateFrom(levelInfo: LevelInfo, mapInfo: MapInfo){
+  public updateFrom(levelInfo: LevelInfo, mapInfo: MapInfo, moneyInfo: string){
     if (!userInfo.logged)
       return;
     levelInfo.forEach((item) => {levelFinish[item.num.toString()] = item.state});
@@ -112,5 +114,7 @@ export default class Backend {
       if (item.categoryName === 'Pets')
         Pets[item.name].currentStage = item.stage;
     });
+
+    setMoney(moneyInfo);
   }
 }
