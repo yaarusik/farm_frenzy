@@ -127,7 +127,7 @@ export default class StartPanel extends Common {
     for (let i = 1; i <= this.levelBear[this.level]; i++) {
       setTimeout(() => {
         this.levelRender.createAnimal('bear');
-      }, this.random(25000, 40000) * i);
+      }, this.random(15000, 40000) * i);
     }
   }
 

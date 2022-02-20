@@ -40,12 +40,11 @@ export default class Products extends Common {
 
     // исходные данные для отрисовки
     this.startX = 725;
-    this.startY = 1090;
+    this.startY = 1100;
     // начальные данные
     this.product = [];
     // динамически создается склад
     this.productRender = [];
-
 
     this.updateProduct();
   }
@@ -113,7 +112,7 @@ export default class Products extends Common {
       this.changeColumn++;
     } else {
       this.startX += this.sizeRight;
-      this.startY = 1090;
+      this.startY = 1100;
       this.changeColumn = 1;
       this.columnCount++;
     }
@@ -134,18 +133,14 @@ export default class Products extends Common {
         });
       });
       this.startStorage();
-    } else {
-      // всплывающее сообщение
-      alert("склад переполнен");
     }
-
   }
 
   public reRenderStorage() {
     this.productRender = [];
     this.initialProducts = [];
     this.startX = 725;
-    this.startY = 1090;
+    this.startY = 1100;
     this.changeColumn = 1;
     this.columnCount = 0;
     this.updateProduct();

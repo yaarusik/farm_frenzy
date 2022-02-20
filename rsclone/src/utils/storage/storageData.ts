@@ -2,7 +2,7 @@ export const buildData = {
   well: {
     '1': {
       width: 230,
-      height: 180,
+      height: 190,
       swidth: 128,
       sheight: 100,
       stepY: 100,
@@ -77,8 +77,8 @@ export const buildData = {
       y: -300
     },
     '2': {
-      width: 280,
-      height: 233,
+      width: 290,
+      height: 241,
       swidth: 168,
       sheight: 140,
       stepY: 140,
@@ -86,7 +86,7 @@ export const buildData = {
     },
     '3': {
       width: 290,
-      height: 240,
+      height: 260,
       swidth: 168,
       sheight: 136,
       stepY: 136,

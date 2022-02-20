@@ -1,5 +1,5 @@
 import BuildUtils from "../classes/buildUtil";
-import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity, IPicture, IText } from "../../application/iterfaces";
+import { IButton, IAnimBuild, Coords, IKeyBoolean, IKeyNumber, IFunctions, IOpacity } from "../../application/iterfaces";
 import { animationBuildOptions } from "./../../utils/gameData/levelData";
 import { buildSpawnBtn } from "./../gameData/spawnData";
 import Well from "./well";
