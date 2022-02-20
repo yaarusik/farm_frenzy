@@ -18,6 +18,7 @@ export default class Backend {
       message: 'Что-то пошло не так',
       levelInfo: [],
       mapInfo: [],
+      moneyInfo: '0'
     };
 
     try {
@@ -40,6 +41,7 @@ export default class Backend {
       message: 'Что-то пошло не так',
       levelInfo: [],
       mapInfo: [],
+      moneyInfo: '0'
     };
 
     try {
@@ -79,6 +81,7 @@ export default class Backend {
       message: 'Что-то пошло не так',
       levelInfo: [],
       mapInfo: [],
+      moneyInfo: '0'
     };
 
     try {
