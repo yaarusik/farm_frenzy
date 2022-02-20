@@ -21,7 +21,7 @@ export default class Application extends Control {
 
 		this.mainCycle();
 		// this.gameMapCycle();
-		// this.levelCycle(3);
+		// this.levelCycle(4);
 
 		this.music = new Music();
 		this.music.start();
@@ -99,8 +99,7 @@ export default class Application extends Control {
 		levelPage.onRestart = () => {
 			pageWrapper.destroy();
 			levelPage.destroy();
-			// запомнить может баги давать
-			this.levelCycle(1);
+			this.levelCycle(level);
 		};
 		levelPage.onSettings = () => {
 			pageWrapper.destroy();

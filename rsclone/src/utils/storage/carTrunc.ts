@@ -87,6 +87,23 @@ export default class CarTrunc extends Common {
         sy: 0,
         swidth: 44,
         sheight: 38
+      },
+      {
+        type: "button",
+        name: "cake",
+        image: "images/level/builds/storage/box/cake.png",
+        stepY: 28,
+        stepX: 0,
+        hover: 1,
+        click: 2,
+        x: 1288,
+        y: 722,
+        width: 68,
+        height: 59,
+        sx: 0,
+        sy: 0,
+        swidth: 44,
+        sheight: 38
       }
     ];
 
@@ -94,7 +111,8 @@ export default class CarTrunc extends Common {
       'egg': 0,
       'bear-1': 0,
       'chicken': 0,
-      'flour': 0
+      'flour': 0,
+      'cake': 0
     };
 
     this.startX = 1208;
@@ -198,6 +216,13 @@ export default class CarTrunc extends Common {
             this.check.counter--;
             break;
           }
+          case "cake": {
+            this.func.changeCountBoxProduct(this.boxCounter, btn.name);
+            this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
+            this.deleteProduct(btn.name);
+            this.check.counter--;
+            break;
+          }
         }
       }
     });
@@ -208,7 +233,8 @@ export default class CarTrunc extends Common {
       'egg': 0,
       'bear-1': 0,
       'chicken': 0,
-      'flour': 0
+      'flour': 0,
+      'cake': 0
     };
     this.box = {};
     this.boxData = {};

@@ -39,7 +39,7 @@ export default class StartPanel extends Common {
     this.level = level.toString();
 
     this.levelInitial = JSON.parse(JSON.stringify(levelInitial));
-    // не работает из-за того что рендериться сразу
+
     this.opacityState = {
       show: true,
       disable: false,
@@ -53,10 +53,10 @@ export default class StartPanel extends Common {
       '4': 0,
     };
     this.levelBear = {
-      '1': 2,
+      '1': 3,
       '2': 5,
       '3': 4,
-      '4': 3
+      '4': 7
     };
 
     this.startPanel();
@@ -127,7 +127,7 @@ export default class StartPanel extends Common {
     for (let i = 1; i <= this.levelBear[this.level]; i++) {
       setTimeout(() => {
         this.levelRender.createAnimal('bear');
-      }, this.random(15000, 40000) * i);
+      }, this.random(15000, 25000) * i);
     }
   }
 

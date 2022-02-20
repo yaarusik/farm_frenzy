@@ -8,6 +8,7 @@ import DriedEgg from "./driedEgg";
 import Arrow from "./arrow";
 import WellPrice from "./wellPrice";
 import TrackShop from "./../trackShop";
+import Cake from './cake';
 
 export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
@@ -26,6 +27,7 @@ export default class BuildSpawn extends BuildUtils {
   wellPrice: WellPrice;
   showPrice: IKeyBoolean;
   trackShop: TrackShop;
+  cake: Cake;
 
 
 
@@ -48,6 +50,7 @@ export default class BuildSpawn extends BuildUtils {
     this.level = level;
 
     this.driedEgg = new DriedEgg(canvas, context, this.func, this.products);
+    this.cake = new Cake(canvas, context, this.func, this.products);
     this.arrow = new Arrow(canvas, context);
     this.wellPrice = new WellPrice(canvas, context);
 
@@ -71,7 +74,8 @@ export default class BuildSpawn extends BuildUtils {
     if (this.showPrice.well) this.wellPrice.render();
 
     // сделать потом по клику
-    if (this.level === 3) this.driedEgg.render();
+    if (this.level > 2) this.driedEgg.render();
+    if (this.level === 4) this.cake.render();
 
     this.startSpawn();
   }
@@ -115,8 +119,8 @@ export default class BuildSpawn extends BuildUtils {
       }
     });
 
-    // сделать потом условие
-    this.driedEgg.clickHundler(event, widthK, heightK);
+    if (this.level >= 3) this.driedEgg.clickHundler(event, widthK, heightK);
+    if (this.level === 4) this.cake.clickHundler(event, widthK, heightK);
   }
 
   public waterChange(grace: { [key: string]: boolean }) {
@@ -147,7 +151,8 @@ export default class BuildSpawn extends BuildUtils {
         }
       }
     });
-    this.driedEgg.moveHundler(event, widthK, heightK);
+    if (this.level >= 3) this.driedEgg.moveHundler(event, widthK, heightK);
+    if (this.level === 4) this.cake.moveHundler(event, widthK, heightK);
 
   }
 

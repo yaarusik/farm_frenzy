@@ -35,7 +35,6 @@ export default class TrackShop {
         this.shopData[key] = value.currentStage;
       });
     });
-    console.log(this.shopData);
     this.changeImgParams();
   }
 

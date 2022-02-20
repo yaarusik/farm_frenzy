@@ -86,6 +86,7 @@ export default class LevelPage extends Control {
       'chicken': 0,
       'bear-1': 0,
       'flour': 0,
+      'cake': 0,
     };
 
     this.opacityState = {

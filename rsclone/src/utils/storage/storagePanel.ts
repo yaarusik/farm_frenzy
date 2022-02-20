@@ -110,6 +110,7 @@ export default class StoragePanel extends Common {
       'bear-1': 60,
       'chicken': 50,
       'flour': 20,
+      'cake': 40,
     };
 
     this.iconImg = new Map();

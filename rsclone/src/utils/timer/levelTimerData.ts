@@ -65,6 +65,17 @@ export const timerData = [
         goldSec: 0,
         silvMin: 3,
         silvSec: 0
+    },
+    {
+        deafultStar: 60,
+        goldStar: 190,
+        silverStar: 60,
+        x: 1495,
+        y: 1183,
+        goldMin: 2,
+        goldSec: 30,
+        silvMin: 4,
+        silvSec: 0
     }
 ];
 
@@ -73,9 +84,9 @@ export interface Itime {
 }
 
 export const bestTime: Itime = {
-  '1': 'null',
-  '2': 'null',
-  '3': 'null',
-  '4': 'null',
-  '5': 'null',
+    '1': 'null',
+    '2': 'null',
+    '3': 'null',
+    '4': 'null',
+    '5': 'null',
 };

@@ -113,6 +113,44 @@ export const driedEggsBtn = [
 
 ];
 
+export const cakeBtn = [
+  {
+    type: "button",
+    name: "cakeBuild",
+    image: "images/level/builds/cake/cake-1.png",
+    x: 1235,
+    y: -200,
+    stepY: 156,
+    stepX: 180,
+    hover: 1,
+    click: 2,
+    width: 300,
+    height: 261,
+    sx: 0,
+    sy: 0,
+    swidth: 180,
+    sheight: 156
+  },
+  {
+    type: "animation",
+    name: "houseIndicator",
+    image: "images/level/builds/driedEgg/houseIndicator.png",
+    x: 1510,
+    y: -100,
+    width: 22,
+    height: 100,
+    stepY: 52,
+    stepX: 0,
+    hover: 1,
+    click: 2,
+    frameY: 27,
+    sx: 0,
+    sy: 0,
+    swidth: 12,
+    sheight: 53
+  },
+];
+
 export const driedAnim = [
   {
     name: 'flourBuild',
@@ -123,7 +161,22 @@ export const driedAnim = [
   {
     name: 'houseIndicator',
     maxX: 0,
-    maxY: 330,
+    maxY: 310,
+    speed: 24
+  },
+];
+
+export const cakeAnim = [
+  {
+    name: 'cakeBuild',
+    maxX: 0,
+    maxY: 450,
+    speed: 24
+  },
+  {
+    name: 'houseIndicator',
+    maxX: 0,
+    maxY: 540,
     speed: 24
   },
 ];

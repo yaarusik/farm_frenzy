@@ -149,6 +149,19 @@ export const icons = {
     swidth: 0,
     sheight: 0
   },
+  'cake': {
+    type: "picture",
+    name: "cake",
+    image: "images/level/builds/storage/cake.png",
+    x: 60,
+    y: 0,
+    width: 65,
+    height: 65,
+    sx: 0,
+    sy: 0,
+    swidth: 0,
+    sheight: 0
+  },
 };
 
 export const storagePanelStaticText = [
