@@ -1,5 +1,5 @@
 import Common from "../../application/common/common";
-import { IAnimBuild, IButton, IKeyBoolean, IKeyNumber } from "../../application/iterfaces";
+import { IAnimBuild, IButton, IKeyNumber } from "../../application/iterfaces";
 
 
 export default class BuildUtils extends Common {
@@ -11,6 +11,9 @@ export default class BuildUtils extends Common {
   public buildSpawn(item: IAnimBuild, build: IButton) {
     if (item.name === build.name) {
       if (item.maxY > build.y) build.y += item.speed;
+      else {
+        build.y = item.maxY;
+      }
     }
   }
 

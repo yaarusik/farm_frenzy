@@ -283,6 +283,102 @@ const textThree = [
   },
 ];
 
+const imgFour = [
+  {
+    type: "button",
+    name: "chicken",
+    image: "images/pets/chicken/death.png",
+    x: 510,
+    y: 552,
+    width: 100,
+    height: 100,
+    sx: 0,
+    sy: 0,
+    swidth: 64,
+    sheight: 64
+  },
+  {
+    type: "button",
+    name: "cake",
+    image: "images/level/initial/cake.png",
+    x: 516,
+    y: 494,
+    width: 80,
+    height: 46,
+    sx: 0,
+    sy: 0,
+    swidth: 104,
+    sheight: 60
+  },
+
+];
+
+const textFour = [
+  {
+    name: "cakeCount",
+    text: '2',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 656,
+    y: 534,
+    animation: false,
+  },
+  {
+    name: "chickenCount",
+    text: '2',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 656,
+    y: 628,
+    animation: false,
+  },
+  {
+    name: "levelEnd",
+    text: '60',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 920,
+    y: 534,
+    animation: false,
+  },
+  {
+    name: "goldEnd",
+    text: '+190',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 1008,
+    y: 630,
+    animation: false,
+  },
+  {
+    name: "goldTime",
+    text: '02:30',
+    fontSize: '30px Vag_Rounded-Bold CY',
+    color: 'yellow',
+    x: 842,
+    y: 682,
+    animation: false,
+  },
+  {
+    name: "silverEnd",
+    text: '+60',
+    fontSize: '46px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1026,
+    y: 766,
+    animation: false,
+  },
+  {
+    name: "silverTimer",
+    text: '04:00',
+    fontSize: '30px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 838,
+    y: 816,
+    animation: false,
+  },
+];
+
 
 export const levelInitial = {
   '1': {
@@ -296,6 +392,10 @@ export const levelInitial = {
   '3': {
     img: imgThree,
     text: textThree,
+  },
+  '4': {
+    img: imgFour,
+    text: textFour,
   }
 };
 

@@ -75,6 +75,10 @@ export const levelCoords = {
   '3': {
     x: 716,
     y: 1068
+  },
+  '4': {
+    x: 805,
+    y: 1014
   }
 };
 

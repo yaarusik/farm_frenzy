@@ -107,9 +107,10 @@ export default class StoragePanel extends Common {
 
     this.price = {
       'egg': 10,
-      'bear-1': 50,
-      'chicken': 25,
-      'flour': 30,
+      'bear-1': 60,
+      'chicken': 50,
+      'flour': 20,
+      'cake': 40,
     };
 
     this.iconImg = new Map();
@@ -274,8 +275,7 @@ export default class StoragePanel extends Common {
               this.buttonDisable();              // дизейблим кнопку
               this.buttonCondition.ok = false;
               this.carTrunc.carTruncClear();
-              // для возврата исходного сотояния
-              this.currentStateCheck = true;
+              this.currentStateCheck = true;               // для возврата исходного сотояния
             }
             break;
           }
@@ -286,7 +286,6 @@ export default class StoragePanel extends Common {
             this.buttonCondition.ok = false;
             this.buttonDisable();
             this.changeTotal('', 0);
-            // для возврата исходного соcтояния
             this.currentStateCheck = true;
             this.saveProducts();
             this.carTrunc.carTruncClear();
@@ -325,7 +324,6 @@ export default class StoragePanel extends Common {
         }
       }
     });
-
 
     this.carTrunc.clickHundler(event, widthK, heightK);
   }

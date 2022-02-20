@@ -36,7 +36,6 @@ export default class CarTrunc extends Common {
     this.func = func;
     this.box = {};
     this.boxData = {};
-
     this.productContainer = [
       {
         type: "button",
@@ -88,6 +87,23 @@ export default class CarTrunc extends Common {
         sy: 0,
         swidth: 44,
         sheight: 38
+      },
+      {
+        type: "button",
+        name: "cake",
+        image: "images/level/builds/storage/box/cake.png",
+        stepY: 28,
+        stepX: 0,
+        hover: 1,
+        click: 2,
+        x: 1288,
+        y: 722,
+        width: 68,
+        height: 59,
+        sx: 0,
+        sy: 0,
+        swidth: 44,
+        sheight: 38
       }
     ];
 
@@ -95,25 +111,22 @@ export default class CarTrunc extends Common {
       'egg': 0,
       'bear-1': 0,
       'chicken': 0,
-      'flour': 0
+      'flour': 0,
+      'cake': 0
     };
 
     this.startX = 1208;
     this.stepX = 80;
-
     this.check = check;
-
     this.startTrunc();
   }
-
 
   private async startTrunc() {
     const loadImage = this.productContainer.map(image => this.loadImage(image.image));
     this.initialBox = await this.renderImages(loadImage);
   }
 
-
-  render() {
+  public render() {
     this.drawImage(Object.values(this.box), Object.values(this.boxData));
   }
 
@@ -131,6 +144,7 @@ export default class CarTrunc extends Common {
 
   public drawBox(product: string, count: number): void {
     if (this.boxCounter[product] === 0 && this.check.counter < this.check.maxProducts) {
+      this.changeBoxPosition();
       this.check.counter++;
       this.checkCounter();
       const { name, img } = this.getImg(product);
@@ -156,24 +170,23 @@ export default class CarTrunc extends Common {
       else {
         throw new Error('box img not found');
       }
-      this.changeBoxPosition();
     }
     this.boxCounter[product] += count;
   }
 
   private changeBoxPosition() {
-    if (this.check.counter === 1) this.startX += this.stepX;
+    if (this.check.counter === 1) this.startX = 1288;
+    if (this.check.counter === 0) this.startX = 1208;
   }
 
   private checkCounter() {
-    if (this.check.count > 2) this.check.count = 2;
+    if (this.check.count > 1) this.check.count = 2;
   }
 
   private deleteProduct(product: string) {
-    if (this.check.counter === 1 || this.check.counter === 0) this.startX = 1208;
+    this.startX = 1208;
     delete this.box[product];
     delete this.boxData[product];
-    // перед этим нужно передать значение
     this.boxCounter[product] = 0;
   }
 
@@ -203,6 +216,13 @@ export default class CarTrunc extends Common {
             this.check.counter--;
             break;
           }
+          case "cake": {
+            this.func.changeCountBoxProduct(this.boxCounter, btn.name);
+            this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
+            this.deleteProduct(btn.name);
+            this.check.counter--;
+            break;
+          }
         }
       }
     });
@@ -213,7 +233,8 @@ export default class CarTrunc extends Common {
       'egg': 0,
       'bear-1': 0,
       'chicken': 0,
-      'flour': 0
+      'flour': 0,
+      'cake': 0
     };
     this.box = {};
     this.boxData = {};

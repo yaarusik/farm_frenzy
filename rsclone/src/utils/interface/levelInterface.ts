@@ -20,7 +20,7 @@ export default class LevelInterface extends Common {
     this.initialImg = [];
     this.initialBtn = [];
     this.initialAnim = [];
-    this.level = level
+    this.level = level;
 
     this.lvlInterface = {
       btn: JSON.parse(JSON.stringify(lvlInterfaceBtn)),
@@ -29,9 +29,10 @@ export default class LevelInterface extends Common {
       img: JSON.parse(JSON.stringify(lvlInterfaceImg)),
     };
 
-    if (this.level === 3) {
-      this.lvlInterface.img.push(backs.upLeft);
-    }
+    if (this.level === 3) this.lvlInterface.img.push(backs.upLeft);
+    if (this.level === 4) this.lvlInterface.img.push(backs.upLeft, backs.mediumRight);
+
+
 
     this.startPanel();
   }

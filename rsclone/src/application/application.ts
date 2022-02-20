@@ -21,7 +21,7 @@ export default class Application extends Control {
 
 		this.mainCycle();
 		// this.gameMapCycle();
-		// this.levelCycle(3);
+		// this.levelCycle(4);
 
 		this.music = new Music();
 		this.music.start();
@@ -74,7 +74,7 @@ export default class Application extends Control {
 	// страница магазина
 	private shopCycle() {
 		const preloader = new Preloader(this.node, 'div', 'preloader');
-		const shopPage = new ShopPage(this.node);
+		const shopPage = new ShopPage(this.node, preloader);
 		shopPage.gameMapBack = () => {
 			shopPage.destroy();
 			this.gameMapCycle();
@@ -99,8 +99,7 @@ export default class Application extends Control {
 		levelPage.onRestart = () => {
 			pageWrapper.destroy();
 			levelPage.destroy();
-			// запомнить может баги давать
-			this.levelCycle(1);
+			this.levelCycle(level);
 		};
 		levelPage.onSettings = () => {
 			pageWrapper.destroy();
