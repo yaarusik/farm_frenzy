@@ -3,26 +3,93 @@
 .author {
   padding: 3vh 5%;
   background-image: url("../images/author/author-back.jpg");
+  height: 100%;
 }
 
-.author__title{
+.author__title {
   display: flex; // Без этого ломается обводка текста
   flex-direction: column;
-  align-items: center;
+  padding-top: 30px;
+  font-size: 3rem;
   text-align: center;
-  margin-bottom: 10vh;
+  margin-bottom: 8vh;
 }
 
-.author__status{
-  font-weight: 600;
-  font-size: 1.6rem;
-  color: rgb(150, 85, 31);
-  margin-bottom: 1vh;
-}
-
-.author__item{
-  font-size: 1.85rem;
+.author__item {
+  position: relative;
+  padding-left: 40px;
+  font-size: 2rem;
   color: darken($brown, 30%);
-  line-height: 1.2;
+
+  line-height: 2rem;
   font-weight: 600;
+}
+
+.author__item::before {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  background-image: url(../images/author//git.png);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
+.author__list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  padding: 0 30px;
+}
+
+.author__wrapper {
+  display: flex;
+  flex: 0 1 33.33%;
+  text-align: center;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: center;
+  color: darken($brown, 30%);
+  font-size: 2rem;
+}
+
+.author__block {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid $brown;
+}
+
+.author__block img {
+  display: block;
+  object-fit: cover;
+  width: 100%;
+}
+
+@media (max-width: 1600px) {
+  .author__block {
+    width: calc(90px + (200 - 90) * ((100vw - 320px) / (1600 - 320)));
+    height: calc(90px + (200 - 90) * ((100vw - 320px) / (1600 - 320)));
+  }
+  .author__title {
+    padding-top: calc(10px + (30 - 10) * ((100vw - 320px) / (1600 - 320)));
+    font-size: calc(2rem + (3 - 2) * ((100vw - 320px) / (1600 - 320)));
+  }
+  .author__item {
+    padding-left: calc(24px + (40 - 20) * ((100vw - 320px) / (1600 - 320)));
+    font-size: calc(1.1rem + (1.5 - 1.1) * ((100vw - 320px) / (1600 - 320)));
+    color: darken($brown, 30%);
+  }
+  .author__item::before {
+    content: " ";
+    width: calc(20px + (32 - 20) * ((100vw - 320px) / (1600 - 320)));
+    height: calc(20px + (32 - 20) * ((100vw - 320px) / (1600 - 320)));
+  }
+  .author__wrapper {
+    font-size: calc(1rem + (1.2 - 1) * ((100vw - 320px) / (1600 - 320)));
+  }
 }
