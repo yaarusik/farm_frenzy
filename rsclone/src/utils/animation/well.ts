@@ -16,7 +16,7 @@ export default class Well {
     this.aside = aside;
   }
   public wellAnimation(btn: IButton) {
-    if (this.aside['well'].currentStage > 2) this.wellAnimationUpgrade(btn);
+    if (this.aside['well'].currentStage > 1) this.wellAnimationUpgrade(btn);
     // если в индикаторе есть вода, то блокируем нажатие на колодец
     else if (this.waterCount >= this.maxCount) {
       // во время анимации блокируем колодец

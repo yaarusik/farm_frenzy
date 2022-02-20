@@ -10,21 +10,13 @@ export const buildData = {
     },
     '2': {
       width: 195,
-      height: 177,
-      swidth: 132,
-      sheight: 120,
-      stepY: 120,
-      y: -200
-    },
-    '3': {
-      width: 195,
       height: 168,
       swidth: 176,
       sheight: 152,
       stepY: 152,
       y: -200
     },
-    '4': {
+    '3': {
       width: 195,
       height: 168,
       swidth: 168,
@@ -45,20 +37,12 @@ export const buildData = {
     '2': {
       width: 190,
       height: 176,
-      swidth: 110,
-      sheight: 102,
-      stepY: 102,
-      y: -210
-    },
-    '3': {
-      width: 190,
-      height: 176,
       swidth: 114,
       sheight: 106,
       stepY: 106,
       y: -210
     },
-    '4': {
+    '3': {
       width: 190,
       height: 181,
       swidth: 120,
@@ -78,21 +62,13 @@ export const buildData = {
     },
     '2': {
       width: 290,
-      height: 241,
-      swidth: 168,
-      sheight: 140,
-      stepY: 140,
-      y: -300
-    },
-    '3': {
-      width: 290,
       height: 260,
       swidth: 168,
       sheight: 136,
       stepY: 136,
       y: -300
     },
-    '4': {
+    '3': {
       width: 300,
       height: 250,
       swidth: 170,
