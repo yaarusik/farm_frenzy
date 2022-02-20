@@ -64,7 +64,7 @@ app.post('/', async function(req, res) {
     else if (userInfo.password === reqParams.password){
       userInfo.levelInfo = JSON.parse(reqParams.level);
       userInfo.mapInfo = JSON.parse(reqParams.map);
-      userInfo.moneyInfo = JSON.parse(reqParams.money);
+      userInfo.moneyInfo = reqParams.money;
       await userInfo.save();
       res.status(200).send({ message: 'Успешно доставлено'});
     } else
