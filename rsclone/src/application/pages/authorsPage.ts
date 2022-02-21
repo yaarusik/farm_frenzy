@@ -51,6 +51,14 @@ export default class AuthorsPage extends Control {
     this.authorWrapper(authorList.node, this.auforInform.yakov);
     this.authorWrapper(authorList.node, this.auforInform.serafim);
 
+    const chickenWrapper = new Control(this.wrapper.node, "div", "chicken-wrapper", "");
+
+    const chickenImgRight = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
+    chickenImgRight.node.src = 'images/author/chicken-right.png';
+    
+    const chickenImgLeft = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
+    chickenImgLeft.node.src = 'images/author/chicken-left.png';
+
 
     const mainBackBtn = new Control(this.wrapper.node, "button", "btn btn_close", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);

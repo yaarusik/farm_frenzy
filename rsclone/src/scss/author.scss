@@ -70,6 +70,17 @@
   width: 100%;
 }
 
+.chicken-wrapper{
+  margin-top: 9rem;
+  display: flex;
+  justify-content: center;
+}
+
+.chicken-image{
+  width: 96px;
+  height: 96px;
+}
+
 @media (max-width: 1600px) {
   .author__block {
     width: calc(90px + (200 - 90) * ((100vw - 320px) / (1600 - 320)));

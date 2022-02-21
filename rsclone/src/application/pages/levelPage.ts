@@ -291,9 +291,9 @@ export default class LevelPage extends Control {
                 break;
               }
               case 'pig': {
+                console.log('here');
                 if (initialData.btnDisable[btn.name]) {
-                  this.levelRender.createAnimal("pig"); //Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
-                  // this.levelRender.createAnimal("bear");
+                  this.levelRender.createAnimal("pig");
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
@@ -301,6 +301,10 @@ export default class LevelPage extends Control {
                   this.music.graceDisable();
                   this.arrow.showArrow('up');
                 }
+                break;
+              }
+              case 'cat': {
+                this.levelRender.createAnimal("bear");
                 break;
               }
               case 'mainArea': {
