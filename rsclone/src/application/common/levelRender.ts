@@ -32,7 +32,6 @@ export default class LevelRender {
 		this.music = new Music();
 
 		this.commonFunction = new Common(this.canvas, this.context);
-
 		this.imagesPath = levelImagesPath;
 
 		this.animals = [];
@@ -82,6 +81,7 @@ export default class LevelRender {
 				currentH: 48 * 2 / heightK
 			};
 			if (this.commonFunction.determineCoords(event, productCoords)) {
+				this.music.productDone();
 				clickList.push(item.name);
 				item.state = 'fly';
 				item.age = 0;
@@ -99,6 +99,7 @@ export default class LevelRender {
 			};
 
 			if (this.commonFunction.determineCoords(event, bearCoords)) {
+				this.music.cageCreate();
 				item.cageRemain = 0.5 * 60;
 				if (item.cageBuild < 8)
 					item.cageBuild++;
@@ -385,6 +386,7 @@ export default class LevelRender {
 
 		if (item.state === 'cage') {
 			if (item.cageRemain <= 0) {
+				this.music.cageBroke();
 				item.isEscape = true;
 				item.wantY = item.coordY;
 				if (item.coordX + item.width / 2 < 800) {
@@ -461,6 +463,8 @@ export default class LevelRender {
 			return;
 
 		if (hungryPercent <= 0) {
+			// умирание курицы
+			this.music.chickenDie();
 			item.state = "death";
 			item.frame = 0;
 			return;
@@ -630,6 +634,7 @@ export default class LevelRender {
 	}
 
 	private petAway(item: AnimalList) {
+		this.music.chickenFly();
 		item.state = 'pic';
 		if (item.coordX + item.width / 2 < 800)
 			item.wantX = 0;
@@ -641,12 +646,17 @@ export default class LevelRender {
 	public createAnimal(name: string) {
 		if (!(typeof this.id !== "number"))
 			this.id = 0;
-		if (name === "chicken")
+		if (name === "chicken") {
+			this.music.onChicken();
 			this.animals.push(new Chicken(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
+		}
 		if (name === "pig")
 			this.animals.push(new Pig(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
-		if (name === "bear")
+		if (name === "bear") {
+			this.music.bearAppiarance();
 			this.animals.push(new Bear(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight), 0));
+
+		}
 		this.id++;
 	}
 

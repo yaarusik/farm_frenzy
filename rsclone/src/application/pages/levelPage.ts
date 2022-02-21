@@ -293,7 +293,9 @@ export default class LevelPage extends Control {
               case 'pig': {
                 console.log('here');
                 if (initialData.btnDisable[btn.name]) {
+
                   this.levelRender.createAnimal("pig");
+
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
