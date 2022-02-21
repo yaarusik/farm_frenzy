@@ -7,7 +7,9 @@ import SettingsPage from "./pages/settingsPage";
 import AwardsPage from "./pages/awardsPage";
 import AuthorsPage from "./pages/authorsPage";
 import { Music } from "../utils/music/music";
+import LoginPage from "./pages/loginPage";
 import Preloader from "./preloader";
+import RegPage from "./pages/regPage";
 
 export default class Application extends Control {
 	music: Music;
@@ -47,6 +49,10 @@ export default class Application extends Control {
 			this.music.btnClick();
 			startPage.destroy();
 			this.authorsCycle();
+		};
+		startPage.onLogin = () => {
+			startPage.destroy();
+			this.loginCycle();
 		};
 	}
 
@@ -135,6 +141,32 @@ export default class Application extends Control {
 			this.music.btnClick();
 			authorsPage.destroy();
 			this.mainCycle();
+		};
+	}
+
+	private loginCycle() {
+		const loginPage = new LoginPage(this.node);
+		loginPage.onBack = () => {
+			loginPage.destroy();
+			this.mainCycle();
+		};
+
+		loginPage.onReg = () => {
+			loginPage.destroy();
+			this.regCycle();
+		};
+	}
+
+	private regCycle() {
+		const regCycle = new RegPage(this.node);
+		regCycle.onBack = () => {
+			regCycle.destroy();
+			this.mainCycle();
+		};
+
+		regCycle.onLogin = () => {
+			regCycle.destroy();
+			this.loginCycle();
 		};
 	}
 }

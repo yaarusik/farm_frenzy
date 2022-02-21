@@ -26,13 +26,13 @@ export default class AuthorsPage extends Control {
         name: "Руслан"
       },
       yakov: {
-        img: 'images/author/author-back.jpg',
+        img: 'images/author/Yakov.jpg',
         git: 'https://github.com/YakovLya',
         role: 'Frontend/Backend developer',
         name: "Яков"
       },
       serafim: {
-        img: 'images/author/author-back.jpg',
+        img: 'images/author/Serafim.jpg',
         git: 'https://github.com/Jirafek',
         role: 'Frontend developer',
         name: "Серафим"
@@ -50,6 +50,14 @@ export default class AuthorsPage extends Control {
     this.authorWrapper(authorList.node, this.auforInform.ruslan);
     this.authorWrapper(authorList.node, this.auforInform.yakov);
     this.authorWrapper(authorList.node, this.auforInform.serafim);
+
+    const chickenWrapper = new Control(this.wrapper.node, "div", "chicken-wrapper", "");
+
+    const chickenImgRight = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
+    chickenImgRight.node.src = 'images/author/chicken-right.png';
+    
+    const chickenImgLeft = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
+    chickenImgLeft.node.src = 'images/author/chicken-left.png';
 
 
     const mainBackBtn = new Control(this.wrapper.node, "button", "btn btn_close", "ОК");

@@ -1,6 +1,7 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
 import { Music } from "../../utils/music/music";
+import { userInfo } from "../../utils/userData";
 
 export default class StartPage extends Control {
    wrapper: Control<HTMLElement>;
@@ -22,11 +23,12 @@ export default class StartPage extends Control {
       const panel = new Control(this.wrapper.node, "div", "panel", "");
 
       const greetings = new Control(panel.node, "div", "title panel__greet", "Здравствуйте!");
-
       greetings.node.setAttribute("data-text", "Здравствуйте!");
 
       const nameInput = new Control<HTMLInputElement>(panel.node, "input", "panel__name", "");
       nameInput.node.type = "text";
+      nameInput.node.readOnly = true;
+      nameInput.node.value = userInfo.name;
 
       const campaignBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Карьера");
       this.buttonEffect.devideButton(campaignBtn.node);
@@ -36,9 +38,11 @@ export default class StartPage extends Control {
          this.music.onMain();
       };
 
-      const endlessBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn btn_disabled", "Бесконечная");
-      this.buttonEffect.devideButton(endlessBtn.node);
-      endlessBtn.node.disabled = true;
+      const loginBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Авторизация");
+      this.buttonEffect.devideButton(loginBtn.node);
+      loginBtn.node.onclick = () => {
+         this.onLogin();
+      };
 
       const footer = new Control(this.wrapper.node, "footer", "footer", "");
 
@@ -48,12 +52,7 @@ export default class StartPage extends Control {
          this.music.btnClick();
          this.onSettings();
       };
-      const awardsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Награды");
-      this.buttonEffect.devideButton(awardsBtn.node);
-      awardsBtn.node.onclick = () => {
-         this.music.btnClick();
-         this.onAwards();
-      };
+      
       const authorsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Авторы");
       this.buttonEffect.devideButton(authorsBtn.node);
       authorsBtn.node.onclick = () => {
@@ -71,6 +70,9 @@ export default class StartPage extends Control {
       throw new Error("Method not implemented.");
    }
    onSelectMap() {
+      throw new Error("Method not implemented.");
+   }
+   onLogin() {
       throw new Error("Method not implemented.");
    }
 
