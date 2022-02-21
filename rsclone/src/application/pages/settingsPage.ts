@@ -52,6 +52,15 @@ export default class SettingsPage extends Control {
 
     const fullScreenBox = new Control(settingsBox.node, "div", "screen__box", "На весь экран");
     const fullScreenCheckBox = new Control<HTMLInputElement>(fullScreenBox.node, "input", "settings__checkbox", "");
+    if (document.fullscreenElement)
+      fullScreenCheckBox.node.checked = true;
+    fullScreenCheckBox.node.addEventListener('click', () => {
+      if (!document.fullscreenElement)
+        document.documentElement.requestFullscreen();
+      else if (document.exitFullscreen) {
+          document.exitFullscreen();
+      }
+    });
     fullScreenCheckBox.node.id = "fullScreen";
     fullScreenCheckBox.node.type = "checkbox";
     const fullScreenLabel = new Control<HTMLLabelElement>(fullScreenBox.node, "label", "fullScreen__label", "");

@@ -48,12 +48,7 @@ export default class StartPage extends Control {
          this.music.btnClick();
          this.onSettings();
       };
-      const awardsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Награды");
-      this.buttonEffect.devideButton(awardsBtn.node);
-      awardsBtn.node.onclick = () => {
-         this.music.btnClick();
-         this.onAwards();
-      };
+      
       const authorsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Авторы");
       this.buttonEffect.devideButton(authorsBtn.node);
       authorsBtn.node.onclick = () => {

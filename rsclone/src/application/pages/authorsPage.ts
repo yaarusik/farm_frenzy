@@ -26,13 +26,13 @@ export default class AuthorsPage extends Control {
         name: "Руслан"
       },
       yakov: {
-        img: 'images/author/author-back.jpg',
+        img: 'images/author/Yakov.jpg',
         git: 'https://github.com/YakovLya',
         role: 'Frontend/Backend developer',
         name: "Яков"
       },
       serafim: {
-        img: 'images/author/author-back.jpg',
+        img: 'images/author/Serafim.jpg',
         git: 'https://github.com/Jirafek',
         role: 'Frontend developer',
         name: "Серафим"
