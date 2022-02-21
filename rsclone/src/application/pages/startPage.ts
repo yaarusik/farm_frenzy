@@ -31,6 +31,7 @@ export default class StartPage extends Control {
       const campaignBtn = new Control<HTMLButtonElement>(panel.node, "button", "btn", "Карьера");
       this.buttonEffect.devideButton(campaignBtn.node);
       campaignBtn.node.onclick = () => {
+         this.music.btnClick();
          this.onSelectMap();
          this.music.onMain();
       };
@@ -44,16 +45,19 @@ export default class StartPage extends Control {
       const settingsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Настройки");
       this.buttonEffect.devideButton(settingsBtn.node);
       settingsBtn.node.onclick = () => {
+         this.music.btnClick();
          this.onSettings();
       };
       const awardsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Награды");
       this.buttonEffect.devideButton(awardsBtn.node);
       awardsBtn.node.onclick = () => {
+         this.music.btnClick();
          this.onAwards();
       };
       const authorsBtn = new Control<HTMLButtonElement>(footer.node, "button", "btn", "Авторы");
       this.buttonEffect.devideButton(authorsBtn.node);
       authorsBtn.node.onclick = () => {
+         this.music.btnClick();
          this.onAuthors();
       };
    }

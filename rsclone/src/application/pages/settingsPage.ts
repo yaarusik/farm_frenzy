@@ -8,8 +8,8 @@ export default class SettingsPage extends Control {
   soundVal: string;
   musicVal: string;
   music: Music;
-  
-  constructor(parentNode: HTMLElement){
+
+  constructor (parentNode: HTMLElement) {
     super(parentNode);
 
     this.wrapper = new Control(this.node, "div", "wrapper main", "");
@@ -58,7 +58,7 @@ export default class SettingsPage extends Control {
     fullScreenLabel.node.setAttribute("for", "fullScreen");
     const checkedInput = new Control(fullScreenLabel.node, "div", "input__checked", "");
 
-    
+
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
 
@@ -66,11 +66,12 @@ export default class SettingsPage extends Control {
       if (this.node.children[0].className.includes("map")) {
         (<HTMLElement>this.node.parentElement?.children[0]).style.display = "block";
       } else {
+        this.music.btnClick();
         this.onBack();
       }
     };
 
-}
+  }
   createRangeInput(parent: HTMLElement, className: string, val: string) {
     const input = new Control<HTMLInputElement>(parent, "input", className, "");
     input.node.value = val;
@@ -85,7 +86,7 @@ export default class SettingsPage extends Control {
   onBack() {
     throw new Error("Method not implemented.");
   }
-  resizeWindow = () =>{
+  resizeWindow = () => {
     this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
   };
 

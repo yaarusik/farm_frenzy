@@ -139,36 +139,40 @@ export default class GameMapPage extends Control {
 			if (this.commonFunction.determineCoords(event, scaleCoords)) {
 				switch (btn.name) {
 					case "Магазин": {
-						// асинхронно дождаться settimeout
 						this.buttonsClick(btn, btn.stepY);
 						this.stopAnimation(this.onSelectShop);
 						break;
 					}
 					case "Меню": {
+						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.stopAnimation(this.onBack);
 						this.music.onStart();
 						break;
 					}
 					case "1": {
+						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(1));
 						break;
 					}
 					case "2": {
+						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(2));
 						break;
 					}
 					case "3": {
+						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(3));
 						break;
 					}
 					case "4": {
+						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.timer.updateViewTime(btn.name);
 						this.stopAnimation(() => this.startLevel(4));

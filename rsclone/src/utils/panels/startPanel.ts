@@ -3,6 +3,7 @@ import Common from "./../../application/common/common";
 import { startPanelImg, startPanelStaticText, startPanelBtn, startPanelText } from './../gameData/startPanelData';
 import { levelInitial } from "../gameData/startLevelData";
 import LevelRender from "../../application/common/levelRender";
+import { Music } from "../music/music";
 
 export default class StartPanel extends Common {
   startPanelImg: IPicture[];
@@ -24,6 +25,7 @@ export default class StartPanel extends Common {
   levelRender: LevelRender;
   levelAnimals: IKeyNumber;
   levelBear: IKeyNumber;
+  music: Music;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number, levelRender: LevelRender) {
     super(canvas, context);
@@ -31,6 +33,7 @@ export default class StartPanel extends Common {
     this.initialBtn = [];
     this.startImg = [];
     this.levelRender = levelRender;
+    this.music = new Music();
 
     this.startPanelImg = this.objParse(startPanelImg);
     this.startPanelBtn = this.objParse(startPanelBtn);
@@ -101,6 +104,7 @@ export default class StartPanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
+            this.music.btnClick();
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
             setTimeout(() => this.initialAnimal(), 200);

@@ -268,6 +268,7 @@ export default class LevelPage extends Control {
           if (this.commonFunction.determineCoords(event, scaleCoords)) {
             switch (btn.name) {
               case "Меню": {
+                this.music.btnClick();
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 this.opacityState.show = true;
                 this.opacityState.disable = false;
@@ -305,8 +306,15 @@ export default class LevelPage extends Control {
                 const clickX = (event.clientX - rect.left) * this.curWidthK;
                 const clickY = (event.clientY - rect.top) * this.curHeightK;
                 this.buildSpawn.waterChange(this.isGrace);
-                if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
-                else this.arrow.showArrow('right');
+                if (this.isGrace.grace) {
+                  this.music.graceBevavior();
+                  this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+                }
+                else {
+                  this.music.graceDisable();
+                  this.arrow.showArrow('right');
+
+                }
                 break;
               }
             }

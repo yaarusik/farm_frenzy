@@ -11,7 +11,7 @@ const musicMain = new Audio("audio/front_music/main.mp3");
 musicMain.volume = 0; // Change on 0.5
 
 export class Music {
-    constructor() {
+    constructor () {
         this.startMusicPlay = this.startMusicPlay.bind(this);
     }
 
@@ -91,6 +91,34 @@ export class Music {
     public bearAppiarance() {
         this.UpdateMusic(soundMusic);
         soundMusic.src = "audio/bear/bear_landing.wav";
+        soundMusic.play();
+    }
+
+    public wellBevavior() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/well/action_well.wav";
+        soundMusic.play();
+    }
+    public wellDisable() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/well/action_well_auto.wav";
+        soundMusic.play();
+    }
+
+    public graceBevavior() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/grace/action_watering.wav";
+        soundMusic.play();
+    }
+    public graceDisable() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/grace/fool_action.wav";
+        soundMusic.play();
+    }
+
+    public btnClick() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/buttons/ui_button_click.wav";
         soundMusic.play();
     }
 

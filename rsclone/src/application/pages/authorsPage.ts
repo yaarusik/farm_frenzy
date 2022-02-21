@@ -1,6 +1,7 @@
 import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
 import { IKeyString } from "../iterfaces";
+import { Music } from "../../utils/music/music";
 
 
 export default class AuthorsPage extends Control {
@@ -9,9 +10,13 @@ export default class AuthorsPage extends Control {
   auforInform: {
     [key: string]: IKeyString;
   };
+  music: Music;
+
+
 
   constructor (parentNode: HTMLElement) {
     super(parentNode);
+    this.music = new Music();
 
     this.auforInform = {
       ruslan: {
@@ -50,6 +55,7 @@ export default class AuthorsPage extends Control {
     const mainBackBtn = new Control(this.wrapper.node, "button", "btn btn_close", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
     mainBackBtn.node.onclick = () => {
+      this.music.btnClick();
       this.onBack();
     };
   }
