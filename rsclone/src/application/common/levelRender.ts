@@ -63,7 +63,7 @@ export default class LevelRender {
 			} else
 				item.isHover = false;
 		});
-		let animalsNow: string[] = [];
+		const animalsNow: string[] = [];
 		this.animals.forEach((item) => {
 			animalsNow.push(item.name);
 		});

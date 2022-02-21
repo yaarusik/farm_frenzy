@@ -66,9 +66,9 @@ export default class SettingsPage extends Control {
       if (this.node.children[0].className.includes("map")) {
         (<HTMLElement>this.node.parentElement?.children[0]).style.display = "block";
       } else {
-        this.music.btnClick();
         this.onBack();
       }
+      this.music.btnClick();
     };
 
   }

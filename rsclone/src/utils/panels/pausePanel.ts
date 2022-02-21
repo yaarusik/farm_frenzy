@@ -104,15 +104,16 @@ export default class PausePanel extends Common {
             break;
           }
           case "Настройки": {
+            this.music.btnClick();
             let settings;
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
             this.canvasContainer.node.style.display = "none";
             if (this.node.childElementCount < 2) {
               settings = new SettingsPage(this.node);
+
               (<HTMLElement>settings.node.children[0]).classList.add("map");
             }
-            // setTimeout(() => func.onSettings(), 200);
             setTimeout(() => cancelAnimationFrame(cancelAnim), 300);
             break;
           }

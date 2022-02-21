@@ -1,4 +1,5 @@
 import Control from "../../builder/controller";
+import { Music } from "../../utils/music/music";
 import { houses, aside, Engineering, Pets, IcontentData } from "../../utils/shopPageData";
 import { startMoney, setMoney, moneyBlock, setMoneyWindow, currentContent } from "../../utils/shopPageMoney";
 import Preloader from "./../preloader";
@@ -6,12 +7,14 @@ import Preloader from "./../preloader";
 export default class ShopPage extends Control {
    wrapper: Control<HTMLElement>;
    preloader: Preloader;
+   music: Music;
 
 
    constructor (parentNode: HTMLElement, preloader: Preloader) {
       super(parentNode);
       this.preloader = preloader;
       this.wrapper = new Control(this.node, "div", "wrapper shop", "");
+      this.music = new Music();
 
       const title = new Control(this.wrapper.node, "h2", "shop__title", "");
 
@@ -41,6 +44,7 @@ export default class ShopPage extends Control {
 
       const shopBtn = new Control(shopMainUnderStarsBlock.node, "button", "btn__shop btn", "ОК");
       shopBtn.node.onclick = () => {
+         this.music.btnClick();
          this.gameMapBack();
       };
 
@@ -109,6 +113,7 @@ export default class ShopPage extends Control {
 
    shopButtonClick(contentBlock: Control<HTMLElement>, btn: Control<HTMLButtonElement>,
       img: Control<HTMLImageElement>, link: string, allCosts: string, fullObbject: IcontentData, name: string) {
+      this.music.btnClick();
       let key: keyof IcontentData;
       let curStage;
 
