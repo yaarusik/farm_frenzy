@@ -8,8 +8,8 @@ export default class SettingsPage extends Control {
   soundVal: string;
   musicVal: string;
   music: Music;
-  
-  constructor(parentNode: HTMLElement){
+
+  constructor (parentNode: HTMLElement) {
     super(parentNode);
 
     this.wrapper = new Control(this.node, "div", "wrapper main", "");
@@ -52,13 +52,22 @@ export default class SettingsPage extends Control {
 
     const fullScreenBox = new Control(settingsBox.node, "div", "screen__box", "На весь экран");
     const fullScreenCheckBox = new Control<HTMLInputElement>(fullScreenBox.node, "input", "settings__checkbox", "");
+    if (document.fullscreenElement)
+      fullScreenCheckBox.node.checked = true;
+    fullScreenCheckBox.node.addEventListener('click', () => {
+      if (!document.fullscreenElement)
+        document.documentElement.requestFullscreen();
+      else if (document.exitFullscreen) {
+          document.exitFullscreen();
+      }
+    });
     fullScreenCheckBox.node.id = "fullScreen";
     fullScreenCheckBox.node.type = "checkbox";
     const fullScreenLabel = new Control<HTMLLabelElement>(fullScreenBox.node, "label", "fullScreen__label", "");
     fullScreenLabel.node.setAttribute("for", "fullScreen");
     const checkedInput = new Control(fullScreenLabel.node, "div", "input__checked", "");
 
-    
+
     const mainBackBtn = new Control(panel.node, "button", "btn__settings btn", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
 
@@ -68,9 +77,10 @@ export default class SettingsPage extends Control {
       } else {
         this.onBack();
       }
+      this.music.btnClick();
     };
 
-}
+  }
   createRangeInput(parent: HTMLElement, className: string, val: string) {
     const input = new Control<HTMLInputElement>(parent, "input", className, "");
     input.node.value = val;
@@ -85,7 +95,7 @@ export default class SettingsPage extends Control {
   onBack() {
     throw new Error("Method not implemented.");
   }
-  resizeWindow = () =>{
+  resizeWindow = () => {
     this.wrapper.node.style.width = String(800 * (window.innerHeight / 600)) + "px";
   };
 

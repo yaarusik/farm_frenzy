@@ -268,6 +268,7 @@ export default class LevelPage extends Control {
           if (this.commonFunction.determineCoords(event, scaleCoords)) {
             switch (btn.name) {
               case "Меню": {
+                this.music.btnClick();
                 this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                 this.opacityState.show = true;
                 this.opacityState.disable = false;
@@ -284,18 +285,20 @@ export default class LevelPage extends Control {
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
                 } else {
+                  this.music.graceDisable();
                   this.arrow.showArrow('up');
                 }
                 break;
               }
               case 'pig': {
                 if (initialData.btnDisable[btn.name]) {
-                  // this.levelRender.createAnimal("pig"); Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
-                  this.levelRender.createAnimal("bear");
+                  this.levelRender.createAnimal("pig"); //Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
+                  // this.levelRender.createAnimal("bear");
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
                 } else {
+                  this.music.graceDisable();
                   this.arrow.showArrow('up');
                 }
                 break;
@@ -305,8 +308,15 @@ export default class LevelPage extends Control {
                 const clickX = (event.clientX - rect.left) * this.curWidthK;
                 const clickY = (event.clientY - rect.top) * this.curHeightK;
                 this.buildSpawn.waterChange(this.isGrace);
-                if (this.isGrace.grace) this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
-                else this.arrow.showArrow('right');
+                if (this.isGrace.grace) {
+                  this.music.graceBevavior();
+                  this.levelRender.createGrass(clickX, clickY, this.curWidthK, this.curHeightK);
+                }
+                else {
+                  this.music.graceDisable();
+                  this.arrow.showArrow('right');
+
+                }
                 break;
               }
             }

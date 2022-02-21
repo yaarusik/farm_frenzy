@@ -1,5 +1,6 @@
 import { IKeyNumber, Coords, IButton } from "../../application/iterfaces";
 import Common from "../../application/common/common";
+import { Music } from "../music/music";
 
 export default class CarTrunc extends Common {
   productContainer: IButton[];
@@ -24,6 +25,7 @@ export default class CarTrunc extends Common {
 
   stepX: number;
   check: IKeyNumber;
+  music: Music;
 
 
 
@@ -36,6 +38,7 @@ export default class CarTrunc extends Common {
     this.func = func;
     this.box = {};
     this.boxData = {};
+    this.music = new Music();
     this.productContainer = [
       {
         type: "button",
@@ -200,6 +203,7 @@ export default class CarTrunc extends Common {
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
             this.check.counter--;
+            this.music.truncCancel();
             break;
           }
           case "bear-1": {
@@ -207,12 +211,14 @@ export default class CarTrunc extends Common {
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
             this.check.counter--;
+            this.music.truncCancel();
             break;
           }
           case "flour": {
             this.func.changeCountBoxProduct(this.boxCounter, btn.name);
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
+            this.music.truncCancel();
             this.check.counter--;
             break;
           }
@@ -221,6 +227,7 @@ export default class CarTrunc extends Common {
             this.func.totalSubstraction(btn.name, this.boxCounter[btn.name]);
             this.deleteProduct(btn.name);
             this.check.counter--;
+            this.music.truncCancel();
             break;
           }
         }

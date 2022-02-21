@@ -21,10 +21,9 @@ export default class Application extends Control {
 			preloader.hide(preloader.node);
 		};
 
-		// this.mainCycle();
+		this.mainCycle();
 		// this.gameMapCycle();
 		// this.levelCycle(4);
-		this.authorsCycle();
 
 		this.music = new Music();
 		this.music.start();
@@ -34,18 +33,21 @@ export default class Application extends Control {
 		const startPage = new StartPage(this.node, 'div', 'main__page');
 		startPage.onSelectMap = () => {
 			startPage.destroy();
-			// preloader
+			this.music.btnClick();
 			this.gameMapCycle();
 		};
 		startPage.onSettings = () => {
+			this.music.btnClick();
 			startPage.destroy();
 			this.settingsCycle();
 		};
 		startPage.onAwards = () => {
+			this.music.btnClick();
 			startPage.destroy();
 			this.awardsCycle();
 		};
 		startPage.onAuthors = () => {
+			this.music.btnClick();
 			startPage.destroy();
 			this.authorsCycle();
 		};
@@ -62,6 +64,7 @@ export default class Application extends Control {
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
 		const gameMapPage = new GameMapPage(pageWrapper.node, "div", "map", "", preloader);
 		gameMapPage.onSelectShop = () => {
+			this.music.btnClick();
 			pageWrapper.destroy();
 			gameMapPage.destroy();
 			this.shopCycle();
@@ -72,6 +75,7 @@ export default class Application extends Control {
 			this.levelCycle(level);
 		};
 		gameMapPage.onBack = () => {
+			this.music.btnClick();
 			pageWrapper.destroy();
 			gameMapPage.destroy();
 			this.mainCycle();
@@ -118,6 +122,7 @@ export default class Application extends Control {
 	private settingsCycle() {
 		const settingsPage = new SettingsPage(this.node);
 		settingsPage.onBack = () => {
+			this.music.btnClick();
 			settingsPage.destroy();
 			this.mainCycle();
 		};
@@ -125,6 +130,7 @@ export default class Application extends Control {
 	private awardsCycle() {
 		const awardsPage = new AwardsPage(this.node);
 		awardsPage.onBack = () => {
+			this.music.btnClick();
 			awardsPage.destroy();
 			this.mainCycle();
 		};
@@ -133,6 +139,7 @@ export default class Application extends Control {
 	private authorsCycle() {
 		const authorsPage = new AuthorsPage(this.node);
 		authorsPage.onBack = () => {
+			this.music.btnClick();
 			authorsPage.destroy();
 			this.mainCycle();
 		};

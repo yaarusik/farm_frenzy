@@ -2,6 +2,7 @@ import BuildUtils from "../classes/buildUtil";
 import { IButton, IAnimBuild, Coords, IFunctions, IKeyNumber } from "../../application/iterfaces";
 import { driedEggsBtn, driedAnim } from "./../gameData/spawnData";
 import TrackShop from "./../trackShop";
+import { Music } from "../music/music";
 export default class DriedEgg extends BuildUtils {
   build: IAnimBuild[];
   btn: IButton[];
@@ -24,6 +25,7 @@ export default class DriedEgg extends BuildUtils {
   productWait: number;
   productOpacity: number;
   trackShop: TrackShop;
+  music: Music;
 
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, func: IFunctions, productCounter: IKeyNumber) {
@@ -33,6 +35,7 @@ export default class DriedEgg extends BuildUtils {
     this.trackShop = new TrackShop(this.btn);
     this.productCounter = productCounter;
     this.func = func;
+    this.music = new Music();
     this.initialBtn = [];
     this.flour = {
       type: "button",
@@ -96,6 +99,7 @@ export default class DriedEgg extends BuildUtils {
       if (this.determineCoords(event, scaleCoords)) {
         switch (button.name) {
           case "flourBuild": {
+            this.music.houseClick();
             if (!this.houseDisable && this.checkProduct(this.useProduct, this.productCounter)) {
               this.houseDisable = true;
               this.deleteUseProduct(this.useProduct, this.productCounter);
@@ -111,6 +115,7 @@ export default class DriedEgg extends BuildUtils {
           case "flour": {
             this.opacityState.active = false;
             const product = this.deleteProduct(this.initialFlour, this.flourProducts);
+            this.music.productDone();
             if (product) this.func.productToStorage(product);
             break;
           }

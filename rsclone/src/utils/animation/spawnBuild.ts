@@ -9,6 +9,7 @@ import Arrow from "./arrow";
 import WellPrice from "./wellPrice";
 import TrackShop from "./../trackShop";
 import Cake from './cake';
+import { Music } from "../music/music";
 
 export default class BuildSpawn extends BuildUtils {
   build: IAnimBuild[];
@@ -28,6 +29,7 @@ export default class BuildSpawn extends BuildUtils {
   showPrice: IKeyBoolean;
   trackShop: TrackShop;
   cake: Cake;
+  music: Music;
 
 
 
@@ -37,7 +39,7 @@ export default class BuildSpawn extends BuildUtils {
     this.build = this.objParse(animationBuildOptions);
     this.btn = this.objParse(buildSpawnBtn);
     this.trackShop = new TrackShop(this.btn);
-
+    this.music = new Music();
     this.initialBtn = [];
     this.initialImg = [];
     this.showPrice = {
@@ -95,13 +97,17 @@ export default class BuildSpawn extends BuildUtils {
         switch (button.name) {
           case "well": {
             if (initialData.wellDisable && initialData.btnDisable.well) {
+              this.music.wellBevavior();
               initialData.changeTotalMinus(button.name);
               this.well.wellAnimation(button);
               this.well.fullWaterIndicator();
               initialData.wellDisable = false;
               this.showPrice.well = false;
             } else if (!initialData.btnDisable.well) {
+              this.music.graceDisable();
               this.arrow.showArrow('up');
+            } else {
+              this.music.wellDisable();
             }
             break;
           }

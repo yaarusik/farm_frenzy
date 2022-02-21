@@ -140,7 +140,6 @@ export default class Car extends Common {
       this.carLeft.width = 80;
       this.carLeft.height = 68;
     } else {
-      this.music.car();
       this.carLeft.width = 0;
       this.carLeft.height = 0;
       this.carRight.width = 80;
