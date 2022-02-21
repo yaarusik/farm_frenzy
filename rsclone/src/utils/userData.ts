@@ -4,8 +4,8 @@ export type UserInfo = {
   logged: boolean,
 }
 
-export const userInfo : UserInfo = {
+export const userInfo: UserInfo = {
   name: '',
   password: '',
   logged: false
-}
+};

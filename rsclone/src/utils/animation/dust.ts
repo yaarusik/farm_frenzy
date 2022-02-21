@@ -81,7 +81,6 @@ export default class Dust extends Common {
         this.dust = [];
         this.initialDust = [];
       }
-      console.log(frameX, frameY);
     }, 50);
   }
 
@@ -105,8 +104,6 @@ export default class Dust extends Common {
         frameX = 0;
         dust.sx = 0;
       }
-      console.log(frameX, frameY);
-
     }, 30);
     setTimeout(() => {
       clearInterval(timer);

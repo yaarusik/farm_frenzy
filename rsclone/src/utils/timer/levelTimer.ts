@@ -31,7 +31,7 @@ export default class Timer {
     goldCup: HTMLImageElement;
     silvCup: HTMLImageElement;
 
-    constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
+    constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
         this.context = context;
         this.level = level;
@@ -109,7 +109,7 @@ export default class Timer {
 
         const image = new Picture((this.min >= this.goldMin && this.sec >= this.goldSec ? this.silvImg : this.goldImg), this.strip.x, this.strip.y, this.strip.width, this.strip.height);
         image.draw(this.context);
-        
+
         if (this.min >= this.goldMin && this.sec >= this.goldSec) {
             this.context.fillStyle = "#f7f9f7";
             this.context.fillText(this.content(this.silvMin, this.silvSec), this.textX, this.textY);
@@ -145,11 +145,10 @@ export default class Timer {
 
     updateLevelFinish() {
         let key: keyof IlevelFinish;
-        for(key in levelFinish) {
+        for (key in levelFinish) {
             if (+key === this.level)
                 if (levelFinish[key] !== this.bonus) levelFinish[key] = this.bonus;
         }
-        console.log(levelFinish);
     }
 
     showBestTime() {
@@ -163,7 +162,7 @@ export default class Timer {
     updateBestTime() {
         let key: keyof Itime;
 
-        for(key in bestTime) {
+        for (key in bestTime) {
             if (key === `${this.level}`) {
                 const min = +bestTime[key].split(':')[0];
                 const sec = +bestTime[key].split(':')[1];
@@ -171,8 +170,6 @@ export default class Timer {
                 if (bestTime[key] === 'null' || (this.min < min || (this.min === min && this.sec < sec))) {
                     bestTime[key] = this.content(this.min, this.sec);
                 }
-
-                console.log(bestTime);
             }
         }
     }
@@ -180,7 +177,7 @@ export default class Timer {
     updateViewTime(level: string) {
         let key: keyof Itime;
 
-        for(key in bestTime) {
+        for (key in bestTime) {
             if (+key === +level) {
                 if (bestTime[key] === 'null') startPanelStaticText[startPanelStaticText.length - 1].text = '00:00';
                 else startPanelStaticText[startPanelStaticText.length - 1].text = bestTime[key];
@@ -206,13 +203,13 @@ export default class Timer {
     endPanelView() {
         endTextData.forEach(el => {
             if (el.text === 'Время') {
-              el.text = this.content(this.min, this.sec);
-              this.timeAnimation(el);
+                el.text = this.content(this.min, this.sec);
+                this.timeAnimation(el);
             }
             if (el.text === 'Монеты')
-              el.text = initialData.totalText.text;
+                el.text = initialData.totalText.text;
             if (el.text === 'Бонус')
-              el.text = this.countBonus();
+                el.text = this.countBonus();
         });
     }
 
