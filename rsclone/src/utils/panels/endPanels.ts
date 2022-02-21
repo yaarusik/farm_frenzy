@@ -3,6 +3,7 @@ import Timer from "../timer/levelTimer";
 import Common from "./../../application/common/common";
 import { endBtn, endImg, endStaticText, endText, endTextData } from './../gameData/endPanelData';
 import { levelFinish, levelCoords } from "../gameData/mapData";
+import { Music } from "../music/music";
 
 export default class EndPanel extends Common {
   endPanelImg: IPicture[];
@@ -17,12 +18,14 @@ export default class EndPanel extends Common {
   opacityState: IOpacity;
   level: number;
   levelFinish: IKeyString;
+  music: Music;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, timer: Timer, level: number) {
     super(canvas, context);
     this.initialImage = [];
     this.initialBtn = [];
     this.startImg = [];
+    this.music = new Music();
 
     this.endPanelImg = endImg;
     this.endPanelBtn = endBtn;
@@ -85,6 +88,7 @@ export default class EndPanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Ок": {
+            this.music.btnClick();
             this.opacityState.disable = true;
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.addLevelBtn();

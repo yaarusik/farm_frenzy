@@ -122,4 +122,27 @@ export class Music {
         soundMusic.play();
     }
 
+    public houseClick() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/house/house_click.wav";
+        soundMusic.play();
+    }
+
+    public productDone() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/products/product_crack.wav";
+        soundMusic.play();
+    }
+
+    public truncAdd() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/miniCarAdd/item_add.wav";
+        soundMusic.play();
+    }
+    public truncCancel() {
+        this.UpdateMusic(soundMusic);
+        soundMusic.src = "audio/miniCarAdd/item_cancel.wav";
+        soundMusic.play();
+    }
+
 }

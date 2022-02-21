@@ -4,6 +4,7 @@ import Common from "./../../application/common/common";
 import { storagePanelImg, storagePanelStaticText, storagePanelBtn, storagePanelText, icons } from './../gameData/storagePanelData';
 import CarTrunc from "./carTrunc";
 import Preloader from "../../application/preloader";
+import { Music } from "../music/music";
 
 export default class StoragePanel extends Common {
   storageImg: IPicture[];
@@ -62,6 +63,7 @@ export default class StoragePanel extends Common {
   iconsAllText: IKeyText;
   check: IKeyNumber;
   preloader: Preloader;
+  music: Music;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, productClass: Products, isState: IKeyBoolean, func: IFunctions, productsCounter: IKeyNumber, opacityState: IOpacity, preloader: Preloader) {
     super(canvas, context);
@@ -78,6 +80,8 @@ export default class StoragePanel extends Common {
       counter: 0,
       maxProducts: 2
     };
+
+    this.music = new Music();
 
     this.carTrunc = new CarTrunc(canvas, context, this.click, this.check);
 
@@ -276,6 +280,7 @@ export default class StoragePanel extends Common {
               this.buttonCondition.ok = false;
               this.carTrunc.carTruncClear();
               this.currentStateCheck = true;               // для возврата исходного сотояния
+              this.music.car();
             }
             break;
           }
@@ -289,6 +294,7 @@ export default class StoragePanel extends Common {
             this.currentStateCheck = true;
             this.saveProducts();
             this.carTrunc.carTruncClear();
+            this.music.btnClick();
             break;
           }
         }
@@ -302,6 +308,7 @@ export default class StoragePanel extends Common {
         switch (btn.name) {
           case "1": {
             if (this.check.counter < this.check.maxProducts) {
+              this.music.truncAdd();
               this.buttonsClick(btn, btn.stepY, btn.click);
               this.carTrunc.drawBox(key, 1);
               this.productSubstraction(key);
@@ -312,6 +319,7 @@ export default class StoragePanel extends Common {
           }
           case "All": {
             if (this.check.counter < this.check.maxProducts) {
+              this.music.truncAdd();
               this.buttonsClick(btn, btn.stepY, btn.click);
               this.changeTotal(key, this.productsCounter[key]);
               this.carTrunc.drawBox(key, this.productsCounter[key]);

@@ -127,8 +127,9 @@ export default class Arrow extends Common {
   }
 
   private animEnd() {
-    this.arrow = [];
     this.initialArrow = [];
+    this.arrow = [];
+
   }
 }
 

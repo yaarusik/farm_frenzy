@@ -285,18 +285,20 @@ export default class LevelPage extends Control {
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
                 } else {
+                  this.music.graceDisable();
                   this.arrow.showArrow('up');
                 }
                 break;
               }
               case 'pig': {
                 if (initialData.btnDisable[btn.name]) {
-                  // this.levelRender.createAnimal("pig"); Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
-                  this.levelRender.createAnimal("bear");
+                  this.levelRender.createAnimal("pig"); //Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
+                  // this.levelRender.createAnimal("bear");
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);
                   setTimeout(() => this.startBtn(btn), 200);
                 } else {
+                  this.music.graceDisable();
                   this.arrow.showArrow('up');
                 }
                 break;
