@@ -141,10 +141,20 @@ export class Product{
     this.isBlinking = false;
     this.isHover = false;
 
-    this.wantX = 660;
+    this.wantX = 720;
     this.wantY = 925;
 
     this.speedX = (this.wantX - this.coordX) / (0.2 * 60);
     this.speedY = (this.wantY - this.coordY) / (0.2 * 60);
   }
+}
+
+export type LevelInfo = {num: number, state: string}[];
+export type MapInfo = {categoryName: string, name: string, stage: number}[];
+
+export type ResponseSign = {
+  message: string,
+  levelInfo: LevelInfo,
+  mapInfo: MapInfo,
+  moneyInfo: string
 }

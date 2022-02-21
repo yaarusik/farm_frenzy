@@ -2,15 +2,20 @@ import Control from "../../builder/controller";
 import { houses, aside, Engineering, Pets, IcontentData } from "../../utils/shopPageData";
 import { startMoney, setMoney, moneyBlock, setMoneyWindow, currentContent } from "../../utils/shopPageMoney";
 import Preloader from "./../preloader";
+import Backend from "../../utils/backend/backend";
+import { userInfo } from "../../utils/userData";
 
 export default class ShopPage extends Control {
    wrapper: Control<HTMLElement>;
    preloader: Preloader;
+   backend: Backend;
 
 
    constructor (parentNode: HTMLElement, preloader: Preloader) {
       super(parentNode);
       this.preloader = preloader;
+      this.backend = new Backend();
+
       this.wrapper = new Control(this.node, "div", "wrapper shop", "");
 
       const title = new Control(this.wrapper.node, "h2", "shop__title", "");
@@ -47,6 +52,7 @@ export default class ShopPage extends Control {
       this.preloader.hide(this.preloader.node);
 
    }
+
    gameMapBack() {
       throw new Error("Method not implemented.");
    }
@@ -149,6 +155,7 @@ export default class ShopPage extends Control {
       img.node.src = link;
 
       this.updateShopBackground();
+      this.backend.put(userInfo.name, userInfo.password);
    }
 
    updateShopBackground() {
