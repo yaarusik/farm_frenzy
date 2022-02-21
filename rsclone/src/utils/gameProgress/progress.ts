@@ -2,6 +2,7 @@
 import Common from "./../../application/common/common";
 import { IPicture, IText } from "../../application/iterfaces";
 import { levelSmallInitial, done } from './progressData';
+import { Music } from "../music/music";
 
 
 export default class Progress extends Common {
@@ -24,6 +25,7 @@ export default class Progress extends Common {
   startDone: HTMLImageElement[];
   goals: number;
   goalsDone: Set<string>;
+  music: Music;
 
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
     super(canvas, context);
@@ -40,7 +42,7 @@ export default class Progress extends Common {
 
     this.goals = Object.getOwnPropertyNames(this.productsScore).length;
     this.goalsDone = new Set();
-
+    this.music = new Music();
     this.startProgress();
   }
 
@@ -107,6 +109,7 @@ export default class Progress extends Common {
 
   private doneView(product: IText) {
     product.text = '';
+
     if (product.id !== undefined) {
       this.done[product.id].height = 29;
       this.done[product.id].width = 40;

@@ -292,7 +292,7 @@ export default class LevelPage extends Control {
               }
               case 'pig': {
                 if (initialData.btnDisable[btn.name]) {
-                  this.levelRender.createAnimal("pig"); //Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
+                  // this.levelRender.createAnimal("pig"); //Оставь тут эту строку, а медведя на какую-нибудь кнопку кота или другое
                   // this.levelRender.createAnimal("bear");
                   initialData.changeTotalMinus(btn.name);
                   this.commonFunction.buttonsClick(btn, btn.stepY, btn.click);

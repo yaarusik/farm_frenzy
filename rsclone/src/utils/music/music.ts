@@ -1,8 +1,11 @@
 export let soundVal = "50";
 export let musicVal = "50";
 
-const soundMusic = new Audio();
+let soundMusic = new Audio();
 soundMusic.volume = 0.5;
+const vol = {
+    vol: 0.5
+};
 
 const musicStart = new Audio("audio/front_music/start.mp3");
 musicStart.volume = 0; // Change on 0.5
@@ -23,7 +26,7 @@ export class Music {
 
     public changeSoundVolume(val: string) {
         soundVal = val;
-        soundMusic.volume = +val / 100;
+        vol.vol = +val / 100;
     }
 
     public start() {
@@ -56,92 +59,82 @@ export class Music {
     }
 
     private UpdateMusic(audio: HTMLAudioElement) {
-        audio.pause();
-        audio.currentTime = 0;
+        audio.volume = vol.vol;
     }
 
     // CHICKEN
 
     public onChicken() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/chicken/chicken_voice.wav";
-        soundMusic.play();
+        this.musicCreate("audio/chicken/chicken_voice.wav");
     }
     public chickenDie() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/chicken/chicken_die.wav";
-        soundMusic.play();
+        this.musicCreate("audio/chicken/chicken_die.wav");
     }
-    public chickenHungry() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/chicken/chicken_hungry.wav";
-        soundMusic.play();
+    public chickenFly() {
+        this.musicCreate("audio/chicken/chicken_flyout.wav");
     }
 
     // CAR
 
     public car() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/car/car_came.wav";
-        soundMusic.play();
+        this.musicCreate("audio/car/car_came.wav");
+    }
+    // BEAR
+    public bearAppiarance() {
+        this.musicCreate("audio/bear/bear0_panda_scream.wav");
     }
 
-    // BEAR
+    public cageCreate() {
+        this.musicCreate("audio/cage/cage_click.wav");
 
-    public bearAppiarance() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/bear/bear_landing.wav";
-        soundMusic.play();
+    }
+
+    public cageBroke() {
+        this.musicCreate("audio/cage/cage_broke_bear_flee.wav");
     }
 
     public wellBevavior() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/well/action_well.wav";
-        soundMusic.play();
+        this.musicCreate("audio/well/action_well.wav");
+
     }
     public wellDisable() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/well/action_well_auto.wav";
-        soundMusic.play();
+        this.musicCreate("audio/well/action_well_auto.wav");
     }
 
     public graceBevavior() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/grace/action_watering.wav";
-        soundMusic.play();
+        this.musicCreate("audio/grace/action_watering.wav");
     }
     public graceDisable() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/grace/fool_action.wav";
-        soundMusic.play();
+        this.musicCreate("audio/grace/fool_action.wav");
     }
 
     public btnClick() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/buttons/ui_button_click.wav";
-        soundMusic.play();
+        this.musicCreate("audio/buttons/ui_button_click.wav");
     }
 
     public houseClick() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/house/house_click.wav";
-        soundMusic.play();
+        this.musicCreate("audio/house/house_click.wav");
     }
 
     public productDone() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/products/product_crack.wav";
-        soundMusic.play();
+        this.musicCreate("audio/products/product_crack.wav");
     }
 
     public truncAdd() {
-        this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/miniCarAdd/item_add.wav";
-        soundMusic.play();
+        this.musicCreate("audio/miniCarAdd/item_add.wav");
     }
     public truncCancel() {
+        this.musicCreate("audio/miniCarAdd/item_cancel.wav");
+    }
+
+    public fanfareMedal() {
+        this.musicCreate("audio/end/fanfare_medal.wav");
+    }
+
+    private musicCreate(src: string) {
+        soundMusic = new Audio();
         this.UpdateMusic(soundMusic);
-        soundMusic.src = "audio/miniCarAdd/item_cancel.wav";
+        soundMusic.src = src;
         soundMusic.play();
     }
 
