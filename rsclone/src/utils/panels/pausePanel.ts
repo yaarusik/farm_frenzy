@@ -69,14 +69,15 @@ export default class PausePanel extends Common {
       if (this.determineCoords(event, scaleCoords)) {
         switch (btn.name) {
           case "Продолжить": {
+            this.music.btnClick();
             this.buttonsClick(btn, btn.stepY, btn.click);
-
             this.opacityState.disable = true;
             setTimeout(() => func.isPaused(), 400);
             this.timer.isRunning = true;
             break;
           }
           case "Главное Меню": {
+            this.music.btnClick();
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
             setTimeout(() => func.onMain(), 300);
@@ -85,6 +86,7 @@ export default class PausePanel extends Common {
             break;
           }
           case "Перезапустить": {
+            this.music.btnClick();
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
             setTimeout(() => func.onRestart(), 300);
@@ -93,6 +95,7 @@ export default class PausePanel extends Common {
             break;
           }
           case "Карта": {
+            this.music.btnClick();
             this.buttonsClick(btn, btn.stepY, btn.click);
             this.opacityState.disable = true;
             setTimeout(() => func.onMap(), 300);
