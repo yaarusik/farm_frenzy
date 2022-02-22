@@ -4,7 +4,6 @@ import GameMapPage from "./pages/gameMapPage";
 import ShopPage from "./pages/shopPage";
 import LevelPage from "./pages/levelPage";
 import SettingsPage from "./pages/settingsPage";
-import AwardsPage from "./pages/awardsPage";
 import AuthorsPage from "./pages/authorsPage";
 import { Music } from "../utils/music/music";
 import LoginPage from "./pages/loginPage";
@@ -27,7 +26,7 @@ export default class Application extends Control {
 		this.music = new Music();
 		this.music.start();
 	}
-	// главная страница
+
 	private mainCycle() {
 		const startPage = new StartPage(this.node, 'div', 'main__page');
 		startPage.onSelectMap = () => {
@@ -39,11 +38,6 @@ export default class Application extends Control {
 			this.music.btnClick();
 			startPage.destroy();
 			this.settingsCycle();
-		};
-		startPage.onAwards = () => {
-			this.music.btnClick();
-			startPage.destroy();
-			this.awardsCycle();
 		};
 		startPage.onAuthors = () => {
 			this.music.btnClick();
@@ -57,7 +51,6 @@ export default class Application extends Control {
 	}
 
 
-	// страница карты
 	private gameMapCycle() {
 		const preloader = new Preloader(this.node, 'div', 'preloader');
 		const pageWrapper = new Control<HTMLDivElement>(this.node, "div", "wrapper__map", "");
@@ -81,7 +74,6 @@ export default class Application extends Control {
 		};
 	}
 
-	// страница магазина
 	private shopCycle() {
 		const preloader = new Preloader(this.node, 'div', 'preloader');
 		const shopPage = new ShopPage(this.node, preloader);
@@ -126,17 +118,10 @@ export default class Application extends Control {
 			this.mainCycle();
 		};
 	}
-	private awardsCycle() {
-		const awardsPage = new AwardsPage(this.node);
-		awardsPage.onBack = () => {
-			this.music.btnClick();
-			awardsPage.destroy();
-			this.mainCycle();
-		};
-	}
 
 	private authorsCycle() {
-		const authorsPage = new AuthorsPage(this.node);
+		const preloader = new Preloader(this.node, 'div', 'preloader');
+		const authorsPage = new AuthorsPage(this.node, preloader);
 		authorsPage.onBack = () => {
 			this.music.btnClick();
 			authorsPage.destroy();
