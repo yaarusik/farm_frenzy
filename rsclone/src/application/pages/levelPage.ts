@@ -151,6 +151,11 @@ export default class LevelPage extends Control {
     });
   }
 
+  public destroy(): void {
+    this.render = () => {};
+    this.node.remove();
+  }
+
   private async startUI() {
     const coefficients = this.commonFunction.canvasScale();
     this.curWidthK = coefficients.curWidthK;
