@@ -10,8 +10,6 @@ export default class Dust extends Common {
   animDisable: boolean;
   animUpDisable: boolean;
 
-
-
   constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     super(canvas, context);
     this.maxFrame = 7;
@@ -32,11 +30,8 @@ export default class Dust extends Common {
       sheight: 48
     },
 
-
-
       this.dust = [];
     this.initialDust = [];
-
     this.startDust();
   }
 

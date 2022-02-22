@@ -28,8 +28,6 @@ export default class GameMapPage extends Control {
 	timer: Timer;
 	preloader: Preloader;
 
-
-
 	constructor (parentNode: HTMLElement, tagName = "div", className = "", content = "", preloader: Preloader) {
 		super(parentNode, tagName, className, content);
 
@@ -70,8 +68,6 @@ export default class GameMapPage extends Control {
 			this.canvasClickHundler(e, this.canvas.node, this.buttons);
 		});
 	}
-
-
 
 	private async startMap() {
 		const loadImages = this.imagesOptions.map(image => this.commonFunction.loadImage(image.image));
