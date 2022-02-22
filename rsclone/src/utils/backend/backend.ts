@@ -25,10 +25,10 @@ export default class Backend {
       await fetch(url, {
         method: 'POST',
         mode: 'no-cors'
-      }).then((res) => {console.log('Begin: ', res); return res.json()})
-        .then((json : ResponseSign) => {console.log('Convert: ', json); response = json})
+      }).then((res) => {return res.json()})
+        .then((json : ResponseSign) => {response = json})
     } catch (e) {
-      console.log('Request error: ', e);
+      // console.log('Request error: ', e);
     }
 
     return await response;
@@ -48,10 +48,10 @@ export default class Backend {
       await fetch(url, {
         method: 'POST',
         mode: 'no-cors'
-      }).then((res) => {console.log('Begin: ', res); return res.json()})
-        .then((json : ResponseSign) => {console.log('Convert: ', json); response = json})
+      }).then((res) => {return res.json()})
+        .then((json : ResponseSign) => {response = json})
     } catch (e) {
-      console.log('Request error: ', e);
+      // console.log('Request error: ', e);
     }
 
     return await response;
@@ -75,7 +75,7 @@ export default class Backend {
     let moneyInfo = startMoney;
       
     const url = this.url + '?type=put&name=' + name + '&password=' + password +  '&level=' + JSON.stringify(levelInfo) + '&map=' + JSON.stringify(mapInfo) + '&money=' + moneyInfo;
-    console.log(levelInfo, mapInfo, url);
+    // console.log(levelInfo, mapInfo, url);
       
     let response : ResponseSign = {
       message: 'Что-то пошло не так',
@@ -88,10 +88,10 @@ export default class Backend {
       await fetch(url, {
         method: 'POST',
         mode: 'no-cors'
-      }).then((res) => {console.log('Begin: ', res); return res.json()})
-        .then((json : ResponseSign) => {console.log('Convert: ', json); response = json})
+      }).then((res) => {return res.json()})
+        .then((json : ResponseSign) => {response = json})
     } catch (e) {
-      console.log('Request error: ', e);
+      // console.log('Request error: ', e);
     }
 
     return await response;

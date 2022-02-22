@@ -49,10 +49,10 @@ export default class LoginPage extends Control {
           messageBox.node.textContent = 'Что-то пошло не так';
           return;
         }
-        console.log("Final: ", res);
+        // console.log("Final: ", res);
         messageBox.node.textContent = res.message;
         if (res.message === 'Авторизация прошла успешно'){
-          console.log('Log: Вошёл в аккаунт с ником: ', name);
+          // console.log('Log: Вошёл в аккаунт с ником: ', name);
           this.backend.updateUser(name, password);
           this.backend.updateFrom(res.levelInfo, res.mapInfo, res.moneyInfo);
           setTimeout(() => {

@@ -291,7 +291,6 @@ export default class LevelPage extends Control {
                 break;
               }
               case 'pig': {
-                console.log('here');
                 if (initialData.btnDisable[btn.name]) {
 
                   this.levelRender.createAnimal("pig");
