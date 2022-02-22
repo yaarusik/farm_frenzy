@@ -2,6 +2,7 @@ import Control from "./../../builder/controller";
 import ButtonEffect from "./../../builder/button";
 import { IKeyString } from "../iterfaces";
 import { Music } from "../../utils/music/music";
+import Preloader from "../preloader";
 
 
 export default class AuthorsPage extends Control {
@@ -11,12 +12,14 @@ export default class AuthorsPage extends Control {
     [key: string]: IKeyString;
   };
   music: Music;
+  preloader: Preloader;
 
 
 
-  constructor (parentNode: HTMLElement) {
+  constructor (parentNode: HTMLElement, preloader: Preloader) {
     super(parentNode);
     this.music = new Music();
+    this.preloader = preloader;
 
     this.auforInform = {
       ruslan: {
@@ -55,11 +58,12 @@ export default class AuthorsPage extends Control {
 
     const chickenImgRight = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
     chickenImgRight.node.src = 'images/author/chicken-right.png';
-    
+
     const chickenImgLeft = new Control<HTMLImageElement>(chickenWrapper.node, "img", "chicken-image", "");
     chickenImgLeft.node.src = 'images/author/chicken-left.png';
 
 
+    this.preloader.hide(this.preloader.node);
     const mainBackBtn = new Control(this.wrapper.node, "button", "btn btn_close", "ОК");
     this.buttonEffect.devideButton(mainBackBtn.node);
     mainBackBtn.node.onclick = () => {
@@ -85,7 +89,8 @@ export default class AuthorsPage extends Control {
       const authorFirst = new Control<HTMLAnchorElement>(authorWrapper.node, "a", "author__item", userInform.name);
       authorFirst.node.href = userInform.git;
       authorFirst.node.target = '_blank';
-      const authorRole = new Control(authorWrapper.node, "p", 'author__role', userInform.role);
+      new Control(authorWrapper.node, "p", 'author__role', userInform.role);
+
     };
 
   }
