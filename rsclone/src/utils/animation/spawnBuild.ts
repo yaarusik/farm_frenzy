@@ -77,7 +77,7 @@ export default class BuildSpawn extends BuildUtils {
 
     // сделать потом по клику
     if (this.level > 2) this.driedEgg.render();
-    if (this.level === 4) this.cake.render();
+    if (this.level > 3) this.cake.render();
 
     this.startSpawn();
   }
@@ -126,7 +126,7 @@ export default class BuildSpawn extends BuildUtils {
     });
 
     if (this.level >= 3) this.driedEgg.clickHundler(event, widthK, heightK);
-    if (this.level === 4) this.cake.clickHundler(event, widthK, heightK);
+    if (this.level >= 4) this.cake.clickHundler(event, widthK, heightK);
   }
 
   public waterChange(grace: { [key: string]: boolean }) {
@@ -157,8 +157,8 @@ export default class BuildSpawn extends BuildUtils {
         }
       }
     });
-    if (this.level >= 3) this.driedEgg.moveHundler(event, widthK, heightK);
-    if (this.level === 4) this.cake.moveHundler(event, widthK, heightK);
+    if (this.level > 2) this.driedEgg.moveHundler(event, widthK, heightK);
+    if (this.level > 3) this.cake.moveHundler(event, widthK, heightK);
 
   }
 

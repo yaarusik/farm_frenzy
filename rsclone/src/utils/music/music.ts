@@ -131,6 +131,14 @@ export class Music {
         this.musicCreate("audio/end/fanfare_medal.wav");
     }
 
+    public onPig() {
+        this.musicCreate("audio/pig/pig_flyout.wav");
+    }
+
+    public pigDie() {
+        this.musicCreate("audio/pig/pig_die.wav");
+    }
+
     private musicCreate(src: string) {
         soundMusic = new Audio();
         this.UpdateMusic(soundMusic);

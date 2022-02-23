@@ -110,6 +110,19 @@ export default class Products extends Common {
         swidth: 0,
         sheight: 0
       },
+      {
+        type: "picture",
+        name: "meat",
+        image: "images/level/products_mini/mini_meat.png",
+        x: this.startX,
+        y: this.startY,
+        width: 23,
+        height: 23,
+        sx: 0,
+        sy: 0,
+        swidth: 0,
+        sheight: 0
+      },
     ];
   }
 

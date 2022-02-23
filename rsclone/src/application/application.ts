@@ -21,6 +21,7 @@ export default class Application extends Control {
 		};
 
 		this.mainCycle();
+		// this.levelCycle(5);
 
 
 		this.music = new Music();

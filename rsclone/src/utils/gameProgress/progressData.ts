@@ -260,6 +260,82 @@ const textFourSmall = [
   },
 ];
 
+
+const textFiveSmall = [
+  {
+    name: "cake",
+    text: '0/10',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1480,
+    y: 1130,
+    animation: false,
+    id: 2
+  },
+  {
+    name: "egg",
+    text: '0/20',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1348,
+    y: 1130,
+    animation: false,
+    id: 0
+  },
+  {
+    name: "flour",
+    text: '0/5',
+    fontSize: '22px Vag_Rounded-Bold CY',
+    color: '#fff',
+    x: 1415,
+    y: 1130,
+    animation: false,
+    id: 1
+  },
+];
+
+const imgFiveSmall = [
+  {
+    type: "button",
+    name: "cake",
+    image: "images/level/initial/cake.png",
+    x: 1468,
+    y: 1064,
+    width: 60,
+    height: 43,
+    sx: 0,
+    sy: 0,
+    swidth: 104,
+    sheight: 60
+  },
+  {
+    type: "button",
+    name: "egg",
+    image: "images/level/initial/egg.png",
+    x: 1348,
+    y: 1059,
+    width: 44,
+    height: 48,
+    sx: 0,
+    sy: 0,
+    swidth: 60,
+    sheight: 64
+  },
+  {
+    type: "button",
+    name: "flour",
+    image: "images/level/initial/flour.png",
+    x: 1410,
+    y: 1056,
+    width: 44,
+    height: 55,
+    sx: 0,
+    sy: 0,
+    swidth: 80,
+    sheight: 96
+  },
+];
+
 export const levelSmallInitial = {
   '1': {
     img: imgOneSmall,
@@ -276,6 +352,10 @@ export const levelSmallInitial = {
   '4': {
     img: imgFourSmall,
     text: textFourSmall,
+  },
+  '5': {
+    img: imgFiveSmall,
+    text: textFiveSmall,
   }
 };
 

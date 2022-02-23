@@ -115,6 +115,7 @@ export default class StoragePanel extends Common {
       'chicken': 50,
       'flour': 20,
       'cake': 40,
+      'meat': 100,
     };
 
     this.iconImg = new Map();
@@ -214,6 +215,7 @@ export default class StoragePanel extends Common {
       const imgUrl = img.src;
       const iconName = imgUrl.substring(img.src.lastIndexOf('/') + 1, imgUrl.lastIndexOf('.'));
       imgName = iconName;
+      console.log(iconName);
       return iconName === product;
     });
     return { name: imgName, img: img };

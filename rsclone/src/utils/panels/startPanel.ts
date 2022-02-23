@@ -54,12 +54,14 @@ export default class StartPanel extends Common {
       '2': 2,
       '3': 2,
       '4': 0,
+      '5': 0
     };
     this.levelBear = {
       '1': 3,
-      '2': 5,
-      '3': 4,
-      '4': 7
+      '2': 4,
+      '3': 3,
+      '4': 5,
+      '5': 8,
     };
 
     this.startPanel();
@@ -129,9 +131,10 @@ export default class StartPanel extends Common {
 
   private initialBear() {
     for (let i = 1; i <= this.levelBear[this.level]; i++) {
+      // остановить setimout если уровень закрыт
       setTimeout(() => {
         this.levelRender.createAnimal('bear');
-      }, this.random(15000, 25000) * i);
+      }, this.random(0, 10000) * i);
     }
   }
 

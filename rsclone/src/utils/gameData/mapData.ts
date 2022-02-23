@@ -61,6 +61,10 @@ export interface IlevelFinish {
 
 export const levelFinish: IlevelFinish = {
   '1': 'start',
+  '2': 'start',
+  '3': 'start',
+  '4': 'start',
+  '5': 'start'
 };
 
 export const levelCoords = {
@@ -79,7 +83,15 @@ export const levelCoords = {
   '4': {
     x: 805,
     y: 1014
-  }
+  },
+  '5': {
+    x: 890,
+    y: 945
+  },
+  // '6': {
+  //   x: 890,
+  //   y: 945
+  // },
 };
 
 

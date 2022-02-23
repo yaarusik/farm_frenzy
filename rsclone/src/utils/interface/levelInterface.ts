@@ -30,7 +30,7 @@ export default class LevelInterface extends Common {
     };
 
     if (this.level === 3) this.lvlInterface.img.push(backs.upLeft);
-    if (this.level === 4) this.lvlInterface.img.push(backs.upLeft, backs.mediumRight);
+    if (this.level > 3) this.lvlInterface.img.push(backs.upLeft, backs.mediumRight);
 
 
 
