@@ -97,7 +97,6 @@ export default class GameMapPage extends Control {
 		});
 	}
 
-	// СДЕЛАТЬ ЕДИНУЮ ВЕРСИЮ ХОВЕР И КЛИК
 	private buttonsHover(btn: IPicture, yStep: number) {
 		btn.sy = yStep;
 	}
@@ -146,32 +145,15 @@ export default class GameMapPage extends Control {
 						this.music.onStart();
 						break;
 					}
-					case "1": {
+					case "1":
+					case '2':
+					case '3':
+					case '4':
+					case '5': {
 						this.music.btnClick();
 						this.buttonsClick(btn, btn.stepY);
 						this.timer.updateViewTime(btn.name);
-						this.stopAnimation(() => this.startLevel(1));
-						break;
-					}
-					case "2": {
-						this.music.btnClick();
-						this.buttonsClick(btn, btn.stepY);
-						this.timer.updateViewTime(btn.name);
-						this.stopAnimation(() => this.startLevel(2));
-						break;
-					}
-					case "3": {
-						this.music.btnClick();
-						this.buttonsClick(btn, btn.stepY);
-						this.timer.updateViewTime(btn.name);
-						this.stopAnimation(() => this.startLevel(3));
-						break;
-					}
-					case "4": {
-						this.music.btnClick();
-						this.buttonsClick(btn, btn.stepY);
-						this.timer.updateViewTime(btn.name);
-						this.stopAnimation(() => this.startLevel(4));
+						this.stopAnimation(() => this.startLevel(Number(btn.name)));
 						break;
 					}
 				}

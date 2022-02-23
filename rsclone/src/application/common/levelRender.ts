@@ -650,10 +650,11 @@ export default class LevelRender {
 			this.music.onChicken();
 			this.animals.push(new Chicken(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
 		}
-		if (name === "pig")
+		if (name === "pig") {
+			this.music.onPig();
 			this.animals.push(new Pig(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight)));
-		if (name === "bear") {
-			this.music.bearAppiarance();
+		} if (name === "bear") {
+			// this.music.bearAppiarance();
 			this.animals.push(new Bear(this.id, this.areaX + Math.floor(Math.random() * this.areaWidth), this.areaY + Math.floor(Math.random() * this.areaHeight), 0));
 
 		}

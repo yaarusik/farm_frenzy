@@ -87,6 +87,7 @@ export default class LevelPage extends Control {
       'bear-1': 0,
       'flour': 0,
       'cake': 0,
+      'meat': 0
     };
 
     this.opacityState = {
@@ -189,12 +190,10 @@ export default class LevelPage extends Control {
       if (this.panelState.carAnimationOn) this.car.render();
       if (this.panelState.storagePanelSwitch) this.storage.render();
       else {
-        // проверка окончания уровня
         this.endGameCheck();
         if (this.panelState.endPanelSwitch) this.endPanel.render();
       }
     }
-
   }
 
   private endGameCheck(): void {

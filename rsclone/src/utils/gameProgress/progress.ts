@@ -37,7 +37,7 @@ export default class Progress extends Common {
     this.level = level.toString();
     this.productsScore = {};
     this.levelInitial[this.level].text.forEach(product => {
-      if (product.name) this.productsScore[product.name] = { current: 0, max: Number(product.text.slice(-1)) };
+      if (product.name) this.productsScore[product.name] = { current: 0, max: Number(product.text.split('/')[1]) };
     });
 
     this.goals = Object.getOwnPropertyNames(this.productsScore).length;
@@ -61,7 +61,9 @@ export default class Progress extends Common {
 
   private scoreChange(product: IText) {
     if (product.name) {
+      console.log(product.name);
       const current = Number(product.text[0]);
+      console.log(current);
       this.productsScore[product.name].current++;
       this.currentScore(product, current);
     }
