@@ -20,7 +20,7 @@ export default class Total extends Common {
       '2': '90',
       '3': '190',
       '4': '100',
-      '5': '3000'
+      '5': '500'
     };
 
 
