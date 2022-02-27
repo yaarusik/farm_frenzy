@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>reveal.js</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/black.css">
+	<!-- при деплое папку со стилями поменять -->
+
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section>
+				<section>
+					<img src="images/logo_ru.png" alt="">
+				</section>
+				<section class="author__list">
+					<h2>Авторы</h2>
+					<div class="author__flex">
+						<div class="author__wrapper">
+							<div class="author__block">
+								<img src="images/Ruslan.jpg" alt="" class="author__img">
+							</div>
+							<p class="author__role">Руслан</p>
+						</div>
+						<div class="author__wrapper">
+							<div class="author__block">
+								<img src="images/Yakov.jpg" class="author__img">
+							</div>
+							<p class="author__role">Яков</p>
+						</div>
+						<div class="author__wrapper">
+							<div class="author__block">
+								<img src="images/Serafim.jpg" class="author__img">
+							</div>
+							<p class="author__role">Серафим</p>
+						</div>
+					</div>
+					<div class="author__chiken">
+						<img src="images/chicken-right.png" alt="">
+						<img src="images/chicken-left.png" alt="">
+					</div>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Главная страница</h3>
+					<img class="main__img" src="images/main.png" alt="">
+					<img class="main__img" src="images/login.png" alt="">
+				</section>
+				<section>
+					<h3>Карта</h3>
+					<img class="map__img" src="images/map.png" alt="">
+				</section>
+				<section>
+					<h3>Магазин</h3>
+					<img class="map__img" src="images/shop.jpg" alt="">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h3>Уровень</h3>
+					<div class="gif__section">
+						<img class="main__img" src="images/level.jpg" alt="">
+						<div class="gif__wrapper">
+							<div сlass="gif__container" src>
+								<img class="gif__img fragment" src="images/grace.gif" alt="">
+								<p class="fragment">Трава</p>
+							</div>
+							<div сlass="gif__container ">
+								<img class="gif__img fragment" src="images/bear.gif" alt="">
+								<p class="fragment">Медведь</p>
+							</div>
+							<div сlass="gif__container ">
+								<img class="gif__img fragment" src="images/chicken.gif" alt="">
+								<p class="fragment">Курица</p>
+							</div>
+							<div сlass="gif__container ">
+								<img class="gif__img fragment" src="images/build.gif" alt="">
+								<p class="fragment">Здание</p>
+							</div>
+							<div сlass="gif__container">
+								<img class="gif__img fragment" src="images/car.gif" alt="">
+								<p class="fragment">Машина</p>
+							</div>
+						</div>
+					</div>
+				</section>
+			</section>
+
+		</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+		});
+	</script>
+	<link rel="stylesheet" href="dist/theme/presentation.css">
+</body>
+
+</html>
