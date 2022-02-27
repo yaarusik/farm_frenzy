@@ -61,9 +61,7 @@ export default class Progress extends Common {
 
   private scoreChange(product: IText) {
     if (product.name) {
-      console.log(product.name);
       const current = Number(product.text[0]);
-      console.log(current);
       this.productsScore[product.name].current++;
       this.currentScore(product, current);
     }
