@@ -139,6 +139,11 @@ export class Music {
         this.musicCreate("audio/pig/pig_die.wav");
     }
 
+    public pigFly() {
+        this.musicCreate("audio/pig/pig_flyout.wav");
+    }
+
+
     private musicCreate(src: string) {
         soundMusic = new Audio();
         this.UpdateMusic(soundMusic);

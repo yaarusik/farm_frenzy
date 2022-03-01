@@ -134,7 +134,7 @@ export default class StartPanel extends Common {
       // остановить setimout если уровень закрыт
       setTimeout(() => {
         this.levelRender.createAnimal('bear');
-      }, this.random(0, 10000) * i);
+      }, this.random(10000, 20000) * i);
     }
   }
 
