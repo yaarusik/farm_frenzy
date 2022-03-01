@@ -52,8 +52,8 @@
 }
 
 .gif__img {
-  width: 170px;
-  height: 135px;
+  width: 220px;
+  height: 180px;
 }
 
 .gif__section {
@@ -75,4 +75,13 @@
   display: flex;
   column-gap: 20px;
   row-gap: 10px;
+}
+
+.table__img {
+  padding-top: 40px;
+  width: 100%;
+}
+
+.trello__img {
+  width: 85%;
 }
