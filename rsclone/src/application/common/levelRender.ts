@@ -464,7 +464,12 @@ export default class LevelRender {
 
 		if (hungryPercent <= 0) {
 			// умирание курицы
-			this.music.chickenDie();
+			if (item.name === 'chicken') {
+				this.music.chickenDie();
+			} else {
+				this.music.pigDie();
+			}
+
 			item.state = "death";
 			item.frame = 0;
 			return;
@@ -634,7 +639,12 @@ export default class LevelRender {
 	}
 
 	private petAway(item: AnimalList) {
-		this.music.chickenFly();
+		if (item.name === 'chicken') {
+			this.music.chickenFly();
+		} else {
+			this.music.pigFly();
+		}
+
 		item.state = 'pic';
 		if (item.coordX + item.width / 2 < 800)
 			item.wantX = 0;
