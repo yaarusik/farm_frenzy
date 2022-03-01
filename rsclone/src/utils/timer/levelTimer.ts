@@ -1,5 +1,5 @@
 import Picture from "../classes/canvasBtn";
-import { endTextData } from "../gameData/endPanelData";
+import { endTextData, changeData } from "../gameData/endPanelData";
 import { timerData, goldCup, silvCup, silvCupText, goldCupText, bestTime, Itime } from "./levelTimerData";
 import { initialData } from "../../application/common/initialData";
 import { IText } from "../../application/iterfaces";
@@ -30,6 +30,7 @@ export default class Timer {
     bonus: string;
     goldCup: HTMLImageElement;
     silvCup: HTMLImageElement;
+    cont: number;
 
     constructor (canvas: HTMLCanvasElement, context: CanvasRenderingContext2D, level: number) {
         this.canvas = canvas;
@@ -40,6 +41,7 @@ export default class Timer {
         this.min = 0;
         this.sec = 0;
         this.bonus = "";
+        this.cont = 0;
         this.isRunning = true;
         this.goldMin = timerData[this.level - 1].goldMin;
         this.goldSec = timerData[this.level - 1].goldSec;
@@ -186,6 +188,7 @@ export default class Timer {
     }
 
     showCup() {
+        this.cont = 0;
         let cupImg;
         if (this.bonus === "start") return;
 
@@ -198,17 +201,21 @@ export default class Timer {
             cupImg = new Picture(this.goldCup, goldCup.x, goldCup.y, goldCup.width, goldCup.height);
             cupImg.draw(this.context);
         }
+
+        if (endTextData.length >= 5) changeData();
     }
 
     endPanelView() {
+        if (this.cont >= 1) return;
+        this.cont += 1;
         endTextData.forEach(el => {
-            if (el.text === 'Время') {
+            if (el.text === 'Время' || el.text === '00:00') {
                 el.text = this.content(this.min, this.sec);
                 this.timeAnimation(el);
             }
-            if (el.text === 'Монеты')
+            if (el.text === 'Монеты' || el.text === `${initialData.totalText.text}`)
                 el.text = initialData.totalText.text;
-            if (el.text === 'Бонус')
+            if (el.text === 'Бонус' || el.text === `${this.countBonus()}`)
                 el.text = this.countBonus();
         });
     }

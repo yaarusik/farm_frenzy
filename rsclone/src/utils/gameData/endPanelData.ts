@@ -134,7 +134,11 @@ export const endText = [
   },
 ];
 
-export const endTextData = [
+export const changeData = () => {
+  endTextData = endTextData.slice(0, 3);
+};
+
+export let endTextData = [
   {
     text: 'Монеты',
     fontSize: '40px Vag_Rounded-Bold CY',
