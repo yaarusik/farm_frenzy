@@ -1,0 +1,258 @@
+@import "var";
+
+$main-height: 29.375rem;
+$main-width: 58.875rem;
+$border-radius: 1.375rem;
+
+%shop-block {
+    display: flex;
+    justify-content: center;
+    column-gap: 1.125rem;
+    row-gap: 0.313rem;
+}
+
+@font-face {
+    font-family: 'Vag_Rounded-Bold CY';
+    src: url("../fonts/vag-rounded.otf");
+}
+
+.shop {
+    padding: 3vh 5%;
+    background-image: url(../images/shop/shop-back.jpg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.btn__shop {
+    width: 10rem;
+    height: 45px;
+}
+
+.shop__title {
+    position: relative;
+    font-family: 'Vag_Rounded-Bold CY';
+    color: $white;
+    margin-bottom: 8vh;
+    font-size: 3rem;
+    font-weight: 700;
+}
+  
+.shop__title::before {
+    content: "Магазин";
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    -webkit-text-stroke: 0.02em #7e590b;
+}
+
+.shop__main {
+    display: flex;
+    justify-content: space-between;
+    width: $main-width;
+    height: $main-height;
+
+    &-block,  &-aside {
+        width: 47.5rem;
+        height: $main-height;
+        border-radius: $border-radius;
+        background-color: $shop-background;
+    }
+
+    &-aside {
+        width: 10.938rem;
+    }
+
+    &-under {
+        display: flex;
+        justify-content: space-between;
+        align-content: space-between;
+        width: $main-width;
+        height: 10.625rem;
+        margin-top: 0.375rem;
+
+        &__engineering, &__pets {
+            @extend %shop-block;
+            align-items: center;
+            width: 23.125rem;
+            height: 9.688rem;
+            border-radius: $border-radius;
+            background-color: $shop-background;
+        }
+
+        &__block {
+            position: relative;
+            height: 200px;
+            width: 11.563rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        &__stars {
+            position: relative;
+            width: 100%;
+            height: 7.813rem;
+            border-radius: $border-radius;
+            background-color: $shop-background;
+        }
+    }
+}
+
+.stars__img {
+    position: absolute;
+    left: 50%;
+    width: 3.125rem;
+    height: 3.125rem;
+    transform: translate(-50%);
+    top: 10px;
+}
+
+.shop__main-block {
+    @extend %shop-block;
+    flex-wrap: wrap;
+}
+
+.shop__main-aside {
+    @extend %shop-block;
+    flex-direction: column;
+    row-gap: 9px;
+}
+
+.contantBlock, .contantAside, .contantEngineer, .contantPets {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 10.938rem;
+    height: 9.375rem;
+    border: 2px solid #51311c;
+    border-radius: $border-radius;
+}
+
+.stars__count {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    bottom: 10px;
+    color: #ffe80a;
+    font-size: 39px;
+    animation-duration: 0.3s;
+}
+
+.content__name {
+    font-family: Helvetica, sans-serif;
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 3px;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-content: space-between;
+    width: 100%;
+    height: 7.375rem;
+
+    &__block {
+        height: 6.438rem;
+        width: 97%;
+        background-size: 100% 100%;
+    }
+
+    &__img {
+        right: 20px;
+        height: 4.688rem;
+        width: 5.625rem;
+        position: absolute;
+        top: 0;
+    }
+}
+
+.driedEggs {
+    top: 10px;
+    right: 3px;
+    width: 7.875rem;
+    height: 6.563rem;
+}
+
+.depots, .wells {
+    top: 30px;
+    width: 6.75rem;
+    height: 4.876rem;
+}
+
+.cages {
+    top: 25px;
+    width: 6rem;
+    height: 5.25rem;
+}
+
+.cars {
+    top: 35px;
+    width: 6.976rem;
+    height: 4.876rem;
+}
+
+.airplanes {
+    top: 15px;
+    width: 7.50rem;
+    height: 6.735rem;
+}
+
+.dogs {
+    top: 28px;
+}
+.cats {
+    top: 23px;
+}
+
+.cats, .dogs {
+    width: 6.75rem;
+    height: 5.625rem;
+}
+
+.content__btn {
+    position: absolute;
+    left: 50%;
+    transform: translate(-49%);
+    bottom: 3px;
+    width: 6.25rem;
+    height: 1.875rem;
+    background-color: #696f73;
+    border-radius: 15px;
+    font-size: 23px;
+    color: $white;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+
+    &-img {
+        position: absolute;
+        bottom: 7px;
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+}
+
+.level__max {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 2.188rem;
+    height: 2.188rem;
+    background-image: url(../images/shop/checked.svg);
+    background-size: cover;
+}
+
+@keyframes money_anim {
+    0% {top: 72px; opacity: 1;}
+    100% {top: 115px; opacity: 0;}
+}
+@keyframes money_backAnim {
+    0% {top: 0px; opacity: 0;}
+    100% {top: 72px; opacity: 1;}
+}

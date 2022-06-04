@@ -1,0 +1,60 @@
+@import "var";
+
+.main {
+  background-image: url("../images/main/main-back.jpg");
+  height: 100%;
+}
+
+.logo {
+  height: 36.875vh;
+  display: block;
+  margin: 0 auto 3vh auto;
+}
+
+.panel {
+  width: 45%;
+  height: 43.75vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  padding: 2rem;
+  background: url("../images/main/main-panel.png") center no-repeat;
+  background-size: contain;
+  letter-spacing: 0px;
+}
+
+.panel__greet {
+  margin-bottom: 3vh;
+}
+
+.panel__name {
+  margin-bottom: 3vh;
+  padding: 1vh 3%;
+  border-radius: 30px;
+  border: 3px solid $brown;
+  text-align: center;
+  font-size: 1.4rem;
+  color: rgb(76, 66, 56);
+  font-weight: 700;
+  user-select: none;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 5px 1px rgba($black, 0.5) inset;
+}
+
+.panel__msg{
+  color: rgb(76, 66, 56);
+  font-size: 1.4rem;
+}
+
+.footer {
+  height: 9vh;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 10%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
